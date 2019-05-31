@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "@razors/presets-base": "latest",
+    "@razors/presets-typescript": "latest",
+    "lerna": "^3.14.1",
+    "typescript": "latest"
+  },
+  "name": "babel-plugin",
+  "private": true
+}

@@ -1,0 +1,3 @@
+{
+  "extends": "/Users/jialiu/WebstormProjects/razorsjs/babel-plugin/node_modules/@razors/presets-typescript/tsconfig.json"
+}

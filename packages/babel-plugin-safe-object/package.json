@@ -1,0 +1,18 @@
+{
+  "name": "@razors/babel-plugin-safe-object",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch",
+    "build": "npm run build:types && npm run build:js",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:js": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps",
+    "test": "jest"
+  }
+}

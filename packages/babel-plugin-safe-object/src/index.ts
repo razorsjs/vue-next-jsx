@@ -20,9 +20,9 @@ export default function() {
         }
         // TODO: do not transform import or require MemberExpression
         if (t.isIdentifier(obj) && !t.isSequenceExpression(path.parent)) {
+          // add import if not
           if (importDeclaration === null) {
             const codeBlock = path.scope.block as t.Program;
-            // add import
             const source = buildLiteral('../../../dist', 'string');
             importDeclaration = t.importDeclaration([buildImportSpecifier('safeGet')], source);
             // const importCode = `import {safeGet} from '../../../src';`;

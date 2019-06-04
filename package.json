@@ -19,7 +19,8 @@
   "name": "babel-plugin",
   "private": true,
   "scripts": {
-    "test": "./node_modules/.bin/lerna run test"
+    "test": "./node_modules/.bin/lerna run test",
+    "build": "./node_modules/.bin/lerna run build"
   },
   "workspaces": [
     "packages/*"

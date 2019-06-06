@@ -8,13 +8,13 @@ export default function() {
   let importDeclaration: any = null;
   let isEnd = false;
   return {
-    Program: {
-      exit() {
-        isEnd = true;
-      },
-    },
     visitor: {
-      // ImportDeclaration(path:any) {
+      Program: {
+        exit() {
+          isEnd = true;
+        },
+      },
+      // ImportDeclaration(path: any) {
       //   console.log(path);
       // },
       // CallExpression(path: NodePath) {
@@ -33,16 +33,13 @@ export default function() {
           replacePath = path;
         }
         // TODO: do not transform import or require MemberExpression
+        // TODO: do not transform global MemberExpression
         if (t.isIdentifier(obj) && !isEnd) {
           // add import if not
           if (importDeclaration === null) {
-            const codeBlock = path.scope.block as t.Program;
+            const codeBlock = state.file.ast.program as t.Program;
             const source = buildLiteral('../../../dist', 'string');
             importDeclaration = t.importDeclaration([buildImportSpecifier('safeGet')], source);
-            // const importCode = `import {safeGet} from '../../../src';`;
-            // const importDeclaration = template.ast(importCode, {
-            //   sourceType: 'module',
-            // }) as t.ImportDeclaration;
             insertImportDeclaration(codeBlock.body, importDeclaration);
           }
 

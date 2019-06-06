@@ -1,6 +1,6 @@
 import { transformFileSync, PluginOptions } from '@babel/core';
 import babelPluginSafeObject from '../src';
-import { readdirSync, writeFileSync } from 'fs';
+import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { EnvEnum } from '../src/environment';
 
@@ -30,9 +30,10 @@ describe('babel-plugin-safe-object', () => {
     const actualFile = path.join(fixtureDir, 'actual.js');
     const expectedFile = path.join(fixtureDir, 'expected.js');
     it(`should work with ${caseName.split('-').join(' ')}`, () => {
-      const transfromResult = transformTestFile(actualFile);
-      writeFileSync(expectedFile, transfromResult)
-      expect(true);
+      const transformResult = transformTestFile(actualFile);
+      const expectResult = readFileSync(expectedFile, 'utf-8').toString();
+      writeFileSync(expectedFile, transformResult)
+      expect(transformResult === expectResult);
     });
   });
 });

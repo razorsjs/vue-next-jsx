@@ -49,8 +49,7 @@ export default function() {
           // add import if not
           if (importDeclaration === null) {
             const codeBlock = state.file.ast.program as t.Program;
-            // TODO: production and test
-            const source = buildLiteral('../../../dist', 'string');
+            const source = buildLiteral('@razors/babel-plugin-safe-object', 'string');
             importDeclaration = t.importDeclaration([buildImportSpecifier(methodString)], source);
             insertImportDeclaration(codeBlock.body, importDeclaration);
           } else {

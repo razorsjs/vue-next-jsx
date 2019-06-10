@@ -2,7 +2,6 @@ import { transformFileSync, PluginOptions } from '@babel/core';
 import babelPluginSafeObject from '../src';
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
-import { EnvEnum } from '../src/environment';
 
 function transformTestFile(filePath: string, options: any = {}, pluginOptions: PluginOptions = {}) {
   const transformObj = transformFileSync(filePath, {
@@ -15,12 +14,6 @@ function transformTestFile(filePath: string, options: any = {}, pluginOptions: P
   });
   return transformObj === null ? '' : transformObj.code;
 }
-
-beforeAll(() => {
-  // Clears the database and adds some testing data.
-  // Jest will wait for this promise to resolve before running tests.
-  process.env.NODE_ENV = EnvEnum.TEST;
-});
 
 describe('babel-plugin-safe-object', () => {
   const fixturesDir = path.join(__dirname, 'fixtures');

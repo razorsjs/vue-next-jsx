@@ -1,6 +1,6 @@
 "use strict";
 
-var _dist = require("../../../dist");
+var _babelPluginSafeObject = require("@razors/babel-plugin-safe-object");
 
 var obj = {};
-var undef = (0, _dist.safeGet)(obj, ["a", "b"]);
+var undef = (0, _babelPluginSafeObject.safeGet)(obj, ["a", "b"]);

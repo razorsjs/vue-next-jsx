@@ -1,13 +1,21 @@
-import { types as t, NodePath, template } from '@babel/core';
+import { types as t, NodePath } from '@babel/core';
 import { MemberExpression, Expression, AssignmentExpression, ImportDeclaration, ImportSpecifier } from '@babel/types';
 import { buildImportSpecifier, buildLiteral, insertImportDeclaration } from './babel-util';
+import global from './global';
 
 function isSet(path: NodePath) {
   return t.isAssignmentExpression(path.parent) && path.parent.left === path.node;
 }
 
-function isMemberExpressionEnd(expression: MemberExpression) {
-  return !t.isMemberExpression(expression.object)
+function isMemberExpressionEnd(node: MemberExpression) {
+  return !t.isMemberExpression(node.object)
+}
+
+function isInGlobal(node: MemberExpression) {
+  return t.isIdentifier(node.object) && node.object.name in global
+}
+function isNeedConvert(node: MemberExpression) {
+  return isMemberExpressionEnd(node) && !isInGlobal(node)
 }
 
 export default function() {
@@ -34,15 +42,16 @@ export default function() {
       //   }
       // },
       // TODO: do not transform import or require MemberExpression
-      // TODO: do not transform global MemberExpression
       MemberExpression(path: NodePath, state: any) {
         const node = path.node as MemberExpression;
-        paths.unshift(node.property.name);
         const obj = node.object as Expression;
-        if (replaceRoot === null) {
+        if (replaceRoot === null && !isInGlobal(node)) {
           replaceRoot = path;
         }
-        if (isMemberExpressionEnd(node) && !isEnd) {
+        if (replaceRoot) {
+          paths.unshift(node.property.name);
+        }
+        if (isNeedConvert(node) && !isEnd) {
           // if parent node is AssignmentExpression and it's left node equals node, means set
           const _isSet = isSet(replaceRoot);
           const methodString = _isSet ? 'safeSet' : 'safeGet';

@@ -19,8 +19,8 @@
   "name": "babel-plugin",
   "private": true,
   "scripts": {
-    "test": "./node_modules/.bin/lerna run test",
-    "publish": "npm run build && ./node_modules/.bin/lerna publish",
+    "test": "jest",
+    "publish": "npm run build && npm run jest && ./node_modules/.bin/lerna publish",
     "build": "./node_modules/.bin/lerna run build"
   },
   "workspaces": [

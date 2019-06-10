@@ -25,7 +25,7 @@ describe('babel-plugin-safe-object', () => {
     it(`should work with ${caseName.split('-').join(' ')}`, () => {
       const transformResult = transformTestFile(actualFile);
       const expectResult = readFileSync(expectedFile, 'utf-8').toString();
-      writeFileSync(expectedFile, transformResult)
+      // writeFileSync(expectedFile, transformResult)
       expect(transformResult === expectResult);
     });
   });

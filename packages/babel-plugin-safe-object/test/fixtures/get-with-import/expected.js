@@ -1,10 +1,10 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 var _path = _interopRequireDefault(require("path"));
 
 var _babelPluginSafeObject = require("@razors/babel-plugin-safe-object");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function f() {
   var obj = {};

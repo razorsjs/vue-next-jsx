@@ -19,7 +19,7 @@ function isNeedConvert(node: MemberExpression) {
 }
 
 export default function() {
-  let paths: Array<string> = [];
+  let paths: Array<Expression> = [];
   let replaceRoot: any = null;
   let importDeclaration: ImportDeclaration | null = null;
   let isEnd = false;
@@ -49,7 +49,7 @@ export default function() {
           replaceRoot = path;
         }
         if (replaceRoot) {
-          paths.unshift(node.property.name);
+          paths.unshift(node.property);
         }
         if (isNeedConvert(node) && !isEnd) {
           // if parent node is AssignmentExpression and it's left node equals node, means set
@@ -72,7 +72,7 @@ export default function() {
           // replace
           const callee = t.identifier(methodString);
           const properties = t.arrayExpression(paths.map(item => {
-            return buildLiteral(item, 'string');
+            return t.isIdentifier(item) ? buildLiteral(item.name, 'string') : item;
           }));
           const _arguments: Array<any> = [obj, properties];
           if (_isSet) {

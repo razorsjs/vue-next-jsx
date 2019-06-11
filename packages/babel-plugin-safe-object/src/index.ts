@@ -58,7 +58,7 @@ export default function() {
           // add import if not
           if (importDeclaration === null) {
             const codeBlock = state.file.ast.program as t.Program;
-            const source = buildLiteral('@razors/babel-plugin-safe-object', 'string');
+            const source = buildLiteral('@razors/babel-plugin-safe-object/dist/helper', 'string');
             importDeclaration = t.importDeclaration([buildImportSpecifier(methodString)], source);
             insertImportDeclaration(codeBlock.body, importDeclaration);
           } else {
@@ -94,5 +94,3 @@ export default function() {
     },
   };
 }
-
-export * from './helper';

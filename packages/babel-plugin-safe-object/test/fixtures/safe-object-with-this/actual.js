@@ -1,3 +1,6 @@
 function f() {
-  this.x.y++
+  this.n.z;
+  this.a.b++;
+  let m = x.y.z;
+  m++
 }

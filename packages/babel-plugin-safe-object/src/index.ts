@@ -8,22 +8,30 @@ function isSet(path: NodePath) {
 }
 
 function isMemberExpressionEnd(node: MemberExpression) {
-  return !t.isMemberExpression(node.object)
+  return !t.isMemberExpression(node.object);
 }
 
 function isInGlobal(node: MemberExpression) {
-  return t.isIdentifier(node.object) && node.object.name in global
+  return t.isIdentifier(node.object) && node.object.name in global;
 }
 
 function isInBlackList(node: MemberExpression) {
-  return t.isIdentifier(node.object) && inBlackList(node.object.name)
+  return t.isIdentifier(node.object) && inBlackList(node.object.name);
+}
+
+function isLegalNode(node: MemberExpression) {
+  return !t.isThisExpression(node.object) &&
+    !isInGlobal(node) &&
+    !isInBlackList(node);
+}
+
+function isLegalRoot(path: NodePath) {
+  return !t.isUpdateExpression(path.parent);
 }
 
 function isNeedConvert(node: MemberExpression) {
-  return isMemberExpressionEnd(node) &&
-    !t.isThisExpression(node.object) &&
-    !isInGlobal(node) &&
-    !isInBlackList(node)
+  return isMemberExpressionEnd(node);
+
 }
 
 export default function() {
@@ -53,46 +61,54 @@ export default function() {
       MemberExpression(path: NodePath, state: any) {
         const node = path.node as MemberExpression;
         const obj = node.object as Expression;
-        if (replaceRoot === null && !isInGlobal(node)) {
-          replaceRoot = path;
+        if (replaceRoot === null) {
+          if (isLegalRoot(path)) {
+            replaceRoot = path;
+          } else {
+            path.skip();
+            return;
+          }
         }
         if (replaceRoot) {
           paths.unshift(node.property);
         }
-        if (isNeedConvert(node) && !isEnd) {
-          // if parent node is AssignmentExpression and it's left node equals node, means set
-          const _isSet = isSet(replaceRoot);
-          const methodString = _isSet ? 'safeSet' : 'safeGet';
-          // add import if not
-          if (importDeclaration === null) {
-            const codeBlock = state.file.ast.program as t.Program;
-            const source = buildLiteral('@razors/babel-plugin-safe-object/dist/helper', 'string');
-            importDeclaration = t.importDeclaration([buildImportSpecifier(methodString)], source);
-            insertImportDeclaration(codeBlock.body, importDeclaration);
-          } else {
-            // add safeGet or safeSet when exists at the same time
-            const specifiers = importDeclaration.specifiers;
-            const existingSpecifier = specifiers[0] as ImportSpecifier;
-            if (specifiers.length === 1 && existingSpecifier.imported.name !== methodString) {
-              specifiers.push(buildImportSpecifier(methodString));
+        if (isNeedConvert(node) && replaceRoot && !isEnd) {
+          // avoid this.x.y console.log ...
+          if (isLegalNode(node)) {
+            // if parent node is AssignmentExpression and it's left node equals node, means set
+            const _isSet = isSet(replaceRoot);
+            const methodString = _isSet ? 'safeSet' : 'safeGet';
+            // add import if not
+            if (importDeclaration === null) {
+              const codeBlock = state.file.ast.program as t.Program;
+              const source = buildLiteral('@razors/babel-plugin-safe-object/dist/helper', 'string');
+              importDeclaration = t.importDeclaration([buildImportSpecifier(methodString)], source);
+              insertImportDeclaration(codeBlock.body, importDeclaration);
+            } else {
+              // add safeGet or safeSet when exists at the same time
+              const specifiers = importDeclaration.specifiers;
+              const existingSpecifier = specifiers[0] as ImportSpecifier;
+              if (specifiers.length === 1 && existingSpecifier.imported.name !== methodString) {
+                specifiers.push(buildImportSpecifier(methodString));
+              }
             }
-          }
-          // replace
-          const callee = t.identifier(methodString);
-          const properties = t.arrayExpression(paths.map(item => {
-            return t.isIdentifier(item) ? buildLiteral(item.name, 'string') : item;
-          }));
-          const _arguments: Array<any> = [obj, properties];
-          if (_isSet) {
-            const value = (replaceRoot.parent as AssignmentExpression).right;
-            _arguments.push(value);
-          }
-          const callExpression = t.callExpression(callee, _arguments);
-          // when get, only replace; while set needs to  replace Assignment
-          if (_isSet) {
-            replaceRoot.parentPath.replaceWith(callExpression);
-          } else {
-            replaceRoot.replaceWith(callExpression);
+            // replace
+            const callee = t.identifier(methodString);
+            const properties = t.arrayExpression(paths.map(item => {
+              return t.isIdentifier(item) ? buildLiteral(item.name, 'string') : item;
+            }));
+            const _arguments: Array<any> = [obj, properties];
+            if (_isSet) {
+              const value = (replaceRoot.parent as AssignmentExpression).right;
+              _arguments.push(value);
+            }
+            const callExpression = t.callExpression(callee, _arguments);
+            // when get, only replace; while set needs to  replace Assignment
+            if (_isSet) {
+              replaceRoot.parentPath.replaceWith(callExpression);
+            } else {
+              replaceRoot.replaceWith(callExpression);
+            }
           }
           // clear
           paths = [];

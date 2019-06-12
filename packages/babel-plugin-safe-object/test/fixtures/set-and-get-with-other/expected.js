@@ -1,10 +1,10 @@
 "use strict";
 
-var _babelPluginSafeObject = require("@razors/babel-plugin-safe-object");
+var _helper = require("@razors/babel-plugin-safe-object/dist/helper");
 
 function SuperClass() {
-  (0, _babelPluginSafeObject.safeSet)(this, ["x"], {});
+  (0, _helper.safeSet)(new SuperClass(), ["x", "y", "x"], {});
 }
 
-var undef = (0, _babelPluginSafeObject.safeGet)(new SuperClass(), ["x", "y"]);
-var undef1 = (0, _babelPluginSafeObject.safeGet)(new Map(), ["x", "y"]);
+var undef = new SuperClass().x.y;
+var undef1 = (0, _helper.safeGet)(new Map(), ["x", "y"]);

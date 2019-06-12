@@ -20,7 +20,13 @@ export function insertImportDeclaration(body: Array<t.Statement>, importDeclarat
   for (let i = 0; i < body.length; i++) {
     if (!t.isImportDeclaration(body[i])) {
       body.splice(i, 0, importDeclaration);
-      return body
+      return body;
     }
   }
+}
+
+const blackList: Array<string> = [];
+
+export function inBlackList(obj: string) {
+  return blackList.indexOf(obj) !== -1
 }

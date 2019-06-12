@@ -1,6 +1,6 @@
 import { types as t, NodePath } from '@babel/core';
 import { MemberExpression, Expression, AssignmentExpression, ImportDeclaration, ImportSpecifier } from '@babel/types';
-import { buildImportSpecifier, buildLiteral, insertImportDeclaration } from './babel-util';
+import { buildImportSpecifier, buildLiteral, insertImportDeclaration, inBlackList } from './babel-util';
 import global from './global';
 
 function isSet(path: NodePath) {
@@ -14,8 +14,16 @@ function isMemberExpressionEnd(node: MemberExpression) {
 function isInGlobal(node: MemberExpression) {
   return t.isIdentifier(node.object) && node.object.name in global
 }
+
+function isInBlackList(node: MemberExpression) {
+  return t.isIdentifier(node.object) && inBlackList(node.object.name)
+}
+
 function isNeedConvert(node: MemberExpression) {
-  return isMemberExpressionEnd(node) && !isInGlobal(node)
+  return isMemberExpressionEnd(node) &&
+    !t.isThisExpression(node.object) &&
+    !isInGlobal(node) &&
+    !isInBlackList(node)
 }
 
 export default function() {

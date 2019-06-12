@@ -1,5 +1,5 @@
 "use strict";
 
-var _babelPluginSafeObject = require("@razors/babel-plugin-safe-object");
+var _helper = require("@razors/babel-plugin-safe-object/dist/helper");
 
-console.log((0, _babelPluginSafeObject.safeGet)(x, ["y", "z"]));
+console.log((0, _helper.safeGet)(x, ["y", "z"]));

@@ -15,7 +15,7 @@
     "build:js": "babel src --out-dir dist --extensions \".ts,.tsx\"",
     "test": "jest"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@babel/core": "^7.4.5"
   }
 }

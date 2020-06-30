@@ -1,4 +1,6 @@
 {
+  "name": "@razors/babel-plugin",
+  "private": true,
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
@@ -7,8 +9,6 @@
     "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-typescript": "^7.3.3",
-    "@razors/presets-base": "latest",
-    "@razors/presets-typescript": "latest",
     "@types/jest": "^24.0.13",
     "@types/node": "^12.0.4",
     "jest": "^24.8.0",
@@ -16,8 +16,6 @@
     "ts-jest": "^24.0.2",
     "typescript": "latest"
   },
-  "name": "babel-plugin",
-  "private": true,
   "scripts": {
     "test": "jest",
     "publish": "npm run build && npm run test && ./node_modules/.bin/lerna publish",

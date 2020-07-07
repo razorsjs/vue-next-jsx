@@ -2,19 +2,12 @@
   "name": "@razors/babel-plugin",
   "private": true,
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@babel/plugin-proposal-decorators": "^7.4.4",
-    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
-    "@babel/plugin-transform-runtime": "^7.4.4",
-    "@babel/preset-env": "^7.4.5",
-    "@babel/preset-typescript": "^7.3.3",
     "@types/jest": "^24.0.13",
     "@types/node": "^12.0.4",
-    "jest": "^24.8.0",
+    "jest": "^26.1.0",
     "lerna": "^3.14.1",
-    "ts-jest": "^24.0.2",
-    "typescript": "latest"
+    "ts-jest": "^26.1.1",
+    "typescript": "^3.9.5"
   },
   "scripts": {
     "test": "jest",

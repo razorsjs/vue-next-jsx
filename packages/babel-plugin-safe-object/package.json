@@ -16,6 +16,6 @@
     "test": "jest"
   },
   "peerDependencies": {
-    "@babel/core": "^7.4.5"
+    "@babel/core": "^7.10.4"
   }
 }

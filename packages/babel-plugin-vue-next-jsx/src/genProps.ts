@@ -1,3 +1,7 @@
+/**
+ * gen props, directives, attrs, spreadProps from path
+ */
+
 import { NodePath, types as t } from '@babel/core';
 import { extractPatchFlagFromProps } from './patchFlag';
 import jsxNode, { DirectiveNode, AttributeNode } from './jsxNode';

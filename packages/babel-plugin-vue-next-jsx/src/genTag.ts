@@ -1,3 +1,7 @@
+/**
+ * gen tag from path
+ */
+
 import { NodePath, types as t } from '@babel/core'
 import jsxNode from './jsxNode';
 

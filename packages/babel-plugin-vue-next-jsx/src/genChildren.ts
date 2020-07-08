@@ -1,11 +1,6 @@
 import {types as t, NodePath} from '@babel/core';
 import jsxNode from './jsxNode';
 
-/**
- * Transform JSXText to StringLiteral
- * @param path JSXText
- * @returns StringLiteral
- */
 const transformJSXText = (path: NodePath<t.JSXText>): t.StringLiteral => {
   const node = path.node
   const lines = node.value.split(/\r\n|\n|\r/)
@@ -51,21 +46,12 @@ const transformJSXText = (path: NodePath<t.JSXText>): t.StringLiteral => {
 
   return str !== '' ? t.stringLiteral(str) : null
 }
-/**
- * Transform JSXExpressionContainer to Expression
- * @param path JSXExpressionContainer
- * @returns Expression
- */
 const transformJSXExpressionContainer = (path: NodePath<t.JSXExpressionContainer>): t.Expression | t.JSXEmptyExpression => path.node.expression
-/**
- * Transform JSXSpreadChild
- * @param t
- * @param path JSXSpreadChild
- * @returns SpreadElement
- */
 const transformJSXSpreadChild = (path: NodePath<t.JSXSpreadChild>): t.SpreadElement => t.spreadElement(path.node.expression)
 
-export default function(paths) {
+export default function() {
+  const {path} = jsxNode
+  const paths: Array<any> = path.get('children')
   const nodes = paths.map(path => {
       if (path.isJSXText()) {
         return transformJSXText(path)

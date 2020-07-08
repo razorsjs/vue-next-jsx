@@ -1,6 +1,9 @@
+/**
+ * model for a jsxElement: more like Vue TransformContext
+ */
+
 import { NodePath, types as t } from '@babel/core';
-import { ElementTypes } from '@vue/compiler-core'
-import { NodeTypes } from './constant'
+import { NodeTypes, ElementTypes } from './constant'
 import domOptions from './domOptions'
 
 // AttributeNode: @vue/compiler-core AttributeNode
@@ -26,8 +29,10 @@ export interface JsxNode  {
 
   // current JSXElement Path
   path?: NodePath<t.JSXElement>
-  // tagType: @vue/compiler-core ElementTypes
-  tagType?: ElementTypes,
+  // nodeType: equal with @vue/compiler-core NodeTypes
+  nodeType?: NodeTypes
+  // tagType: equal with @vue/compiler-core ElementTypes
+  tagType?: ElementTypes
   isComponent?: boolean
 
   // just concat attrs and dirs
@@ -72,8 +77,12 @@ export type PluginOptions = BuildOptions & ParseOptions
 
 let jsxNode: JsxNode = {}
 
-export function jsxNodeInit(path: NodePath<t.JSXElement>, options: PluginOptions) {
+export function clear() {
   Object.keys(jsxNode).forEach(key => delete jsxNode[key])
+}
+
+export function jsxNodeInit(path: NodePath<t.JSXElement>, options: PluginOptions) {
+  clear()
   jsxNode.path = path
   jsxNode.options = {
     ...domOptions,

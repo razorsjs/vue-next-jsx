@@ -1,5 +1,5 @@
 import { transform, BabelFileResult } from '@babel/core'
-import VueNextJSX from '../main'
+import VueNextJSX from '../index'
 import { baseCompile } from '@vue/compiler-core'
 
 const formatVue = (source: string): string => {

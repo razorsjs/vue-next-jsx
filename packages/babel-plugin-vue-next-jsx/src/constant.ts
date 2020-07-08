@@ -4,7 +4,8 @@ export {
   CREATE_BLOCK,
   CREATE_VNODE,
   CREATE_TEXT,
-  NodeTypes
+  NodeTypes,
+  ElementTypes
 } from '@vue/compiler-core'
 
 export {

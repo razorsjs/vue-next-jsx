@@ -1,5 +1,5 @@
 import {types as t, NodePath} from '@babel/core';
-import {generateTextVNode} from './transformJSXElement';
+import jsxNode from './jsxNode';
 
 /**
  * Transform JSXText to StringLiteral
@@ -84,20 +84,5 @@ export default function(paths) {
     })
     .filter(el => el !== null && !t.isJSXEmptyExpression(el));
 
-  if(nodes.length === 1 && t.isStringLiteral(nodes[0])) {
-    // only one
-    return nodes[0]
-  } else if (nodes.length === 0) {
-    // no children
-    return null
-  } else {
-    // wrap string children with _createTextVNode
-    for(let i=0;i<nodes.length;i++){
-      const node = nodes[i]
-      if(t.isStringLiteral(node)) {
-        nodes[i] = generateTextVNode([node])
-      }
-    }
-    return t.arrayExpression(nodes)
-  }
+  jsxNode.children = nodes
 }

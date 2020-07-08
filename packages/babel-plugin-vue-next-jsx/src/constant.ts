@@ -3,7 +3,8 @@ export {
   OPEN_BLOCK,
   CREATE_BLOCK,
   CREATE_VNODE,
-  CREATE_TEXT
+  CREATE_TEXT,
+  NodeTypes
 } from '@vue/compiler-core'
 
 export {

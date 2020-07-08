@@ -1,9 +1,3 @@
-support jsx for vue3
+# vue-next-jsx
 
-TODO：
-
-- [x] split unwrap ref plugin
-- [x] move to @razorjs/babel-plugin project
-- [x] support v-slot destructuring
-
-
+A babel plugin that provides jsx syntax for vue3

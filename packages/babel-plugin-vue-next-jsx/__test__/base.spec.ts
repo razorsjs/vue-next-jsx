@@ -1,4 +1,4 @@
-import {compare} from './util'
+import { compare, transformWithPlugin, vueCompiled } from './util';
 
 describe('Base jsx use', () => {
   test('Base jsx', () => {
@@ -9,16 +9,19 @@ describe('Base jsx use', () => {
     const code = '<div/>'
     compare(code)
   })
+  test('Base jsx with variable', () => {
+    const jsxCode = '<div>{a}</div>'
+    const vueCode = '<div>{{a}}</div>'
+    console.log(vueCompiled(vueCode));
+    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  })
   test('Base jsx with one children', () => {
     const code = '<div><span>hello world</span></div>'
     compare(code)
   })
-  test('Base jsx with two children', () => {
-    const code = '<div><span>hello world</span><span>hello world</span></div>'
-    compare(code)
-  })
-  test('Base jsx with mutiple children', () => {
-    const code = '<div><span>123<span>hello world</span></span></div>'
-    compare(code)
+  test('Base jsx with mixed children', () => {
+    const jsxCode = '<div><span>test</span>{a}</div>'
+    const vueCode = '<div><span>test</span>{{a}}</div>'
+    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
 })

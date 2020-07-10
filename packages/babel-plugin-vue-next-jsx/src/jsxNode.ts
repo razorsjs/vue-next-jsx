@@ -3,7 +3,7 @@
  */
 
 import { NodePath, types as t } from '@babel/core';
-import { NodeTypes, ElementTypes } from './constant'
+import { NodeTypes, ElementTypes } from './util/constant'
 import domOptions from './domOptions'
 
 // AttributeNode: @vue/compiler-core AttributeNode
@@ -32,8 +32,8 @@ export interface JsxNode  {
   // nodeType: equal with @vue/compiler-core NodeTypes
   nodeType?: NodeTypes
   // tagType: equal with @vue/compiler-core ElementTypes
+  // ElementTypes.Slot and ElementTypes.Template will not be supported(we don't need v-slot)
   tagType?: ElementTypes
-  isComponent?: boolean
 
   // just concat attrs and dirs
   props?: Array<AttributeNode | DirectiveNode>
@@ -46,11 +46,11 @@ export interface JsxNode  {
   // tag: first argument for createVNode
   tag?: t.StringLiteral | t.Identifier
   // children: third argument for createVNode
-  children?: null | Array<any>,
+  children?: Array<any>,
   // patchFlags: fourth argument for createVNode
-  patchFlags?: number,
+  patchFlag?: number,
   // dynamicProps: fifth argument for createVNode
-  dynamicProps?: Array<any>
+  dynamicProps?: Array<string | undefined>
 }
 
 export interface BuildOptions {
@@ -71,6 +71,7 @@ export interface ParseOptions {
    * e.g. platform native elements, e.g. <div> for browsers
    */
   isNativeTag?: (tag: string) => boolean
+  isBuiltInComponent?: (tag: string) => boolean
 }
 
 export type PluginOptions = BuildOptions & ParseOptions

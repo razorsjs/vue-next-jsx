@@ -1,5 +1,8 @@
-import {types as t, NodePath} from '@babel/core';
-import jsxNode from './jsxNode';
+import { NodePath, types as t } from '@babel/core';
+import jsxNode from '../jsxNode';
+import { PatchFlags } from '../util/constant';
+import { NodeTypes } from '@vue/compiler-core';
+import genText from '../gen/genText'
 
 const transformJSXText = (path: NodePath<t.JSXText>): t.StringLiteral => {
   const node = path.node
@@ -46,18 +49,24 @@ const transformJSXText = (path: NodePath<t.JSXText>): t.StringLiteral => {
 
   return str !== '' ? t.stringLiteral(str) : null
 }
-const transformJSXExpressionContainer = (path: NodePath<t.JSXExpressionContainer>): t.Expression | t.JSXEmptyExpression => path.node.expression
+
 const transformJSXSpreadChild = (path: NodePath<t.JSXSpreadChild>): t.SpreadElement => t.spreadElement(path.node.expression)
 
 export default function() {
   const {path} = jsxNode
   const paths: Array<any> = path.get('children')
-  const nodes = paths.map(path => {
+
+  const nodes: Array<ChildNode> = paths.map(path => {
       if (path.isJSXText()) {
         return transformJSXText(path)
       }
+      // treated as vue: {{XX}}
       if (path.isJSXExpressionContainer()) {
-        return transformJSXExpressionContainer(path)
+        const isTextVNode = paths.length > 1
+        if(!isTextVNode) {
+          jsxNode.patchFlag|=PatchFlags.TEXT
+        }
+        return genText(path.node, isTextVNode)
       }
       if (path.isJSXSpreadChild()) {
         return transformJSXSpreadChild(path)

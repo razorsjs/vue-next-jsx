@@ -1,19 +1,38 @@
 import { compare, transformWithPlugin, vueCompiled } from './util';
 
-describe('Use jsx with variable', () => {
-  test('jsx with dynamic class', () => {
-    const jsxCode = '<test class={test}>hello world</test>'
-    const vueCode = '<test :class="test">hello world</test>'
+describe('patchFlag test', () => {
+  test('PatchFlags.TEXT', () => {
+    const jsxCode = '<div>{a}</div>'
+    const vueCode = '<div>{{a}}</div>'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
-  test('jsx with dynamic style', () => {
-    const jsxCode = '<test style={test}>hello world</test>'
-    const vueCode = '<test :style="test">hello world</test>'
+  test('PatchFlags.CLASS', () => {
+    const jsxCode = '<div class={test}></div>'
+    const vueCode = '<div :class="test"></div>'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
-  test('jsx with dynamic text', () => {
-    const jsxCode = '<test>{test}</test>'
-    const vueCode = '<test>{{test}}</test>'
+  test('PatchFlags.STYLE', () => {
+    const jsxCode = '<div style={test}></div>'
+    const vueCode = '<div :style="test"></div>'
+    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  })
+  test('PatchFlags.PROPS', () => {
+    const jsxCode = '<div a={a}></div>'
+    const vueCode = '<div :a="a"></div>'
+    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  })
+  test('PatchFlags.HYDRATE_EVENTS', () => {
+    const jsxCode = '<div onTest={test}></div>'
+    const vueCode = '<div @test="test"></div>'
+    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  })
+  test('PatchFlags.NEED_PATCH', () => {
+    const code = '<div ref="a"></div>'
+    compare(code)
+  })
+  test('mixed all', () => {
+    const jsxCode = '<div onTest={test} a={a} class={a} style={test}>{a}</div>'
+    const vueCode = '<div @test="test" :a="a" :class="a" :style="test">{{a}}</div>'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
 })

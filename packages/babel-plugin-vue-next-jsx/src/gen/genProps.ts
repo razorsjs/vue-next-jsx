@@ -3,9 +3,9 @@
  */
 
 import { NodePath, types as t } from '@babel/core';
-import { extractPatchFlagFromProps } from './patchFlag';
-import jsxNode, { DirectiveNode, AttributeNode } from './jsxNode';
-import { NodeTypes } from './constant';
+import { extractPatchFlag } from '../patchFlag';
+import jsxNode, { DirectiveNode, AttributeNode } from '../jsxNode';
+import { NodeTypes } from '../util/constant';
 
 const parsePropsFromJSXAttribute = (path: NodePath<t.JSXAttribute>) => {
   // tsx does't support JSXNamespacedName, so only JSXIdentifier
@@ -60,6 +60,6 @@ export default function(): void {
   jsxNode.props = [...jsxNode.attributes, ...jsxNode.directives];
 
   if (jsxNode.props.length !== 0) {
-    extractPatchFlagFromProps();
+    extractPatchFlag();
   }
 }

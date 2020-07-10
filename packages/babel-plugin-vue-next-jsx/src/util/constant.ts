@@ -4,10 +4,12 @@ export {
   CREATE_BLOCK,
   CREATE_VNODE,
   CREATE_TEXT,
+  TO_DISPLAY_STRING,
   NodeTypes,
   ElementTypes
 } from '@vue/compiler-core'
 
 export {
-  PatchFlags
+  PatchFlags,
+  isOn
 } from '@vue/shared'

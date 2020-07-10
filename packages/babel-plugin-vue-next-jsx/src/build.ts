@@ -2,24 +2,33 @@
  * tools for building vue render function
  */
 import { types as t } from '@babel/core';
-import { generateBlock, generateCreateVNode, generateTextVNode } from './generateCode';
-import { JsxNode } from './jsxNode';
+import { generateBlock, generateCall } from './gen/generateCode';
+import jsxNode, { JsxNode } from './jsxNode';
+import { ElementTypes, CREATE_VNODE, CREATE_TEXT, TO_DISPLAY_STRING, PatchFlags } from './util/constant';
+import { buildArrayToArrow, buildObjectToExpression } from './util/build';
+import { isText, isTextVNode, isVNode } from './util';
 
 // main
 export const build = (node: JsxNode): t.ExpressionStatement | t.CallExpression => {
-  const {path, tag, children, patchFlags} = node
+  const {path, tag, children, patchFlag, dynamicProps} = node
   const args: any = [tag]
-  if(children.length !== 0) {
-    // data
-    args.push(buildData(node))
+  const data = buildData(node)
+  if(dynamicProps?.length || patchFlag || children?.length || !t.isNullLiteral(data)) {
+    args.push(data)
+  }
+  if(dynamicProps?.length || patchFlag || children?.length ) {
     args.push(buildChildren(node))
-    if(patchFlags) {
-      args.push(t.numericLiteral(patchFlags))
-    }
+  }
+  if(dynamicProps?.length || patchFlag) {
+    args.push(patchFlag ? t.numericLiteral(patchFlag) : t.nullLiteral())
+  }
+  if(dynamicProps?.length) {
+    args.push(t.arrayExpression(dynamicProps.map(i=>t.stringLiteral(i))))
   }
   // in root we generate block, else vnode
+  // A jsxElement with no jsxElement parent will be treated as root
   if(t.isJSXElement(path.parent)) {
-    return generateCreateVNode(args)
+    return generateCall(args, CREATE_VNODE)
   } else {
     return generateBlock(args)
   }
@@ -38,23 +47,46 @@ export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression => 
   return t.objectExpression(objectProperty.concat(spreadProps));
 }
 
-// build children for createVNode
-export const buildChildren = (node: JsxNode): null | t.StringLiteral | t.ArrayExpression => {
-  let nodes = node.children
-  if(nodes.length === 1 && t.isStringLiteral(nodes[0])) {
+/**
+ * build slot children like
+ * {
+ *   default: () => [_createTextVNode('123')],
+ *   slot1: () => []
+ * }
+ * @param node
+ */
+export const buildSlotChildren = (node: JsxNode): t.ObjectExpression => {
+  const children = node.children.map(child => isText(child) ? generateCall([child], CREATE_TEXT) : child)
+  const defaultValue = buildArrayToArrow(children)
+  const slot = {
+    default: defaultValue,
+    _: t.numericLiteral(1)
+  }
+  return buildObjectToExpression(slot)
+}
+
+/**
+ * build children for createVNode
+ * contains slotChildren for component and normal children for dom
+ * @param node
+ */
+export const buildChildren = (node: JsxNode): t.NullLiteral | t.CallExpression | t.StringLiteral | t.ArrayExpression | t.ObjectExpression => {
+  // no children
+  if(!node.children?.length) return t.nullLiteral()
+  const {children: nodes} = node;
+  // if component node and has slot
+  const isComponent = node.tagType === ElementTypes.COMPONENT
+  if(isComponent) {
+    return buildSlotChildren(node)
+  }
+
+  if(nodes.length === 1 && !isVNode(nodes[0])) {
     // only one
     return nodes[0]
   } else if (nodes.length === 0) {
     // no children
-    return null
+    return t.nullLiteral()
   } else {
-    // wrap string children with _createTextVNode
-    for(let i=0;i<nodes.length;i++){
-      const node = nodes[i]
-      if(t.isStringLiteral(node)) {
-        nodes[i] = generateTextVNode([node])
-      }
-    }
     return t.arrayExpression(nodes)
   }
 }

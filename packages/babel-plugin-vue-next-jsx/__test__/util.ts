@@ -1,6 +1,30 @@
 import { transform, BabelFileResult } from '@babel/core'
 import VueNextJSX from '../index'
-import { baseCompile } from '@vue/compiler-core'
+// use compiler-dom to test
+import { compile } from '@vue/compiler-dom'
+
+// remove funcName() wrap
+const removeFunc = (str: string, funcName): string => {
+  const s = str.split(funcName)
+  if(s.length < 2) return str
+  const pre = s[0]
+  let last = str.substring(pre.length + funcName.length + 1)
+  const stack = ['(']
+  let i = 0;
+  for(;i<last.length;i++) {
+    if(last[i] === '(') {
+      stack.push('(')
+    }
+    if(last[i] === ')') {
+      stack.pop()
+    }
+    if(stack.length === 0) {
+      break
+    }
+  }
+  const result = pre + last.substring(0, i) + last.substring(i+1)
+  return result.includes(funcName) ? removeFunc(result, funcName) : result
+}
 
 const formatVue = (source: string): string => {
   // format
@@ -10,7 +34,7 @@ const formatVue = (source: string): string => {
     match(/(return \(_openBlock[\S\s]+)/)
   if(match) {
     const matched = match[0]
-    return matched
+    let result = matched
       .substring(8, matched.length - 2)
       // trim blank
       .replace(/\s+/g, '')
@@ -18,6 +42,11 @@ const formatVue = (source: string): string => {
       .replace(/_ctx./g, '')
       // remove comment
       .replace(/\/\*[\S]+\*\//g, '')
+      // remove _component_ in component name because we don't need resolveComponent
+      .replace(/_component_/g, '')
+    // remove _withCtx() in slot
+    result = removeFunc(result, '_withCtx')
+    return result
   } else {
     throw Error(`format vue complied faile, source: ${source}`)
   }
@@ -29,12 +58,18 @@ const formatTransformed = (source: string): string => {
     .substring(0, source.length - 1)
     // trim blank
     .replace(/\s+/g, '')
+    // trim ;
+    .replace(/;/g, '')
 }
 
 export function vueCompiled(source: string): string {
-  const compiled = baseCompile(source, {
+  const compiled = compile(source, {
     mode: 'module',
-    prefixIdentifiers: true
+    prefixIdentifiers: true,
+    optimizeBindings: false,
+    hoistStatic: false,
+    cacheHandlers: false,
+    scopeId: null
   })
   return formatVue(compiled.code)
 }

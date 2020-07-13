@@ -3,8 +3,9 @@
  */
 
 import { types as t } from '@babel/core';
-import { PatchFlags, ElementTypes, isOn } from './util/constant';
-import jsxNode, { AttributeNode, DirectiveNode } from './jsxNode';
+import { PatchFlags, ElementTypes, isOn, helperNameMap, isSymbol } from './util/constant';
+import jsxNode, { AttributeNode, DirectiveNode, DirectiveTransformResult } from './jsxNode';
+import {vueImportMap} from './addVueImport';
 
 // dynamic check
 const isDynamic = (value) => {
@@ -12,20 +13,21 @@ const isDynamic = (value) => {
 }
 
 export const extractPatchFlag = () => {
-  const {attributes, tagType} = jsxNode
+  const {attributes, directives, tagType, options} = jsxNode
   const isComponent = tagType === ElementTypes.COMPONENT
   let hasRef = false
   let hasClassBinding = false
   let hasStyleBinding = false
   let hasHydrationEventBinding = false
   const dynamicPropNames: string[] = []
+  // record only runtime
+  const runtimeDirectives = []
+  // record all props
+  const directiveTransformResult: Array<t.ArrayExpression | undefined> = []
   jsxNode.patchFlag = 0
 
   /**
    * onXXX all be treated as listener like v-on, e.g. onClick <==> v-on:click <==> @click
-   */
-  /**
-   * Dynamic keys: not supported
    */
   attributes.forEach((attr: AttributeNode) => {
     const {name, value} = attr
@@ -54,6 +56,27 @@ export const extractPatchFlag = () => {
     }
   })
 
+  /**
+   * run directive transform
+   */
+  directives.forEach((dir) => {
+    const directiveTransform = options.directiveTransforms[dir.name]
+    if (directiveTransform) {
+      // has built-in directive transform.
+      const { props, needRuntime } = directiveTransform(dir, jsxNode)
+      directiveTransformResult.push(t.arrayExpression(props))
+      if (needRuntime) {
+        runtimeDirectives.push(dir)
+        if (isSymbol(needRuntime)) {
+          vueImportMap.push(needRuntime)
+        }
+      }
+    } else {
+      // no built-in transform, this is a user custom directive.
+      runtimeDirectives.push(dir)
+    }
+  })
+
   const {patchFlag} = jsxNode
 
   if (hasClassBinding) {
@@ -71,10 +94,11 @@ export const extractPatchFlag = () => {
 
   if (
     (patchFlag === 0 || patchFlag === PatchFlags.HYDRATE_EVENTS) &&
-    (hasRef)
+    (hasRef) || runtimeDirectives?.length
   ) {
     jsxNode.patchFlag |= PatchFlags.NEED_PATCH
   }
 
   jsxNode.dynamicProps = dynamicPropNames
+  jsxNode.directiveTransformResult = directiveTransformResult
 }

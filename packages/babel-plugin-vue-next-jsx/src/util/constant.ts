@@ -5,11 +5,18 @@ export {
   CREATE_VNODE,
   CREATE_TEXT,
   TO_DISPLAY_STRING,
+  WITH_DIRECTIVES,
   NodeTypes,
   ElementTypes
 } from '@vue/compiler-core'
 
 export {
+  V_SHOW
+} from '@vue/compiler-dom'
+
+export {
   PatchFlags,
-  isOn
+  isOn,
+  extend,
+  isSymbol
 } from '@vue/shared'

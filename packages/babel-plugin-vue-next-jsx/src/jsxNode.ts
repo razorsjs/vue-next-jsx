@@ -3,8 +3,9 @@
  */
 
 import { NodePath, types as t } from '@babel/core';
-import { NodeTypes, ElementTypes } from './util/constant'
+import { NodeTypes, ElementTypes, extend } from './util/constant';
 import domOptions from './domOptions'
+import directiveTransforms from './directives'
 
 // AttributeNode: @vue/compiler-core AttributeNode
 export interface AttributeNode {
@@ -51,6 +52,18 @@ export interface JsxNode  {
   patchFlag?: number,
   // dynamicProps: fifth argument for createVNode
   dynamicProps?: Array<string | undefined>
+  // an array used to build directives, generated in patchFlag
+  directiveTransformResult?: Array<t.ArrayExpression>
+}
+
+export type DirectiveTransform = (
+  dir: DirectiveNode,
+  node: JsxNode
+) => DirectiveTransformResult
+
+export interface DirectiveTransformResult {
+  props: [t.Expression, t.Expression]
+  needRuntime?: boolean | symbol
 }
 
 export interface BuildOptions {
@@ -58,7 +71,7 @@ export interface BuildOptions {
    * e.g. build jsxNode to babel
    * @param node
    */
-  build(node: JsxNode): t.ExpressionStatement | t.CallExpression
+  build(node: JsxNode): t.SequenceExpression | t.CallExpression
 }
 
 export interface ParseOptions {
@@ -74,7 +87,15 @@ export interface ParseOptions {
   isBuiltInComponent?: (tag: string) => boolean
 }
 
-export type PluginOptions = BuildOptions & ParseOptions
+export interface TransformOptions {
+  /**
+   * An object of { name: transform } to be applied to every directive attribute
+   * node found on element nodes.
+   */
+  directiveTransforms?: Record<string, DirectiveTransform | undefined>
+}
+
+export type PluginOptions = BuildOptions & ParseOptions & TransformOptions
 
 let jsxNode: JsxNode = {}
 
@@ -86,7 +107,9 @@ export function jsxNodeInit(path: NodePath<t.JSXElement>, options: PluginOptions
   clear()
   jsxNode.path = path
   jsxNode.options = {
-    ...domOptions,
+    ...extend({}, domOptions, {
+      directiveTransforms
+    }),
     ...options
   }
   jsxNode.attributes = []

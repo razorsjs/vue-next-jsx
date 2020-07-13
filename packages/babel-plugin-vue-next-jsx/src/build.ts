@@ -7,9 +7,10 @@ import jsxNode, { JsxNode } from './jsxNode';
 import { ElementTypes, CREATE_VNODE, CREATE_TEXT, TO_DISPLAY_STRING, PatchFlags } from './util/constant';
 import { buildArrayToArrow, buildObjectToExpression } from './util/build';
 import { isText, isTextVNode, isVNode } from './util';
+import genDirective from './gen/genDirective';
 
 // main
-export const build = (node: JsxNode): t.ExpressionStatement | t.CallExpression => {
+export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression => {
   const {path, tag, children, patchFlag, dynamicProps} = node
   const args: any = [tag]
   const data = buildData(node)
@@ -25,13 +26,11 @@ export const build = (node: JsxNode): t.ExpressionStatement | t.CallExpression =
   if(dynamicProps?.length) {
     args.push(t.arrayExpression(dynamicProps.map(i=>t.stringLiteral(i))))
   }
-  // in root we generate block, else vnode
+  // In root we generate block, else vnode
   // A jsxElement with no jsxElement parent will be treated as root
-  if(t.isJSXElement(path.parent)) {
-    return generateCall(args, CREATE_VNODE)
-  } else {
-    return generateBlock(args)
-  }
+  // If has directive, wrap with _withDirective
+  const codeBlock = t.isJSXElement(path.parent) ? generateCall(args, CREATE_VNODE) : generateBlock(args)
+  return genDirective(codeBlock)
 }
 
 // build data for createVNode

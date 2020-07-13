@@ -24,7 +24,7 @@ const parsePropsFromJSXAttribute = (path: NodePath<t.JSXAttribute>) => {
   if (isDirective(name)) {
     const directiveNode: DirectiveNode = {
       type: NodeTypes.DIRECTIVE,
-      name,
+      name: name.split('-')[1],
       exp: value,
     };
     jsxNode.directives.push(directiveNode);
@@ -59,7 +59,7 @@ export default function(): void {
   jsxNode.spreadProps = spread;
   jsxNode.props = [...jsxNode.attributes, ...jsxNode.directives];
 
-  if (jsxNode.props.length !== 0) {
+  if (jsxNode.props.length !== 0 || jsxNode.attributes.length!==0) {
     extractPatchFlag();
   }
 }

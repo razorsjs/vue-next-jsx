@@ -27,15 +27,22 @@ const removeFunc = (str: string, funcName): string => {
 }
 
 const formatVue = (source: string): string => {
+  let isDirective = false
   // format
-  const match = source
+  source = source
     // trim \n
-    .replace(/\n/g, '').
-    match(/(return \(_openBlock[\S\s]+)/)
+    .replace(/\n/g, '')
+  let match = source.match(/(return \(_openBlock[\S\s]+)/)
+  if(!match) {
+    match = source.match(/(return _withDirectives[\S\s]+)/)
+    isDirective = true
+  }
   if(match) {
     const matched = match[0]
     let result = matched
-      .substring(8, matched.length - 2)
+      .replace(/^[\S]+\s/g,'')
+      .replace(/^\(/g,'')
+      result = result.substring(0, isDirective ? result.length - 1 : result.length - 2)
       // trim blank
       .replace(/\s+/g, '')
       // remove _ctx because jsx does't need
@@ -48,7 +55,7 @@ const formatVue = (source: string): string => {
     result = removeFunc(result, '_withCtx')
     return result
   } else {
-    throw Error(`format vue complied faile, source: ${source}`)
+    throw Error(`format vue complied failed, source: ${source}`)
   }
 }
 

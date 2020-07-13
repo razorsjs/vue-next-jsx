@@ -4,11 +4,19 @@
 
 import { NodePath, types as t } from '@babel/core';
 import jsxNode from '../jsxNode';
-import { ElementTypes } from '../util/constant';
+import { ElementTypes, FRAGMENT, PatchFlags } from '../util/constant';
+import { addVueImport } from '../addVueImport';
 
 export default function() {
   const { path, options } = jsxNode
-  const openingElementPath: NodePath<t.JSXOpeningElement> = path.get('openingElement')
+  if(t.isJSXFragment(path.node)) {
+    const component = addVueImport(FRAGMENT)
+    jsxNode.tag = t.identifier(component)
+    jsxNode.tagType = ElementTypes.ELEMENT
+    jsxNode.patchFlag|=PatchFlags.STABLE_FRAGMENT
+    return;
+  }
+  const openingElementPath: NodePath<t.JSXOpeningElement> = (path as NodePath<t.JSXElement>).get('openingElement')
   const nameNode = openingElementPath.node.name
   let tagType = ElementTypes.ELEMENT
 

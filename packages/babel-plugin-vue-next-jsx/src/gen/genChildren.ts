@@ -54,7 +54,7 @@ const transformJSXSpreadChild = (path: NodePath<t.JSXSpreadChild>): t.SpreadElem
 
 export default function() {
   const {path} = jsxNode
-  const paths: Array<any> = path.get('children')
+  const paths: Array<any> = path.get('children') as any
 
   const nodes: Array<ChildNode> = paths.map(path => {
       if (path.isJSXText()) {
@@ -71,7 +71,7 @@ export default function() {
       if (path.isJSXSpreadChild()) {
         return transformJSXSpreadChild(path)
       }
-      if (path.isCallExpression()) {
+      if (path.isCallExpression() || path.isSequenceExpression()) {
         return path.node
       }
       /* istanbul ignore next */

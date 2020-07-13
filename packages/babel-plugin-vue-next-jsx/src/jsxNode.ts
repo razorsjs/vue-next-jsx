@@ -29,7 +29,7 @@ export interface JsxNode  {
   options?: PluginOptions
 
   // current JSXElement Path
-  path?: NodePath<t.JSXElement>
+  path?: NodePath
   // nodeType: equal with @vue/compiler-core NodeTypes
   nodeType?: NodeTypes
   // tagType: equal with @vue/compiler-core ElementTypes
@@ -103,7 +103,7 @@ export function clear() {
   Object.keys(jsxNode).forEach(key => delete jsxNode[key])
 }
 
-export function jsxNodeInit(path: NodePath<t.JSXElement>, options: PluginOptions) {
+export function jsxNodeInit(path: NodePath, options: PluginOptions) {
   clear()
   jsxNode.path = path
   jsxNode.options = {

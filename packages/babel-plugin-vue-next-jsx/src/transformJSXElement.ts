@@ -8,7 +8,7 @@ import genChildren from './gen/genChildren';
 import genProps from './gen/genProps';
 import jsxNode from './jsxNode';
 
-export const transformJSXElement = (): t.ExpressionStatement | t.CallExpression => {
+export const transformJSXElement = (): t.SequenceExpression | t.CallExpression => {
   const {options} = jsxNode
   // gen tag
   genTag()

@@ -1,4 +1,4 @@
-import {types as t} from '@babel/core';
+import {types as t, NodePath} from '@babel/core';
 import { CREATE_VNODE, helperNameMap, TO_DISPLAY_STRING } from './constant';
 import { importTransform } from '../gen/generateCode';
 
@@ -19,4 +19,8 @@ export const isVNode = (value: t.Expression): boolean => {
   return t.isCallExpression(value)
     && t.isIdentifier(value.callee)
     && value.callee.name === importTransform(helperNameMap[CREATE_VNODE])
+}
+
+export const isLeaf = (path: NodePath<any>): boolean =>  {
+  return !t.isExpressionStatement(path.parent)
 }

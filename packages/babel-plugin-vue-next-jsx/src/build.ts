@@ -6,7 +6,7 @@ import { generateBlock, generateCall } from './gen/generateCode';
 import jsxNode, { JsxNode } from './jsxNode';
 import { ElementTypes, CREATE_VNODE, CREATE_TEXT, TO_DISPLAY_STRING, PatchFlags } from './util/constant';
 import { buildArrayToArrow, buildObjectToExpression } from './util/build';
-import { isText, isTextVNode, isVNode } from './util';
+import { isText, isTextVNode, isVNode, isLeaf } from './util';
 import genDirective from './gen/genDirective';
 
 // main
@@ -29,7 +29,7 @@ export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression =>
   // In root we generate block, else vnode
   // A jsxElement with no jsxElement parent will be treated as root
   // If has directive, wrap with _withDirective
-  const codeBlock = t.isJSXElement(path.parent) ? generateCall(args, CREATE_VNODE) : generateBlock(args)
+  const codeBlock = isLeaf(path) ? generateCall(args, CREATE_VNODE) : generateBlock(args)
   return genDirective(codeBlock)
 }
 
@@ -74,6 +74,7 @@ export const buildChildren = (node: JsxNode): t.NullLiteral | t.CallExpression |
   if(!node.children?.length) return t.nullLiteral()
   const {children: nodes} = node;
   // if component node and has slot
+  // Fragment treated as ELEMENT
   const isComponent = node.tagType === ElementTypes.COMPONENT
   if(isComponent) {
     return buildSlotChildren(node)

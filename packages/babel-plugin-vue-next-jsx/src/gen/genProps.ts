@@ -43,7 +43,8 @@ const parsePropsFromJSXAttribute = (path: NodePath<t.JSXAttribute>) => {
  */
 export default function(): void {
   const { path } = jsxNode;
-  const openingElementPath: NodePath<t.JSXOpeningElement> = path.get('openingElement');
+  if(t.isJSXFragment(path.node)) return
+  const openingElementPath: NodePath<t.JSXOpeningElement> = (path as NodePath<t.JSXElement>).get('openingElement');
   const paths = openingElementPath.get('attributes');
   const spread: Array<t.SpreadElement> = [];
 

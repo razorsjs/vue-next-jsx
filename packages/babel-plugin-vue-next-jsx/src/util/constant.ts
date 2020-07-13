@@ -6,6 +6,7 @@ export {
   CREATE_TEXT,
   TO_DISPLAY_STRING,
   WITH_DIRECTIVES,
+  FRAGMENT,
   NodeTypes,
   ElementTypes
 } from '@vue/compiler-core'

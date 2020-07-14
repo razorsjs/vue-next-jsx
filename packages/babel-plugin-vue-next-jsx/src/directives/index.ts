@@ -2,6 +2,7 @@ import vShow from './vShow';
 import { types as t } from '@babel/core';
 import { DirectiveNode, DirectiveTransformResult, JsxNode } from '../jsxNode';
 import vText from './vText';
+import vHtml from './vHtml';
 export const defaultTransform = (dir: DirectiveNode, node: JsxNode): DirectiveTransformResult => {
   return {
     props: [
@@ -12,5 +13,6 @@ export const defaultTransform = (dir: DirectiveNode, node: JsxNode): DirectiveTr
 }
 export default {
   show: vShow,
-  text: vText
+  text: vText,
+  html: vHtml
 }

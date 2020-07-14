@@ -6,9 +6,4 @@ describe('v-show test', () => {
     const vueCode = '<div v-show="a"></div>'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
-  test('Base component with v-show', () => {
-    const jsxCode = '<test v-show={a}></test>'
-    const vueCode = '<test v-show="a"></test>'
-    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
-  })
 })

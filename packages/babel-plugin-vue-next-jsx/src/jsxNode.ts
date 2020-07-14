@@ -36,8 +36,8 @@ export interface JsxNode  {
   // ElementTypes.Slot and ElementTypes.Template will not be supported(we don't need v-slot)
   tagType?: ElementTypes
 
-  // just concat attrs and dirs
-  props?: Array<AttributeNode | DirectiveNode>
+  // just concat attrs and {...}
+  props?: Array<AttributeNode | t.SpreadElement>
   attributes?: Array<AttributeNode>
   directives?: Array<DirectiveNode>
   // spread props like {...obj}
@@ -112,6 +112,7 @@ export function jsxNodeInit(path: NodePath, options: PluginOptions) {
     }),
     ...options
   }
+  jsxNode.props = []
   jsxNode.attributes = []
   jsxNode.directives = []
   jsxNode.spreadProps = []

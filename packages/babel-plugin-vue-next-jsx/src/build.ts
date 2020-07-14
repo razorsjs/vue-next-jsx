@@ -4,10 +4,11 @@
 import { types as t } from '@babel/core';
 import { generateBlock, generateCall } from './gen/generateCode';
 import jsxNode, { JsxNode } from './jsxNode';
-import { ElementTypes, CREATE_VNODE, CREATE_TEXT, TO_DISPLAY_STRING, PatchFlags } from './util/constant';
+import { ElementTypes, CREATE_VNODE, CREATE_TEXT, MERGE_PROPS, PatchFlags } from './util/constant';
 import { buildArrayToArrow, buildObjectToExpression } from './util/build';
 import { isText, isTextVNode, isVNode, isLeaf } from './util';
 import genDirective from './gen/genDirective';
+import { addVueImport } from './addVueImport';
 
 // main
 export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression => {
@@ -34,16 +35,29 @@ export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression =>
 }
 
 // build data for createVNode
-export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression => {
-  const {attributes, spreadProps} = node
-  if(attributes.length === 0 && spreadProps.length === 0) {
+export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t.CallExpression => {
+  const {attributes, spreadProps, props} = node
+  if(props.length === 0) {
     return t.nullLiteral()
   }
-  const objectProperty: Array<t.ObjectProperty> = attributes.map(attr => {
-    return t.objectProperty(t.identifier(attr.name), attr.value)
-  })
-  // @ts-ignore
-  return t.objectExpression(objectProperty.concat(spreadProps));
+  // if has spread child, we use mergeProps
+  if(spreadProps?.length) {
+    const name = addVueImport(MERGE_PROPS)
+    const _props = props.map(i => {
+      if(!t.isSpreadElement(i)) {
+        return t.objectExpression([t.objectProperty(t.identifier(i.name), i.value)])
+      } else {
+        return t.objectExpression([i])
+      }
+    })
+    return t.callExpression(t.identifier(name), _props)
+  } else {
+    // plain {}
+    const objectProperty: Array<t.ObjectProperty> = attributes.map(attr => {
+      return t.objectProperty(t.identifier(attr.name), attr.value)
+    })
+    return t.objectExpression(objectProperty);
+  }
 }
 
 /**

@@ -7,6 +7,7 @@ export {
   TO_DISPLAY_STRING,
   WITH_DIRECTIVES,
   FRAGMENT,
+  MERGE_PROPS,
   NodeTypes,
   ElementTypes
 } from '@vue/compiler-core'

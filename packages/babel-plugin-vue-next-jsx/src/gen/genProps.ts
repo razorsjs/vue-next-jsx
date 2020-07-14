@@ -28,6 +28,7 @@ const parsePropsFromJSXAttribute = (path: NodePath<t.JSXAttribute>) => {
       exp: value,
     };
     jsxNode.directives.push(directiveNode);
+    return directiveNode
   } else {
     const attributeNode: AttributeNode = {
       type: NodeTypes.ATTRIBUTE,
@@ -35,6 +36,8 @@ const parsePropsFromJSXAttribute = (path: NodePath<t.JSXAttribute>) => {
       value,
     };
     jsxNode.attributes.push(attributeNode);
+    jsxNode.props.push(attributeNode)
+    return attributeNode
   }
 };
 
@@ -46,21 +49,19 @@ export default function(): void {
   if(t.isJSXFragment(path.node)) return
   const openingElementPath: NodePath<t.JSXOpeningElement> = (path as NodePath<t.JSXElement>).get('openingElement');
   const paths = openingElementPath.get('attributes');
-  const spread: Array<t.SpreadElement> = [];
 
   paths.forEach(path => {
     if (path.isJSXAttribute()) {
       parsePropsFromJSXAttribute(path);
     }
     if (path.isJSXSpreadAttribute()) {
-      spread.push(t.spreadElement(path.node.argument));
+      let node = t.spreadElement(path.node.argument)
+      jsxNode.spreadProps.push(node)
+      jsxNode.props.push(node)
     }
   });
 
-  jsxNode.spreadProps = spread;
-  jsxNode.props = [...jsxNode.attributes, ...jsxNode.directives];
-
-  if (jsxNode.props.length !== 0 || jsxNode.attributes.length!==0) {
+  if (jsxNode.directives?.length || jsxNode.attributes?.length) {
     extractPatchFlag();
   }
 }

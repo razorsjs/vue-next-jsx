@@ -1,12 +1,12 @@
 import { DirectiveNode, DirectiveTransformResult, JsxNode } from '../jsxNode';
 import { types as t } from '@babel/core';
-import {V_SHOW, helperNameMap} from '../util/constant'
-import {importTransform} from '../gen/generateCode';
+import {V_SHOW} from '../util/constant'
+import { addVueImport } from '../addVueImport';
 
 export default (dir: DirectiveNode, node: JsxNode): DirectiveTransformResult => {
   return {
     props: [
-      t.identifier(importTransform(helperNameMap[V_SHOW])),
+      t.identifier(addVueImport(V_SHOW)),
       dir.exp
     ],
     needRuntime: V_SHOW

@@ -12,7 +12,7 @@ export {
 } from '@vue/compiler-core'
 
 export {
-  V_SHOW
+  V_SHOW,
 } from '@vue/compiler-dom'
 
 export {

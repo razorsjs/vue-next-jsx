@@ -6,4 +6,9 @@ describe('fragment test', () => {
     const vueCode = '<div>a</div><div>b</div>'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
+  // test('base use with array', () => {
+  //   const jsxCode = '[<div>a</div>, <div>b</div>]'
+  //   const vueCode = '<div>a</div><div>b</div>'
+  //   expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  // })
 })

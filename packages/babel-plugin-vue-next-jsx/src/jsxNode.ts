@@ -59,7 +59,7 @@ export interface JsxNode  {
 export type DirectiveTransform = (
   dir: DirectiveNode,
   node: JsxNode
-) => DirectiveTransformResult
+) => DirectiveTransformResult | void
 
 export interface DirectiveTransformResult {
   props: [t.Expression, t.Expression]
@@ -115,6 +115,7 @@ export function jsxNodeInit(path: NodePath, options: PluginOptions) {
   jsxNode.attributes = []
   jsxNode.directives = []
   jsxNode.spreadProps = []
+  jsxNode.dynamicProps = []
 }
 
 export default jsxNode

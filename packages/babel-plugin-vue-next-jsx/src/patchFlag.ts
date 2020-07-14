@@ -4,13 +4,10 @@
 
 import { types as t } from '@babel/core';
 import { PatchFlags, ElementTypes, isOn, helperNameMap, isSymbol } from './util/constant';
-import jsxNode, { AttributeNode, DirectiveNode, DirectiveTransformResult } from './jsxNode';
-import {vueImportMap} from './addVueImport';
-
-// dynamic check
-const isDynamic = (value) => {
-  return !t.isLiteral(value)
-}
+import jsxNode, { AttributeNode, DirectiveNode, DirectiveTransform, DirectiveTransformResult } from './jsxNode';
+import {addVueImport} from './addVueImport';
+import {defaultTransform} from './directives'
+import {isDynamic} from'./util'
 
 export const extractPatchFlag = () => {
   const {attributes, directives, tagType, options} = jsxNode
@@ -19,7 +16,7 @@ export const extractPatchFlag = () => {
   let hasClassBinding = false
   let hasStyleBinding = false
   let hasHydrationEventBinding = false
-  const dynamicPropNames: string[] = []
+  let dynamicPropNames: string[] = []
   // record only runtime
   const runtimeDirectives = []
   // record all props
@@ -60,24 +57,31 @@ export const extractPatchFlag = () => {
    * run directive transform
    */
   directives.forEach((dir) => {
-    const directiveTransform = options.directiveTransforms[dir.name]
+    const directiveTransform: DirectiveTransform = options.directiveTransforms[dir.name]
     if (directiveTransform) {
       // has built-in directive transform.
-      const { props, needRuntime } = directiveTransform(dir, jsxNode)
-      directiveTransformResult.push(t.arrayExpression(props))
-      if (needRuntime) {
-        runtimeDirectives.push(dir)
-        if (isSymbol(needRuntime)) {
-          vueImportMap.push(needRuntime)
+      const transformResult = directiveTransform(dir, jsxNode)
+      // directiveTransform can return void like v-text
+      if(transformResult) {
+        const {props, needRuntime} = transformResult
+        directiveTransformResult.push(t.arrayExpression(props))
+        if (needRuntime) {
+          runtimeDirectives.push(dir)
+          if (isSymbol(needRuntime)) {
+            addVueImport(needRuntime)
+          }
         }
       }
     } else {
       // no built-in transform, this is a user custom directive.
+      const { props } = defaultTransform(dir, jsxNode)
+      directiveTransformResult.push(t.arrayExpression(props))
       runtimeDirectives.push(dir)
     }
   })
 
   const {patchFlag} = jsxNode
+  dynamicPropNames = jsxNode.dynamicProps.concat(dynamicPropNames)
 
   if (hasClassBinding) {
     jsxNode.patchFlag |= PatchFlags.CLASS

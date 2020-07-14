@@ -13,6 +13,7 @@ export default ({}, options: PluginOptions) => {
         exit(path: NodePath<Node>, state) {
           // Just do replacing in root
           // TODO: If path is leaf, replace it by its children
+          // TODO: support array return
           jsxNodeInit(path, options)
           path.replaceWith(transformJSXElement())
         },

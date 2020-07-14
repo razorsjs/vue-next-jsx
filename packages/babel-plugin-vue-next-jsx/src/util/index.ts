@@ -24,3 +24,13 @@ export const isVNode = (value: t.Expression): boolean => {
 export const isLeaf = (path: NodePath<any>): boolean =>  {
   return !t.isExpressionStatement(path.parent)
 }
+
+export const isDynamic = (value) => {
+  return !t.isLiteral(value)
+}
+
+export const getContent = (node): string => {
+  if(t.isNumericLiteral(node)) return node.value.toString()
+  if(t.isIdentifier(node)) return node.name
+  if(t.isStringLiteral(node)) return node.value
+}

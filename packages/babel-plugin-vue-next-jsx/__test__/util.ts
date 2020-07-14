@@ -26,6 +26,13 @@ const removeFunc = (str: string, funcName): string => {
   return result.includes(funcName) ? removeFunc(result, funcName) : result
 }
 
+// remove some in functional com
+const removeInFuncCom = (str) => {
+  return str
+    .replace(/_component_/g, '')
+    .replace(/_directive_/g, '')
+}
+
 const formatVue = (source: string): string => {
   let isDirective = false
   // format
@@ -49,8 +56,7 @@ const formatVue = (source: string): string => {
       .replace(/_ctx./g, '')
       // remove comment
       .replace(/\/\*[\S]+\*\//g, '')
-      // remove _component_ in component name because we don't need resolveComponent
-      .replace(/_component_/g, '')
+    result = removeInFuncCom(result)
     // remove _withCtx() in slot
     result = removeFunc(result, '_withCtx')
     return result

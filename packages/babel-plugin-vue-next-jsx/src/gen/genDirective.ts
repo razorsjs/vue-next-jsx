@@ -1,14 +1,13 @@
 import {types as t} from '@babel/core';
 import jsxNode from '../jsxNode';
-import {vueImportMap} from '../addVueImport';
-import {WITH_DIRECTIVES,helperNameMap} from '../util/constant'
-import {importTransform} from './generateCode';
+import {addVueImport} from '../addVueImport';
+import {WITH_DIRECTIVES} from '../util/constant'
 
 export default function(block: t.CallExpression | t.SequenceExpression): t.CallExpression | t.SequenceExpression{
   if(jsxNode.directiveTransformResult?.length) {
-    vueImportMap.push(WITH_DIRECTIVES)
+    const name = addVueImport(WITH_DIRECTIVES)
     return t.callExpression(
-      t.identifier(importTransform(helperNameMap[WITH_DIRECTIVES])),
+      t.identifier(name),
       [block, t.arrayExpression(jsxNode.directiveTransformResult)]
     )
   } else {

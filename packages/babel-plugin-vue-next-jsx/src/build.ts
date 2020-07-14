@@ -4,25 +4,25 @@
 import { types as t } from '@babel/core';
 import { generateBlock, generateCall } from './gen/generateCode';
 import jsxNode, { JsxNode } from './jsxNode';
-import { ElementTypes, CREATE_VNODE, CREATE_TEXT, MERGE_PROPS, PatchFlags } from './util/constant';
+import { ElementTypes, CREATE_VNODE, CREATE_TEXT, MERGE_PROPS, PatchFlags, KEEP_ALIVE, TELEPORT } from './util/constant';
 import { buildArrayToArrow, buildObjectToExpression } from './util/build';
-import { isText, isTextVNode, isVNode, isLeaf } from './util';
+import { isText, isTextVNode, isVNode, isRoot, shouldUseBlock } from './util';
 import genDirective from './gen/genDirective';
 import { addVueImport } from './addVueImport';
 
 // main
 export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression => {
-  const {path, tag, children, patchFlag, dynamicProps} = node
+  const {path, tag, children, dynamicProps} = node
   const args: any = [tag]
   const data = buildData(node)
-  if(dynamicProps?.length || patchFlag || children?.length || !t.isNullLiteral(data)) {
+  if(dynamicProps?.length || node.patchFlag || children?.length || !t.isNullLiteral(data)) {
     args.push(data)
   }
-  if(dynamicProps?.length || patchFlag || children?.length ) {
+  if(dynamicProps?.length || node.patchFlag || children?.length ) {
     args.push(buildChildren(node))
   }
-  if(dynamicProps?.length || patchFlag) {
-    args.push(patchFlag ? t.numericLiteral(patchFlag) : t.nullLiteral())
+  if(dynamicProps?.length || node.patchFlag) {
+    args.push(node.patchFlag ? t.numericLiteral(node.patchFlag) : t.nullLiteral())
   }
   if(dynamicProps?.length) {
     args.push(t.arrayExpression(dynamicProps.map(i=>t.stringLiteral(i))))
@@ -30,7 +30,8 @@ export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression =>
   // In root we generate block, else vnode
   // A jsxElement with no jsxElement parent will be treated as root
   // If has directive, wrap with _withDirective
-  const codeBlock = isLeaf(path) ? generateCall(args, CREATE_VNODE) : generateBlock(args)
+  const useBlock = shouldUseBlock(node)
+  const codeBlock = (isRoot(path) || useBlock) ? generateBlock(args) : generateCall(args, CREATE_VNODE)
   return genDirective(codeBlock)
 }
 
@@ -86,15 +87,36 @@ export const buildSlotChildren = (node: JsxNode): t.ObjectExpression => {
 export const buildChildren = (node: JsxNode): t.NullLiteral | t.CallExpression | t.StringLiteral | t.ArrayExpression | t.ObjectExpression => {
   // no children
   if(!node.children?.length) return t.nullLiteral()
-  const {children: nodes} = node;
+  let {children: nodes, vnodeTag} = node;
   // if component node and has slot
   // Fragment treated as ELEMENT
   const isComponent = node.tagType === ElementTypes.COMPONENT
-  if(isComponent) {
+  if(vnodeTag === KEEP_ALIVE) {
+    node.patchFlag|=PatchFlags.DYNAMIC_SLOTS
+  }
+  if(vnodeTag === TELEPORT) {
+    nodes = nodes.map(node => {
+      if(t.isStringLiteral(node)) {
+        return generateCall([node], CREATE_TEXT)
+      } else {
+        return node
+      }
+    })
+  }
+  const shouldBuildAsSlots =
+    isComponent &&
+    // Teleport is not a real component and has dedicated runtime handling
+    vnodeTag !== TELEPORT &&
+    // explained above.
+    vnodeTag !== KEEP_ALIVE
+  if(shouldBuildAsSlots) {
     return buildSlotChildren(node)
   }
 
-  if(nodes.length === 1 && !isVNode(nodes[0])) {
+  if(nodes.length === 1) {
+    if(isVNode(nodes[0])) {
+      return t.arrayExpression(nodes)
+    }
     // only one
     return nodes[0]
   } else if (nodes.length === 0) {

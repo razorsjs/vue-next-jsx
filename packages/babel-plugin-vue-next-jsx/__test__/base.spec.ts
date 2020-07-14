@@ -24,4 +24,8 @@ describe('Base jsx use', () => {
     const vueCode = '<div><span>test</span>{{a}}</div>'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
+  test('svg render as block', () => {
+    const code = '<div><svg></svg></div>'
+    compare(code)
+  })
 })

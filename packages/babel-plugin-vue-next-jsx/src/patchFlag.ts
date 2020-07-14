@@ -21,7 +21,6 @@ export const extractPatchFlag = () => {
   const runtimeDirectives = []
   // record all props
   const directiveTransformResult: Array<t.ArrayExpression | undefined> = []
-  jsxNode.patchFlag = 0
 
   /**
    * onXXX all be treated as listener like v-on, e.g. onClick <==> v-on:click <==> @click

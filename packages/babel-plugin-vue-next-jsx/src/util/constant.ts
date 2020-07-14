@@ -8,6 +8,10 @@ export {
   WITH_DIRECTIVES,
   FRAGMENT,
   MERGE_PROPS,
+  TELEPORT,
+  SUSPENSE,
+  KEEP_ALIVE,
+  BASE_TRANSITION,
   NodeTypes,
   ElementTypes
 } from '@vue/compiler-core'
@@ -20,5 +24,6 @@ export {
   PatchFlags,
   isOn,
   extend,
-  isSymbol
+  isSymbol,
+  hyphenate
 } from '@vue/shared'

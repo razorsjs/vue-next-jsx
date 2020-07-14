@@ -4,8 +4,24 @@
 
 import { NodePath, types as t } from '@babel/core';
 import jsxNode from '../jsxNode';
-import { ElementTypes, FRAGMENT, PatchFlags } from '../util/constant';
+import { ElementTypes, FRAGMENT, isSymbol, PatchFlags } from '../util/constant';
 import { addVueImport } from '../addVueImport';
+import {isCoreComponent} from '../util'
+
+export const resolveTag = (tag): string | symbol => {
+  const { options } = jsxNode
+
+  // 1. dynamic component
+
+  // 2. built-in components (Teleport, Transition, KeepAlive, Suspense...)
+  const builtIn = isCoreComponent(tag) || (options.isBuiltInComponent && options.isBuiltInComponent(tag))
+  if (builtIn) {
+    // built-ins are simply fallthroughs / have special handling during ssr
+    // no we don't need to import their runtime equivalents
+    return builtIn
+  }
+  return tag
+}
 
 export default function() {
   const { path, options } = jsxNode
@@ -26,19 +42,24 @@ export default function() {
     if(options.isNativeTag) {
       if (!options.isNativeTag(tag)) tagType = ElementTypes.COMPONENT
     } else if (
-      // isCoreComponent(tag) ||
+      isCoreComponent(tag) ||
       (options.isBuiltInComponent && options.isBuiltInComponent(tag)) ||
       /^[A-Z]/.test(tag) ||
       tag === 'component') {
       tagType = ElementTypes.COMPONENT
     }
 
+    jsxNode.vnodeTag = resolveTag(tag)
+
     if(tagType === ElementTypes.COMPONENT) {
-      jsxNode.tag = t.identifier(tag)
+      if(isSymbol(jsxNode.vnodeTag)) {
+        jsxNode.tag = t.identifier(addVueImport(jsxNode.vnodeTag))
+      } else {
+        jsxNode.tag = t.identifier(tag)
+      }
     } else {
       jsxNode.tag = t.stringLiteral(tag)
     }
-
     jsxNode.tagType = tagType
 
     return;

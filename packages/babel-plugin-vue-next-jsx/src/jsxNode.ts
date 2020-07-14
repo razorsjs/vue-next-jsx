@@ -35,6 +35,8 @@ export interface JsxNode  {
   // tagType: equal with @vue/compiler-core ElementTypes
   // ElementTypes.Slot and ElementTypes.Template will not be supported(we don't need v-slot)
   tagType?: ElementTypes
+  // vnodeTag
+  vnodeTag?: symbol | string
 
   // just concat attrs and {...}
   props?: Array<AttributeNode | t.SpreadElement>
@@ -84,7 +86,7 @@ export interface ParseOptions {
    * e.g. platform native elements, e.g. <div> for browsers
    */
   isNativeTag?: (tag: string) => boolean
-  isBuiltInComponent?: (tag: string) => boolean
+  isBuiltInComponent?: (tag: string) => symbol | void
 }
 
 export interface TransformOptions {
@@ -112,6 +114,7 @@ export function jsxNodeInit(path: NodePath, options: PluginOptions) {
     }),
     ...options
   }
+  jsxNode.patchFlag = 0
   jsxNode.props = []
   jsxNode.attributes = []
   jsxNode.directives = []

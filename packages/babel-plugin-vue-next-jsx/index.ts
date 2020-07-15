@@ -2,7 +2,6 @@ import jsx from "@babel/plugin-syntax-jsx";
 import { transformJSXElement } from './src/transformJSXElement';
 import {NodePath, types as t, Node} from '@babel/core'
 import { jsxNodeInit, PluginOptions } from './src/jsxNode';
-import { isLeaf } from './src/util';
 
 export default ({}, options: PluginOptions) => {
   return {

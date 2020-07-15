@@ -79,7 +79,6 @@ export function vueCompiled(source: string): string {
   const compiled = compile(source, {
     mode: 'module',
     prefixIdentifiers: true,
-    optimizeBindings: false,
     hoistStatic: false,
     cacheHandlers: false,
     scopeId: null

@@ -2,22 +2,42 @@
   "name": "@razors/babel-plugin",
   "private": true,
   "devDependencies": {
+    "@babel/preset-env": "^7.10.4",
+    "@razors/build-rollup": "^0.0.9",
     "@types/jest": "^24.0.13",
     "@types/node": "^12.0.4",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^3.6.0",
+    "html-webpack-plugin": "^4.3.0",
     "jest": "^26.1.0",
     "lerna": "^3.14.1",
+    "less-loader": "^6.2.0",
+    "style-loader": "^1.2.1",
     "ts-jest": "^26.1.1",
-    "typescript": "^3.9.5"
+    "ts-loader": "^8.0.0",
+    "typescript": "^3.9.5",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^5.0.9"
   },
   "scripts": {
     "test": "jest",
     "publish": "npm run build && npm run test && ./node_modules/.bin/lerna publish",
-    "build": "./node_modules/.bin/lerna run build"
+    "build": "rollup --config config/rollup/rollup.config.js",
+    "serve": "webpack-dev-server --config ./config/webpack/site/webpack.dev.conf.js"
   },
   "workspaces": [
     "packages/*"
   ],
   "dependencies": {
-    "vue": "3.0.0-beta.18"
+    "@vue/compiler-sfc": "^3.0.0-beta.21",
+    "rollup-plugin-vue": "^6.0.0-beta.6",
+    "vue": "3.0.0-beta.18",
+    "vue-loader": "16.0.0-beta.3",
+    "vue-router": "4.0.0-alpha.12"
+  },
+  "resolutions": {
+    "rollup-plugin-vue": "^6.0.0-beta.6"
   }
 }

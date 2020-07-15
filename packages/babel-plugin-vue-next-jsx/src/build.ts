@@ -37,12 +37,13 @@ export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression =>
 
 // build data for createVNode
 export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t.CallExpression => {
-  const {attributes, spreadProps, props} = node
-  if(props.length === 0) {
+  const {attributes, spreadProps} = node
+  if(attributes.length === 0 && spreadProps.length === 0 ) {
     return t.nullLiteral()
   }
   // if has spread child, we use mergeProps
   if(spreadProps?.length) {
+    const props = [...attributes,...spreadProps]
     const name = addVueImport(MERGE_PROPS)
     const _props = props.map(i => {
       if(!t.isSpreadElement(i)) {

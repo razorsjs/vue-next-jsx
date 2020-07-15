@@ -17,7 +17,7 @@
       },
     }
     return (
-      <Icon icon="search" v-show={isShow} onClick = {isShow}>{d}<div contentEditable={contentEditable}>ad</div></Icon>
+      <Icon icon="search" v-test={test} onClick = {onClick}>{d.value}<div contentEditable={contentEditable}>ad</div></Icon>
     )
   }
 </script>

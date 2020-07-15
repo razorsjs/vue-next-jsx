@@ -12,7 +12,6 @@ describe('Base jsx use', () => {
   test('Base jsx with variable', () => {
     const jsxCode = '<div>{a}</div>'
     const vueCode = '<div>{{a}}</div>'
-    console.log(vueCompiled(vueCode));
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
   test('Base jsx with one children', () => {

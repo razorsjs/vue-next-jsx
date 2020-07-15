@@ -66,13 +66,18 @@ const formatVue = (source: string): string => {
 }
 
 const formatTransformed = (source: string): string => {
-  return source
+  let s = source
     // delete ; at the end of transformed
     .substring(0, source.length - 1)
     // trim blank
     .replace(/\s+/g, '')
     // trim ;
     .replace(/;/g, '')
+  let match =  s.match(/_withDirectives\([\s\S]+/)
+  if(!match) {
+    match = s.match(/_openBlock\([\s\S]+/)
+  }
+  return match[0]
 }
 
 export function vueCompiled(source: string): string {
@@ -81,6 +86,7 @@ export function vueCompiled(source: string): string {
     prefixIdentifiers: true,
     hoistStatic: false,
     cacheHandlers: false,
+    optimizeImports: false,
     scopeId: null
   })
   return formatVue(compiled.code)

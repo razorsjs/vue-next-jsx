@@ -36,7 +36,6 @@ const parsePropsFromJSXAttribute = (path: NodePath<t.JSXAttribute>) => {
       value,
     };
     jsxNode.attributes.push(attributeNode);
-    jsxNode.props.push(attributeNode)
     return attributeNode
   }
 };
@@ -57,7 +56,6 @@ export default function(): void {
     if (path.isJSXSpreadAttribute()) {
       let node = t.spreadElement(path.node.argument)
       jsxNode.spreadProps.push(node)
-      jsxNode.props.push(node)
     }
   });
 

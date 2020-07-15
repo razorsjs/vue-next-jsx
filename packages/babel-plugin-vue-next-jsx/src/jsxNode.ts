@@ -27,9 +27,11 @@ export interface DirectiveNode {
 export interface JsxNode  {
   // plugin options
   options?: PluginOptions
-
   // current JSXElement Path
   path?: NodePath
+  // current program
+  program?: NodePath
+
   // nodeType: equal with @vue/compiler-core NodeTypes
   nodeType?: NodeTypes
   // tagType: equal with @vue/compiler-core ElementTypes
@@ -38,8 +40,6 @@ export interface JsxNode  {
   // vnodeTag
   vnodeTag?: symbol | string
 
-  // just concat attrs and {...}
-  props?: Array<AttributeNode | t.SpreadElement>
   attributes?: Array<AttributeNode>
   directives?: Array<DirectiveNode>
   // spread props like {...obj}
@@ -105,9 +105,10 @@ export function clear() {
   Object.keys(jsxNode).forEach(key => delete jsxNode[key])
 }
 
-export function jsxNodeInit(path: NodePath, options: PluginOptions) {
+export function jsxNodeInit(path: NodePath, options: PluginOptions, program: NodePath) {
   clear()
   jsxNode.path = path
+  jsxNode.program = program
   jsxNode.options = {
     ...extend({}, domOptions, {
       directiveTransforms
@@ -115,7 +116,6 @@ export function jsxNodeInit(path: NodePath, options: PluginOptions) {
     ...options
   }
   jsxNode.patchFlag = 0
-  jsxNode.props = []
   jsxNode.attributes = []
   jsxNode.directives = []
   jsxNode.spreadProps = []

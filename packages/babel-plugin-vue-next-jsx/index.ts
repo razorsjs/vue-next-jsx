@@ -1,6 +1,6 @@
 import jsx from "@babel/plugin-syntax-jsx";
 import { transformJSXElement } from './src/transformJSXElement';
-import {NodePath, types as t, Node} from '@babel/core'
+import { NodePath, types as t, Node, PluginPass } from '@babel/core';
 import { jsxNodeInit, PluginOptions } from './src/jsxNode';
 
 export default ({}, options: PluginOptions) => {
@@ -9,17 +9,17 @@ export default ({}, options: PluginOptions) => {
     inherits: jsx,
     visitor: {
       JSXFragment: {
-        exit(path: NodePath<Node>, state) {
+        exit(path: NodePath<Node>, state:PluginPass) {
           // Just do replacing in root
           // TODO: If path is leaf, replace it by its children
           // TODO: support array return
-          jsxNodeInit(path, options)
+          jsxNodeInit(path, options, state.file.path)
           path.replaceWith(transformJSXElement())
         },
       },
       JSXElement: {
-        exit(path: NodePath<Node>, state) {
-          jsxNodeInit(path, options)
+        exit(path: NodePath<Node>, state: PluginPass) {
+          jsxNodeInit(path, options, state.file.path)
           path.replaceWith(transformJSXElement())
         },
       }

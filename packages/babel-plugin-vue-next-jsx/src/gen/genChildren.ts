@@ -52,6 +52,18 @@ const transformJSXText = (path: NodePath<t.JSXText>): t.StringLiteral => {
 
 const transformJSXSpreadChild = (path: NodePath<t.JSXSpreadChild>): t.SpreadElement => t.spreadElement(path.node.expression)
 
+const transformJSXExpressionContainer = (path: NodePath<t.JSXExpressionContainer>, paths) => {
+  const {node: {expression}} = path
+  if(t.isIdentifier(expression) || t.isLiteral(expression)) {
+    const isTextVNode = paths.length > 1
+    if(t.isIdentifier(expression) && !isTextVNode) {
+      jsxNode.patchFlag|=PatchFlags.TEXT
+    }
+    return genText(path.node, isTextVNode)
+  }
+  return expression
+}
+
 export default function() {
   const {path} = jsxNode
   const paths: Array<any> = path.get('children') as any
@@ -62,11 +74,7 @@ export default function() {
       }
       // treated as vue: {{XX}}
       if (path.isJSXExpressionContainer()) {
-        const isTextVNode = paths.length > 1
-        if(!isTextVNode) {
-          jsxNode.patchFlag|=PatchFlags.TEXT
-        }
-        return genText(path.node, isTextVNode)
+        return transformJSXExpressionContainer(path, paths)
       }
       if (path.isJSXSpreadChild()) {
         return transformJSXSpreadChild(path)

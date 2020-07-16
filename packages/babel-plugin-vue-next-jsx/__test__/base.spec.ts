@@ -9,9 +9,14 @@ describe('Base jsx use', () => {
     const code = '<div/>'
     compare(code)
   })
-  test('Base jsx with variable', () => {
+  test('Base jsx with variable text', () => {
     const jsxCode = '<div>{a}</div>'
     const vueCode = '<div>{{a}}</div>'
+    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  })
+  test('Base jsx with variable number', () => {
+    const jsxCode = '<div>{1}</div>'
+    const vueCode = '<div>{{1}}</div>'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
   test('Base jsx with one children', () => {

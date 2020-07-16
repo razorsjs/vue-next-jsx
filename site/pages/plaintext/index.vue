@@ -16,8 +16,13 @@
         console.log(el, vnode);
       },
     }
+    const maps = [1,2]
     return (
-      <Icon icon="search" v-test={test} onClick = {onClick}>{d.value}<div contentEditable={contentEditable}>ad</div></Icon>
+      <div color="a">
+        <>
+
+        </>
+      </div>
     )
   }
 </script>

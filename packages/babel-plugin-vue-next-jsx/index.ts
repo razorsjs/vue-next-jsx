@@ -11,8 +11,6 @@ export default ({}, options: PluginOptions) => {
       JSXFragment: {
         exit(path: NodePath<Node>, state:PluginPass) {
           // Just do replacing in root
-          // TODO: If path is leaf, replace it by its children
-          // TODO: support array return
           jsxNodeInit(path, options, state.file.path)
           path.replaceWith(transformJSXElement())
         },

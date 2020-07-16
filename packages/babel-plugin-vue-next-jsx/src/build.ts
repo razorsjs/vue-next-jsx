@@ -11,7 +11,7 @@ import genDirective from './gen/genDirective';
 import { addVueImport } from './addVueImport';
 
 // main
-export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression => {
+export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression | t.ArrayExpression => {
   const {path, tag, children, dynamicProps} = node
   const args: any = [tag]
   const data = buildData(node)
@@ -31,7 +31,10 @@ export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression =>
   // A jsxElement with no jsxElement parent will be treated as root
   // If has directive, wrap with _withDirective
   const useBlock = shouldUseBlock(node)
-  const codeBlock = (isRoot(path) || useBlock) ? generateBlock(args) : generateCall(args, CREATE_VNODE)
+  let codeBlock: t.SequenceExpression | t.CallExpression | t.ArrayExpression = (isRoot(path) || useBlock) ? generateBlock(args) : generateCall(args, CREATE_VNODE)
+  if(t.isArrowFunctionExpression(path.parent)) {
+    codeBlock = t.arrayExpression([codeBlock])
+  }
   return genDirective(codeBlock)
 }
 
@@ -71,13 +74,24 @@ export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t
  * @param node
  */
 export const buildSlotChildren = (node: JsxNode): t.ObjectExpression => {
-  const children = node.children.map(child => isText(child) ? generateCall([child], CREATE_TEXT) : child)
-  const defaultValue = buildArrayToArrow(children)
-  const slot = {
-    default: defaultValue,
-    _: t.numericLiteral(1)
+  // if children is object, assume that slotScope
+  let isSlotScope = false
+  const children = node.children.map(child => {
+    if(t.isObjectExpression(child) && child.properties) {
+      isSlotScope = true
+    }
+    return isText(child) ? generateCall([child], CREATE_TEXT) : child
+  })
+  if(isSlotScope) {
+    const _ = t.objectProperty(t.identifier('_'), t.numericLiteral(1))
+    return t.objectExpression([...children[0].properties, _])
+  } else {
+    const slot = {
+      default: buildArrayToArrow(children),
+      _: t.numericLiteral(1),
+    }
+    return buildObjectToExpression(slot)
   }
-  return buildObjectToExpression(slot)
 }
 
 /**

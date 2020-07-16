@@ -18,6 +18,7 @@ export const isTextVNode = (value: t.Expression): boolean => {
 }
 
 export const isVNode = (value: t.Expression): boolean => {
+  // if () => [], will add wrap [] in child, not in there
   const isCreateTextVNode = t.isCallExpression(value)
     && t.isIdentifier(value.callee)
     && value.callee.name === importTransform(helperNameMap[CREATE_TEXT])

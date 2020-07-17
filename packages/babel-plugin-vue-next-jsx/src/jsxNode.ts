@@ -5,7 +5,6 @@
 import { NodePath, types as t } from '@babel/core';
 import { NodeTypes, ElementTypes, extend } from './util/constant';
 import domOptions from './domOptions'
-import directiveTransforms from './directives'
 
 // AttributeNode: @vue/compiler-core AttributeNode
 export interface AttributeNode {
@@ -63,6 +62,14 @@ export type DirectiveTransform = (
   node: JsxNode
 ) => DirectiveTransformResult | void
 
+export interface CodegenOptions {
+  /**
+   * Customize where to import runtime helpers from.
+   * @default 'vue'
+   */
+  runtimeModuleName?: string
+}
+
 export interface DirectiveTransformResult {
   props: [t.Expression, t.Expression]
   needRuntime?: boolean | symbol
@@ -97,7 +104,7 @@ export interface TransformOptions {
   directiveTransforms?: Record<string, DirectiveTransform | undefined>
 }
 
-export type PluginOptions = BuildOptions & ParseOptions & TransformOptions
+export type PluginOptions = BuildOptions & ParseOptions & TransformOptions & CodegenOptions
 
 let jsxNode: JsxNode = {}
 
@@ -109,12 +116,7 @@ export function jsxNodeInit(path: NodePath, options: PluginOptions, program: Nod
   clear()
   jsxNode.path = path
   jsxNode.program = program
-  jsxNode.options = {
-    ...extend({}, domOptions, {
-      directiveTransforms
-    }),
-    ...options
-  }
+  jsxNode.options = extend({}, domOptions, options)
   jsxNode.patchFlag = 0
   jsxNode.attributes = []
   jsxNode.directives = []

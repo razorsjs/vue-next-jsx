@@ -25,5 +25,6 @@ export {
   isOn,
   extend,
   isSymbol,
-  hyphenate
+  hyphenate,
+  camelize
 } from '@vue/shared'

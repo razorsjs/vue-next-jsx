@@ -55,7 +55,7 @@ const formatVue = (source: string): string => {
       // remove _ctx because jsx does't need
       .replace(/_ctx./g, '')
       // remove comment
-      .replace(/\/\*[\S]+\*\//g, '')
+      .replace(/\/\*[\S]+?\*\//g, '')
     result = removeInFuncCom(result)
     // remove _withCtx() in slot
     result = removeFunc(result, '_withCtx')

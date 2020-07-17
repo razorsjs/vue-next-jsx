@@ -4,7 +4,7 @@
 import { types as t } from '@babel/core';
 import { generateBlock, generateCall } from './gen/generateCode';
 import jsxNode, { JsxNode } from './jsxNode';
-import { ElementTypes, CREATE_VNODE, CREATE_TEXT, MERGE_PROPS, PatchFlags, KEEP_ALIVE, TELEPORT } from './util/constant';
+import { ElementTypes, CREATE_VNODE, CREATE_TEXT, MERGE_PROPS, PatchFlags, KEEP_ALIVE, TELEPORT, FRAGMENT } from './util/constant';
 import { buildArrayToArrow, buildObjectToExpression } from './util/build';
 import { isText, isTextVNode, isVNode, isRoot, shouldUseBlock } from './util';
 import genDirective from './gen/genDirective';
@@ -109,7 +109,7 @@ export const buildChildren = (node: JsxNode): t.NullLiteral | t.CallExpression |
   if(vnodeTag === KEEP_ALIVE) {
     node.patchFlag|=PatchFlags.DYNAMIC_SLOTS
   }
-  if(vnodeTag === TELEPORT) {
+  if(vnodeTag === TELEPORT || vnodeTag === FRAGMENT) {
     nodes = nodes.map(node => {
       if(t.isStringLiteral(node)) {
         return generateCall([node], CREATE_TEXT)

@@ -4,7 +4,7 @@
 
 import { NodePath, types as t } from '@babel/core';
 import jsxNode from '../jsxNode';
-import { ElementTypes, FRAGMENT, isSymbol, PatchFlags } from '../util/constant';
+import { ElementTypes, FRAGMENT, isSymbol, PatchFlags, camelize } from '../util/constant';
 import { addVueImport } from '../addVueImport';
 import {isCoreComponent} from '../util'
 
@@ -18,7 +18,7 @@ export const resolveTag = (tag): string | symbol => {
   if (builtIn) {
     // built-ins are simply fallthroughs / have special handling during ssr
     // no we don't need to import their runtime equivalents
-    return builtIn
+    return builtIn as symbol
   }
   return tag
 }
@@ -29,7 +29,7 @@ export default function() {
     const component = addVueImport(FRAGMENT)
     jsxNode.tag = t.identifier(component)
     jsxNode.tagType = ElementTypes.ELEMENT
-    jsxNode.patchFlag|=PatchFlags.STABLE_FRAGMENT
+    jsxNode.vnodeTag = FRAGMENT
     return;
   }
   const openingElementPath: NodePath<t.JSXOpeningElement> = (path as NodePath<t.JSXElement>).get('openingElement')
@@ -37,7 +37,7 @@ export default function() {
   let tagType = ElementTypes.ELEMENT
 
   if (t.isJSXIdentifier(nameNode)) {
-    const tag = nameNode.name
+    let tag = nameNode.name
     // parseTag in @vue/compiler-core pares.ts
     if(options.isNativeTag) {
       if (!options.isNativeTag(tag)) tagType = ElementTypes.COMPONENT
@@ -49,7 +49,14 @@ export default function() {
       tagType = ElementTypes.COMPONENT
     }
 
+    // keep with vue vnodeTag
     jsxNode.vnodeTag = resolveTag(tag)
+
+    // reformat a-b to AB
+    // but a does not turn to A
+    if(tag.includes('-')) {
+      tag = camelize(tag).replace(/^(\w)/g, (_, c) => (c ? c.toUpperCase() : ''))
+    }
 
     if(tagType === ElementTypes.COMPONENT) {
       if(isSymbol(jsxNode.vnodeTag)) {

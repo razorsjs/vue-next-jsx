@@ -67,6 +67,7 @@ const transformJSXExpressionContainer = (path: NodePath<t.JSXExpressionContainer
 export default function() {
   const {path} = jsxNode
   const paths: Array<any> = path.get('children') as any
+  const isFragment = t.isJSXFragment(path.node)
 
   const nodes: Array<ChildNode> = paths.map(path => {
       if (path.isJSXText()) {
@@ -86,6 +87,10 @@ export default function() {
       throw new Error(`getChildren: ${path.type} is not supported`)
     })
     .filter(el => el !== null && !t.isJSXEmptyExpression(el));
+
+  if(isFragment) {
+    jsxNode.patchFlag|=PatchFlags.STABLE_FRAGMENT
+  }
 
   jsxNode.children = nodes
 }

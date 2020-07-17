@@ -7,7 +7,8 @@
 import { AttributeNode, JsxNode } from '../jsxNode';
 import { NodeTypes } from '../util/constant';
 import is from './is'
-import v from './v-'
+import v_ from './v-'
+import v from './v'
 
 export const defaultAttrTransform = (name: string, value: any, jsxNode: JsxNode) => {
   const attributeNode: AttributeNode = {
@@ -20,6 +21,7 @@ export const defaultAttrTransform = (name: string, value: any, jsxNode: JsxNode)
 
 const internalMap = new Map()
 internalMap.set('is', is)
-internalMap.set(/^v-/g, v)
+internalMap.set(/^v-/g, v_)
+internalMap.set(/^v[A-Z]/g, v)
 
 export default internalMap

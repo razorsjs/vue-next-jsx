@@ -23,6 +23,33 @@ export const extractPatchFlag = () => {
   const directiveTransformResult: Array<t.ArrayExpression | undefined> = []
 
   /**
+   * run directive transform
+   */
+  directives.forEach((dir) => {
+    const directiveTransform: DirectiveTransform = options.directiveTransforms[dir.name]
+    if (directiveTransform) {
+      // has built-in directive transform.
+      const transformResult = directiveTransform(dir, jsxNode)
+      // directiveTransform can return void like v-text
+      if(transformResult) {
+        const {props, needRuntime} = transformResult
+        directiveTransformResult.push(t.arrayExpression(props))
+        if (needRuntime) {
+          runtimeDirectives.push(dir)
+          if (isSymbol(needRuntime)) {
+            addVueImport(needRuntime)
+          }
+        }
+      }
+    } else {
+      // no built-in transform, this is a user custom directive.
+      const { props } = defaultTransform(dir, jsxNode)
+      directiveTransformResult.push(t.arrayExpression(props))
+      runtimeDirectives.push(dir)
+    }
+  })
+
+  /**
    * onXXX all be treated as listener like v-on, e.g. onClick <==> v-on:click <==> @click
    */
   attributes.forEach((attr: AttributeNode) => {
@@ -49,33 +76,6 @@ export const extractPatchFlag = () => {
       } else if (name !== 'key' && !dynamicPropNames.includes(name)) {
         dynamicPropNames.push(name)
       }
-    }
-  })
-
-  /**
-   * run directive transform
-   */
-  directives.forEach((dir) => {
-    const directiveTransform: DirectiveTransform = options.directiveTransforms[dir.name]
-    if (directiveTransform) {
-      // has built-in directive transform.
-      const transformResult = directiveTransform(dir, jsxNode)
-      // directiveTransform can return void like v-text
-      if(transformResult) {
-        const {props, needRuntime} = transformResult
-        directiveTransformResult.push(t.arrayExpression(props))
-        if (needRuntime) {
-          runtimeDirectives.push(dir)
-          if (isSymbol(needRuntime)) {
-            addVueImport(needRuntime)
-          }
-        }
-      }
-    } else {
-      // no built-in transform, this is a user custom directive.
-      const { props } = defaultTransform(dir, jsxNode)
-      directiveTransformResult.push(t.arrayExpression(props))
-      runtimeDirectives.push(dir)
     }
   })
 

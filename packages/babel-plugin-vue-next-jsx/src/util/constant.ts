@@ -12,6 +12,7 @@ export {
   SUSPENSE,
   KEEP_ALIVE,
   BASE_TRANSITION,
+  RESOLVE_DYNAMIC_COMPONENT,
   NodeTypes,
   ElementTypes
 } from '@vue/compiler-core'

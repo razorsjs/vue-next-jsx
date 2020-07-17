@@ -6,8 +6,7 @@ A babel plugin that provides jsx syntax for vue3
 
 ### directives:
 
-- [x] v-pre
-- [x] v-is
+- [x] v-once
 - [x] v-model
 
 ### patchFlags

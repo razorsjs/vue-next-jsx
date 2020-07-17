@@ -46,7 +46,7 @@ export interface JsxNode  {
 
   // for createVNode
   // tag: first argument for createVNode
-  tag?: t.StringLiteral | t.Identifier
+  tag?: t.Expression
   // children: third argument for createVNode
   children?: Array<any>,
   // patchFlags: fourth argument for createVNode
@@ -64,6 +64,12 @@ export type DirectiveTransform = (
 
 export interface CodegenOptions {
   /**
+   * Option to optimize helper import bindings via variable assignment
+   * (only used for webpack code-split)
+   * @default false
+   */
+  optimizeImports?: boolean
+  /**
    * Customize where to import runtime helpers from.
    * @default 'vue'
    */
@@ -75,6 +81,8 @@ export interface DirectiveTransformResult {
   needRuntime?: boolean | symbol
 }
 
+export type AttributeTransform = (name: string, value: t.Expression | t.BooleanLiteral,node: JsxNode) => void
+
 export interface BuildOptions {
   /**
    * e.g. build jsxNode to babel
@@ -85,11 +93,6 @@ export interface BuildOptions {
 
 export interface ParseOptions {
   /**
-   * e.g. use for judging directive
-   * @param attr
-   */
-  isDirective?(attr: string): boolean
-  /**
    * e.g. platform native elements, e.g. <div> for browsers
    */
   isNativeTag?: (tag: string) => boolean
@@ -98,10 +101,32 @@ export interface ParseOptions {
 
 export interface TransformOptions {
   /**
+   * An object of { name or regexp : transform } to be applied to every jsx attribute
+   */
+  attributeTransforms?: Map<string | RegExp, AttributeTransform | undefined>
+  /**
    * An object of { name: transform } to be applied to every directive attribute
    * node found on element nodes.
    */
   directiveTransforms?: Record<string, DirectiveTransform | undefined>
+  /**
+   * Hoist static VNodes and props objects to `_hoisted_x` constants
+   * @default false
+   */
+  hoistStatic?: boolean
+  /**
+   * Cache v-on handlers to avoid creating new inline functions on each render,
+   * also avoids the need for dynamically patching the handlers by wrapping it.
+   * e.g `@click="foo"` by default is compiled to `{ onClick: foo }`. With this
+   * option it's compiled to:
+   * ```js
+   * { onClick: _cache[0] || (_cache[0] = e => _ctx.foo(e)) }
+   * ```
+   * - Requires "prefixIdentifiers" to be enabled because it relies on scope
+   * analysis to determine if a handler is safe to cache.
+   * @default false
+   */
+  cacheHandlers?: boolean
 }
 
 export type PluginOptions = BuildOptions & ParseOptions & TransformOptions & CodegenOptions

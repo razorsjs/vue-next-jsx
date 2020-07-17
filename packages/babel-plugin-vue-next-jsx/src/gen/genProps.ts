@@ -4,14 +4,15 @@
 
 import { NodePath, types as t } from '@babel/core';
 import { extractPatchFlag } from '../patchFlag';
-import jsxNode, { DirectiveNode, AttributeNode } from '../jsxNode';
+import jsxNode, { DirectiveNode, AttributeNode, DirectiveTransform } from '../jsxNode';
 import { NodeTypes } from '../util/constant';
+import {defaultAttrTransform} from '../attributes';
 
 const parsePropsFromJSXAttribute = (path: NodePath<t.JSXAttribute>) => {
   // tsx does't support JSXNamespacedName, so only JSXIdentifier
   const nameNode: t.JSXIdentifier = path.node.name as t.JSXIdentifier;
   const name = nameNode.name;
-  const { options: { isDirective } } = jsxNode;
+  const { options: {attributeTransforms} } = jsxNode;
 
   let value: any = path.node.value;
   if (value) {
@@ -21,22 +22,21 @@ const parsePropsFromJSXAttribute = (path: NodePath<t.JSXAttribute>) => {
   } else {
     value = t.booleanLiteral(true);
   }
-  if (isDirective(name)) {
-    const directiveNode: DirectiveNode = {
-      type: NodeTypes.DIRECTIVE,
-      name: name.split('-')[1],
-      exp: value,
-    };
-    jsxNode.directives.push(directiveNode);
-    return directiveNode
+
+  let attrTrans;
+  attributeTransforms.forEach(function(value, key) {
+    if(key === name) {
+      attrTrans = value
+    }
+    if(key instanceof RegExp && key.test(name)) {
+      key.lastIndex = 0
+      attrTrans = value
+    }
+  });
+  if(attrTrans) {
+    attrTrans(name, value, jsxNode)
   } else {
-    const attributeNode: AttributeNode = {
-      type: NodeTypes.ATTRIBUTE,
-      name,
-      value,
-    };
-    jsxNode.attributes.push(attributeNode);
-    return attributeNode
+    defaultAttrTransform(name, value, jsxNode)
   }
 };
 

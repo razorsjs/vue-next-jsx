@@ -67,8 +67,3 @@ export function shouldUseBlock(node: JsxNode) {
   // leads to too much unnecessary complexity.
   return vnodeTag === KEEP_ALIVE || (!isComponent && (vnodeTag === 'svg' || vnodeTag === 'foreignObject'))
 }
-
-const firstWordRE = /^(\w)/g
-export function camelizeFirstWord(str) {
-  return str.replace(firstWordRE, (_, c) => (c ? c.toUpperCase() : ''))
-}

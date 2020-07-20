@@ -8,6 +8,7 @@ import jsxNode, { AttributeNode, DirectiveNode, DirectiveTransform, DirectiveTra
 import {addVueImport} from './addVueImport';
 import {defaultTransform} from './directives'
 import {isDynamic} from'./util'
+import { isStaticExp } from './util/resolveModifiers';
 
 export const extractPatchFlag = () => {
   const {attributes, directives, tagType, options} = jsxNode
@@ -16,6 +17,7 @@ export const extractPatchFlag = () => {
   let hasClassBinding = false
   let hasStyleBinding = false
   let hasHydrationEventBinding = false
+  let hasDynamicKeys = false
   let dynamicPropNames: string[] = []
   // record only runtime
   const runtimeDirectives = []
@@ -54,45 +56,52 @@ export const extractPatchFlag = () => {
    */
   attributes.forEach((attr: AttributeNode) => {
     const {name, value} = attr
-    if (name === 'ref') {
-      hasRef = true
-    }
-    if(isDynamic(value)) {
-      if (
-        !isComponent &&
-        isOn(name) &&
-        // omit the flag for click handlers becaues hydration gives click
-        // dedicated fast path.
-        name.toLowerCase() !== 'onclick' &&
-        // omit v-model handlers
-        name !== 'onUpdate:modelValue'
-      ) {
-        hasHydrationEventBinding = true
+    if(isStaticExp(name)) {
+      if (name === 'ref') {
+        hasRef = true
       }
-      if (name === 'class' && !isComponent) {
-        hasClassBinding = true
-      } else if (name === 'style' && !isComponent) {
-        hasStyleBinding = true
-      } else if (name !== 'key' && !dynamicPropNames.includes(name)) {
-        dynamicPropNames.push(name)
+      if(isDynamic(value)) {
+        if (
+          !isComponent &&
+          isOn(name) &&
+          // omit the flag for click handlers becaues hydration gives click
+          // dedicated fast path.
+          name.toLowerCase() !== 'onclick' &&
+          // omit v-model handlers
+          name !== 'onUpdate:modelValue'
+        ) {
+          hasHydrationEventBinding = true
+        }
+        if (name === 'class' && !isComponent) {
+          hasClassBinding = true
+        } else if (name === 'style' && !isComponent) {
+          hasStyleBinding = true
+        } else if (name !== 'key' && !dynamicPropNames.includes(name)) {
+          dynamicPropNames.push(name)
+        }
       }
+    } else {
+      hasDynamicKeys = true
     }
   })
 
   const {patchFlag} = jsxNode
   dynamicPropNames = jsxNode.dynamicProps.concat(dynamicPropNames)
-
-  if (hasClassBinding) {
-    jsxNode.patchFlag |= PatchFlags.CLASS
-  }
-  if (hasStyleBinding) {
-    jsxNode.patchFlag |= PatchFlags.STYLE
-  }
-  if (dynamicPropNames.length) {
-    jsxNode.patchFlag |= PatchFlags.PROPS
-  }
-  if (hasHydrationEventBinding) {
-    jsxNode.patchFlag |= PatchFlags.HYDRATE_EVENTS
+  if (hasDynamicKeys) {
+    jsxNode.patchFlag |= PatchFlags.FULL_PROPS
+  } else {
+    if (hasClassBinding) {
+      jsxNode.patchFlag |= PatchFlags.CLASS
+    }
+    if (hasStyleBinding) {
+      jsxNode.patchFlag |= PatchFlags.STYLE
+    }
+    if (dynamicPropNames.length) {
+      jsxNode.patchFlag |= PatchFlags.PROPS
+    }
+    if (hasHydrationEventBinding) {
+      jsxNode.patchFlag |= PatchFlags.HYDRATE_EVENTS
+    }
   }
 
   if (

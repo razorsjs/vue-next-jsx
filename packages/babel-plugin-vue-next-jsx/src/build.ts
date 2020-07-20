@@ -4,7 +4,7 @@
 import { types as t } from '@babel/core';
 import { generateBlock, generateCall } from './gen/generateCode';
 import jsxNode, { JsxNode } from './jsxNode';
-import { ElementTypes, CREATE_VNODE, CREATE_TEXT, MERGE_PROPS, PatchFlags, KEEP_ALIVE, TELEPORT, FRAGMENT } from './util/constant';
+import { ElementTypes, CREATE_VNODE, CREATE_TEXT, MERGE_PROPS, PatchFlags, KEEP_ALIVE, TELEPORT, FRAGMENT, CAPITALIZE } from './util/constant';
 import { buildArrayToArrow, buildObjectToExpression } from './util/build';
 import { isText, isTextVNode, isVNode, isRoot, shouldUseBlock } from './util';
 import genDirective from './gen/genDirective';
@@ -38,6 +38,27 @@ export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression | 
   return genDirective(codeBlock)
 }
 
+export const buildDataName = (strOrExp): {
+  exp: t.Identifier | t.BinaryExpression,
+  needComputed: boolean
+} => {
+  if(typeof strOrExp === 'string') {
+    return {
+      exp: t.identifier(strOrExp),
+      needComputed: false
+    }
+  } else if(t.isIdentifier(strOrExp)){
+    return {
+      exp:  t.binaryExpression('+', t.stringLiteral('on'), t.callExpression(t.identifier(addVueImport(CAPITALIZE)), [strOrExp])),
+      needComputed: true
+    }
+  } else {
+    return {
+      exp: strOrExp,
+      needComputed: true
+    }
+  }
+}
 // build data for createVNode
 export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t.CallExpression => {
   const {attributes, spreadProps} = node
@@ -50,7 +71,8 @@ export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t
     const name = addVueImport(MERGE_PROPS)
     const _props = props.map(i => {
       if(!t.isSpreadElement(i)) {
-        return t.objectExpression([t.objectProperty(t.identifier(i.name), i.value)])
+        const {exp, needComputed} = buildDataName(i.name)
+        return t.objectExpression([t.objectProperty(exp, i.value, needComputed)])
       } else {
         return t.objectExpression([i])
       }
@@ -59,7 +81,8 @@ export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t
   } else {
     // plain {}
     const objectProperty: Array<t.ObjectProperty> = attributes.map(attr => {
-      return t.objectProperty(t.identifier(attr.name), attr.value)
+      const {exp, needComputed} = buildDataName(attr.name)
+      return t.objectProperty(exp, attr.value, needComputed)
     })
     return t.objectExpression(objectProperty);
   }

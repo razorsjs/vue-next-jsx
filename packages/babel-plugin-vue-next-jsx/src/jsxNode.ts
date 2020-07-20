@@ -9,7 +9,7 @@ import domOptions from './domOptions'
 // AttributeNode: @vue/compiler-core AttributeNode
 export interface AttributeNode {
   type: NodeTypes.ATTRIBUTE
-  name: string
+  name: string | t.Expression
   value: any
 }
 

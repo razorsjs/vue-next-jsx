@@ -13,13 +13,15 @@ export {
   KEEP_ALIVE,
   BASE_TRANSITION,
   RESOLVE_DYNAMIC_COMPONENT,
+  CAPITALIZE,
   NodeTypes,
   ElementTypes
 } from '@vue/compiler-core'
 
 export {
   V_SHOW,
-  V_ON_WITH_MODIFIERS
+  V_ON_WITH_MODIFIERS,
+  V_ON_WITH_KEYS
 } from '@vue/compiler-dom'
 
 export {
@@ -28,5 +30,7 @@ export {
   extend,
   isSymbol,
   hyphenate,
-  camelize
+  camelize,
+  makeMap,
+  capitalize
 } from '@vue/shared'

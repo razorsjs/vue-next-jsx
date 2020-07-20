@@ -11,7 +11,6 @@ A babel plugin that provides jsx syntax for vue3
 
 ### patchFlags
 
-- [x] FULL_PROPS
 - [x] STABLE_FRAGMENT (only in fragment)
 - [x] KEYED_FRAGMENT
 - [x] UNKEYED_FRAGMENT

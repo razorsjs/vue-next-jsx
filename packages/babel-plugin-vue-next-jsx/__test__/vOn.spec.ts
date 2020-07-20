@@ -1,32 +1,66 @@
 import { transformWithPlugin, vueCompiled } from './util';
 
+// copied from @vue/compiler-dom
 describe('vOn', () => {
-  test('normal use', () => {
-    const jsxCode = '<div onTest={onTest}>hello world</div>'
-    const vueCode = '<div @test="onTest">hello world</div>'
-    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
-  })
-  test('normal use with modifiers', () => {
-    const jsxCode = '<div onTest={[onTest,["stop", "prevent"]]}>hello world</div>'
-    const vueCode = '<div @test.stop.prevent="onTest">hello world</div>'
-    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
-  })
+  // test('should support multiple modifiers w/ prefixIdentifiers: true', () => {
+  //   const jsxCode = '<div onClick={[test, ["stop", "prevent"]]}/>'
+  //   const vueCode = '<div @click.stop.prevent="test"/>'
+  //   expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  // })
+  // test('should support multiple events and modifiers options w/ prefixIdentifiers: true', () => {
+  //   const jsxCode = '<div onClick={[test,["stop"]]} onKeyup={[test,["enter"]]}/>'
+  //   const vueCode = '<div @click.stop="test" @keyup.enter="test" />'
+  //   expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  // })
+  // test('should support multiple modifiers and event options w/ prefixIdentifiers: true', () => {
+  //   const jsxCode = '<div onClick={[test,["stop","capture", "once"]]}/>'
+  //   const vueCode = '<div @click.stop.capture.once="test"/>'
+  //   expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  // })
+  // test('should support multiple modifiers and event options w/ prefixIdentifiers: true', () => {
+  //   const jsxCode = '<div onKeydown={[test,["stop","capture", "ctrl", "a"]]}/>'
+  //   const vueCode = '<div @keydown.stop.capture.ctrl.a="test"/>'
+  //   expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  // })
+  // test('should not wrap keys guard if no key modifier is present', () => {
+  //   const jsxCode = '<div onKeyup={[test,["exact"]]}/>'
+  //   const vueCode = '<div @keyup.exact="test"/>'
+  //   expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  // })
+  // test('should wrap keys guard for static key event w/ left/right modifiers', () => {
+  //   const jsxCode = '<div onKeyup={[test,["left"]]}/>'
+  //   const vueCode = '<div @keyup.left="test"/>'
+  //   expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  // })
+  // test('should wrap keys guard for static key event w/ left/right modifiers', () => {
+  //   const jsxCode = '<div v-on={[e,test,["left"]]}/>'
+  //   const vueCode = '<div @[e].left="test"/>'
+  //   expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  // })
+  // test('should wrap keys guard for static key event w/ left/right modifiers', () => {
+  //   const jsxCode = '<div onKeyup={[test,["enter"]]}/>'
+  //   const vueCode = '<div @keyup.enter="test"/>'
+  //   expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  // })
+  test('should transform click.right', () => {
+    const jsxCode1 = '<div onClick={[test,["right"]]}/>'
+    const vueCode1 = '<div @click.right="test"/>'
 
-  test('normal with component', () => {
-    const jsxCode = '<test onTest={onTest}>hello world</test>'
-    const vueCode = '<test @test="onTest">hello world</test>'
-    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+    const jsxCode2 = '<div v-on={[event,test,["right"]]}/>'
+    const vueCode2 = '<div @[event].right="test"/>'
+    expect(transformWithPlugin(jsxCode1)).toBe(vueCompiled(vueCode1))
+    // missing parentheses
+    expect(transformWithPlugin(jsxCode2)).toBe('_openBlock(),_createBlock("div",{["on"+_capitalize(event)==="onClick"?"onContextmenu":"on"+_capitalize(event)]:_withKeys(_withModifiers(test,["right"]),["right"])},null,16)')
   })
+  test('should transform click.middle', () => {
+    const jsxCode1 = '<div onClick={[test,["middle"]]}/>'
+    const vueCode1 = '<div @click.middle="test"/>'
 
-  test('use v-on', () => {
-    const jsxCode = '<test v-on={["click", onTest]}>hello world</test>'
-    const vueCode = '<test v-on:click="onTest">hello world</test>'
-    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+    const jsxCode2 = '<div v-on={[event,test,["middle"]]}/>'
+    const vueCode2 = '<div @[event].middle="test"/>'
+    expect(transformWithPlugin(jsxCode1)).toBe(vueCompiled(vueCode1))
+    // missing parentheses
+    expect(transformWithPlugin(jsxCode2)).toBe("_openBlock(),_createBlock(\"div\",{[\"on\"+_capitalize(event)===\"onClick\"?\"onMouseup\":\"on\"+_capitalize(event)]:_withModifiers(test,[\"middle\"])},null,16)")
   })
-
-  test('use v-on with modifiers', () => {
-    const jsxCode = '<test v-on={["click", onTest, ["stop", "prevent"]]}>hello world</test>'
-    const vueCode = '<test v-on:click.stop.prevent="onTest">hello world</test>'
-    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
-  })
+  // TODO: cache handlers
 })

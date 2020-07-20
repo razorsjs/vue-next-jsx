@@ -4,9 +4,9 @@
 
 import { NodePath, types as t } from '@babel/core';
 import jsxNode from '../jsxNode';
-import { ElementTypes, FRAGMENT, isSymbol, PatchFlags, camelize } from '../util/constant';
+import { ElementTypes, FRAGMENT, isSymbol, PatchFlags, camelize, capitalize } from '../util/constant';
 import { addVueImport } from '../addVueImport';
-import {isCoreComponent,camelizeFirstWord} from '../util'
+import {isCoreComponent} from '../util'
 
 export const resolveTag = (tag): string | symbol => {
   const { options } = jsxNode
@@ -55,7 +55,7 @@ export default function() {
     // reformat a-b to AB
     // but a does not turn to A
     if(tag.includes('-')) {
-      tag = camelizeFirstWord(camelize(tag))
+      tag = capitalize(camelize(tag))
     }
 
     if(tagType === ElementTypes.COMPONENT) {

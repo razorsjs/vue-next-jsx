@@ -19,6 +19,7 @@ export {
 
 export {
   V_SHOW,
+  V_ON_WITH_MODIFIERS
 } from '@vue/compiler-dom'
 
 export {

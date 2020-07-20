@@ -9,6 +9,7 @@ import { NodeTypes } from '../util/constant';
 import is from './is'
 import v_ from './v-'
 import v from './v'
+import on from './on'
 
 export const defaultAttrTransform = (name: string, value: any, jsxNode: JsxNode) => {
   const attributeNode: AttributeNode = {
@@ -23,5 +24,6 @@ const internalMap = new Map()
 internalMap.set('is', is)
 internalMap.set(/^v-/g, v_)
 internalMap.set(/^v[A-Z]/g, v)
+internalMap.set(/^on[A-Z]/g, on)
 
 export default internalMap

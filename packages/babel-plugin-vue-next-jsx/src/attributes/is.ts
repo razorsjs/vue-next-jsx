@@ -1,6 +1,7 @@
 import { AttributeNode, DirectiveNode, JsxNode } from '../jsxNode';
 import { NodeTypes } from '../util/constant';
 
+// :is in component
 export default (name: string, value: any, jsxNode: JsxNode) => {
   if (jsxNode.vnodeTag === 'component') {
     const directiveNode: DirectiveNode = {

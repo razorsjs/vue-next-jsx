@@ -10,7 +10,9 @@ import domOptions from './domOptions'
 export interface AttributeNode {
   type: NodeTypes.ATTRIBUTE
   name: string | t.Expression
-  value: any
+  value: any,
+  // static means value is transformed, and the origin is static for patchFlags, such as style
+  static?: boolean
 }
 
 // DirectiveNode: @vue/compiler-core DirectiveNode
@@ -30,6 +32,8 @@ export interface JsxNode  {
   path?: NodePath
   // current program
   program?: NodePath
+  // skip building when some special tag
+  skip?: boolean
 
   // nodeType: equal with @vue/compiler-core NodeTypes
   nodeType?: NodeTypes

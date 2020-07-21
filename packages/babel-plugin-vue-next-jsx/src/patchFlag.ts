@@ -6,7 +6,7 @@ import { types as t } from '@babel/core';
 import { PatchFlags, ElementTypes, isOn, helperNameMap, isSymbol } from './util/constant';
 import jsxNode, { AttributeNode, DirectiveNode, DirectiveTransform, DirectiveTransformResult } from './jsxNode';
 import {addVueImport} from './addVueImport';
-import {defaultTransform} from './directives'
+import {defaultDirectiveTransform} from './directives'
 import {isDynamic} from'./util'
 import { isStaticExp } from './util/resolveModifiers';
 
@@ -45,7 +45,7 @@ export const extractPatchFlag = () => {
       }
     } else {
       // no built-in transform, this is a user custom directive.
-      const { props } = defaultTransform(dir, jsxNode)
+      const { props } = defaultDirectiveTransform(dir, jsxNode)
       directiveTransformResult.push(t.arrayExpression(props))
       runtimeDirectives.push(dir)
     }
@@ -60,7 +60,7 @@ export const extractPatchFlag = () => {
       if (name === 'ref') {
         hasRef = true
       }
-      if(isDynamic(value)) {
+      if(isDynamic(value) && !attr.static) {
         if (
           !isComponent &&
           isOn(name) &&

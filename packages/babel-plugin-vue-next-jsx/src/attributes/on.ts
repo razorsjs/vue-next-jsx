@@ -8,7 +8,7 @@ import { resolveModifierValue } from '../util/resolveModifiers';
 export default (name: string | t.Expression, value: any, jsxNode: JsxNode) => {
   // value can be array [value, modifiers]
   if(t.isArrayExpression(value)) {
-    const {key, value: _value} = resolveModifierValue(name, value.elements[0], value.elements[1])
+    const {key, value: _value} = resolveModifierValue(name, value.elements[0], (value as any).elements[1])
     name = key
     value = _value
   }

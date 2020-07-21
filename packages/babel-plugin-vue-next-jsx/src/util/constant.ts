@@ -32,5 +32,6 @@ export {
   hyphenate,
   camelize,
   makeMap,
-  capitalize
+  capitalize,
+  parseStringStyle
 } from '@vue/shared'

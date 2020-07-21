@@ -6,7 +6,9 @@ import vHtml from './vHtml';
 import vIs from './vIs';
 import vOn from './vOn'
 
-export const defaultTransform = (dir: DirectiveNode, node: JsxNode): DirectiveTransformResult => {
+export const noopDirectiveTransform = () => {}
+
+export const defaultDirectiveTransform = (dir: DirectiveNode, node: JsxNode): DirectiveTransformResult => {
   return {
     props: [
       t.identifier(dir.name),
@@ -19,5 +21,6 @@ export default {
   text: vText,
   html: vHtml,
   is: vIs,
-  on: vOn
+  on: vOn,
+  cloak: noopDirectiveTransform
 }

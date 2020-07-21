@@ -15,13 +15,21 @@ export {
   RESOLVE_DYNAMIC_COMPONENT,
   CAPITALIZE,
   NodeTypes,
-  ElementTypes
+  ElementTypes,
+  CompilerError
 } from '@vue/compiler-core'
 
 export {
   V_SHOW,
   V_ON_WITH_MODIFIERS,
-  V_ON_WITH_KEYS
+  V_ON_WITH_KEYS,
+  V_MODEL_TEXT,
+  V_MODEL_DYNAMIC,
+  V_MODEL_RADIO,
+  V_MODEL_CHECKBOX,
+  V_MODEL_SELECT,
+  createDOMCompilerError,
+  DOMErrorCodes
 } from '@vue/compiler-dom'
 
 export {

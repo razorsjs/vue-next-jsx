@@ -38,13 +38,13 @@ export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression | 
   return genDirective(codeBlock)
 }
 
-export const buildDataName = (strOrExp): {
-  exp: t.Identifier | t.BinaryExpression,
+export const buildDataName = (strOrExp, stringLiteral?: boolean): {
+  exp: t.Identifier | t.StringLiteral |t.BinaryExpression,
   needComputed: boolean
 } => {
   if(typeof strOrExp === 'string') {
     return {
-      exp: t.identifier(strOrExp),
+      exp: stringLiteral ? t.stringLiteral(strOrExp) :t.identifier(strOrExp),
       needComputed: false
     }
   } else if(t.isIdentifier(strOrExp)){
@@ -71,7 +71,7 @@ export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t
     const name = addVueImport(MERGE_PROPS)
     const _props = props.map(i => {
       if(!t.isSpreadElement(i)) {
-        const {exp, needComputed} = buildDataName(i.name)
+        const {exp, needComputed} = buildDataName(i.name, i.stringLiteral)
         return t.objectExpression([t.objectProperty(exp, i.value, needComputed)])
       } else {
         return t.objectExpression([i])
@@ -81,7 +81,7 @@ export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t
   } else {
     // plain {}
     const objectProperty: Array<t.ObjectProperty> = attributes.map(attr => {
-      const {exp, needComputed} = buildDataName(attr.name)
+      const {exp, needComputed} = buildDataName(attr.name, attr.stringLiteral)
       return t.objectProperty(exp, attr.value, needComputed)
     })
     return t.objectExpression(objectProperty);

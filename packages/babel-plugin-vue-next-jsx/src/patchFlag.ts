@@ -28,6 +28,7 @@ export const extractPatchFlag = () => {
    * run directive transform
    */
   directives.forEach((dir) => {
+    options.directiveParse(dir)
     const directiveTransform: DirectiveTransform = options.directiveTransforms[dir.name]
     if (directiveTransform) {
       // has built-in directive transform.
@@ -57,9 +58,6 @@ export const extractPatchFlag = () => {
   attributes.forEach((attr: AttributeNode) => {
     const {name, value} = attr
     if(isStaticExp(name)) {
-      if (name === 'ref') {
-        hasRef = true
-      }
       if(isDynamic(value) && !attr.static) {
         if (
           !isComponent &&
@@ -72,7 +70,9 @@ export const extractPatchFlag = () => {
         ) {
           hasHydrationEventBinding = true
         }
-        if (name === 'class' && !isComponent) {
+        if (name === 'ref') {
+          hasRef = true
+        } else if (name === 'class' && !isComponent) {
           hasClassBinding = true
         } else if (name === 'style' && !isComponent) {
           hasStyleBinding = true
@@ -85,7 +85,6 @@ export const extractPatchFlag = () => {
     }
   })
 
-  const {patchFlag} = jsxNode
   dynamicPropNames = jsxNode.dynamicProps.concat(dynamicPropNames)
   if (hasDynamicKeys) {
     jsxNode.patchFlag |= PatchFlags.FULL_PROPS
@@ -105,8 +104,8 @@ export const extractPatchFlag = () => {
   }
 
   if (
-    (patchFlag === 0 || patchFlag === PatchFlags.HYDRATE_EVENTS) &&
-    (hasRef) || runtimeDirectives?.length
+    (jsxNode.patchFlag === 0 || jsxNode.patchFlag === PatchFlags.HYDRATE_EVENTS) &&
+    (hasRef || runtimeDirectives?.length)
   ) {
     jsxNode.patchFlag |= PatchFlags.NEED_PATCH
   }

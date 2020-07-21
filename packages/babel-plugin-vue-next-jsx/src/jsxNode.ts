@@ -3,7 +3,7 @@
  */
 
 import { NodePath, types as t } from '@babel/core';
-import { NodeTypes, ElementTypes, extend } from './util/constant';
+import { NodeTypes, ElementTypes, extend, CompilerError } from './util/constant';
 import domOptions from './domOptions'
 
 // AttributeNode: @vue/compiler-core AttributeNode
@@ -13,6 +13,7 @@ export interface AttributeNode {
   value: any,
   // static means value is transformed, and the origin is static for patchFlags, such as style
   static?: boolean
+  stringLiteral?: boolean
 }
 
 // DirectiveNode: @vue/compiler-core DirectiveNode
@@ -22,7 +23,7 @@ export interface DirectiveNode {
   name: string
   exp?: any
   arg?: any
-  modifiers?: string[]
+  modifiers?: t.ArrayExpression
 }
 
 export interface JsxNode  {
@@ -81,7 +82,7 @@ export interface CodegenOptions {
 }
 
 export interface DirectiveTransformResult {
-  props: [t.Expression, t.Expression]
+  props: t.Expression[]
   needRuntime?: boolean | symbol
 }
 
@@ -101,6 +102,11 @@ export interface ParseOptions {
    */
   isNativeTag?: (tag: string) => boolean
   isBuiltInComponent?: (tag: string) => symbol | void
+  /**
+   * generating DirectiveNode, you can change rules for parsing directive
+   * @param dir
+   */
+  directiveParse?: (dir: DirectiveNode) => void
 }
 
 export interface TransformOptions {
@@ -130,7 +136,8 @@ export interface TransformOptions {
    * analysis to determine if a handler is safe to cache.
    * @default false
    */
-  cacheHandlers?: boolean
+  cacheHandlers?: boolean,
+  onError?: (error: CompilerError) => void
 }
 
 export type PluginOptions = BuildOptions & ParseOptions & TransformOptions & CodegenOptions

@@ -1,6 +1,7 @@
 import {
-  parserOptions
-} from '@vue/compiler-dom'
+  parserOptions,
+  NOOP
+} from './util/constant'
 import {build} from './build';
 import directiveTransforms, {directiveParse} from './directives'
 import attributeTransforms from './attributes'
@@ -17,5 +18,5 @@ export default {
   directiveTransforms,
   attributeTransforms,
   directiveParse,
-  onError: (err) => {console.log(err);}
+  onError: NOOP
 }

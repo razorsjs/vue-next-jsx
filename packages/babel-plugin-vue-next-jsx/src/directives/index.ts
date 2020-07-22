@@ -6,8 +6,7 @@ import vHtml from './vHtml';
 import vIs from './vIs';
 import vOn from './vOn'
 import vModel from './vModel';
-
-export const noopDirectiveTransform = () => {}
+import {NOOP} from '../util/constant'
 
 export const defaultDirectiveTransform = (dir: DirectiveNode, node: JsxNode): DirectiveTransformResult => {
   return {
@@ -44,6 +43,6 @@ export default {
   html: vHtml,
   is: vIs,
   on: vOn,
-  cloak: noopDirectiveTransform,
+  cloak: NOOP,
   model: vModel
 }

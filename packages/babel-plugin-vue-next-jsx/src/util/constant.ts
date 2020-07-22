@@ -29,7 +29,8 @@ export {
   V_MODEL_CHECKBOX,
   V_MODEL_SELECT,
   createDOMCompilerError,
-  DOMErrorCodes
+  DOMErrorCodes,
+  parserOptions
 } from '@vue/compiler-dom'
 
 export {
@@ -41,5 +42,6 @@ export {
   camelize,
   makeMap,
   capitalize,
-  parseStringStyle
+  parseStringStyle,
+  NOOP
 } from '@vue/shared'

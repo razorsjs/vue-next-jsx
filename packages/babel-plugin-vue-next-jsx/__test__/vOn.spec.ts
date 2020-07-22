@@ -49,8 +49,7 @@ describe('vOn', () => {
     const jsxCode2 = '<div v-on={[event,test,["right"]]}/>'
     const vueCode2 = '<div @[event].right="test"/>'
     expect(transformWithPlugin(jsxCode1)).toBe(vueCompiled(vueCode1))
-    // missing parentheses
-    expect(transformWithPlugin(jsxCode2)).toBe('_openBlock(),_createBlock("div",{["on"+_capitalize(event)==="onClick"?"onContextmenu":"on"+_capitalize(event)]:_withKeys(_withModifiers(test,["right"]),["right"])},null,16)')
+    expect(transformWithPlugin(jsxCode2)).toBe(vueCompiled(vueCode2))
   })
   test('should transform click.middle', () => {
     const jsxCode1 = '<div onClick={[test,["middle"]]}/>'
@@ -59,8 +58,7 @@ describe('vOn', () => {
     const jsxCode2 = '<div v-on={[event,test,["middle"]]}/>'
     const vueCode2 = '<div @[event].middle="test"/>'
     expect(transformWithPlugin(jsxCode1)).toBe(vueCompiled(vueCode1))
-    // missing parentheses
-    expect(transformWithPlugin(jsxCode2)).toBe("_openBlock(),_createBlock(\"div\",{[\"on\"+_capitalize(event)===\"onClick\"?\"onMouseup\":\"on\"+_capitalize(event)]:_withModifiers(test,[\"middle\"])},null,16)")
+    expect(transformWithPlugin(jsxCode2)).toBe(vueCompiled(vueCode2))
   })
   // TODO: cache handlers
 })

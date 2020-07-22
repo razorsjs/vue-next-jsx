@@ -5,9 +5,14 @@ describe('compiler: style transform', () => {
     const code = '<div style="color: red"/>'
     expect(transformWithPlugin(code)).toBe(vueCompiled(code))
   })
-  test('should transform into object', () => {
+  test('static', () => {
     const jsxCode = `<div style={{color: 'green'}}></div>`
     const vueCode = `<div :style="{color: 'green'}"></div>`
+    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  })
+  test('dynamic', () => {
+    const jsxCode = `<div style={{color: green}}></div>`
+    const vueCode = `<div :style="{color: green}"></div>`
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
 })

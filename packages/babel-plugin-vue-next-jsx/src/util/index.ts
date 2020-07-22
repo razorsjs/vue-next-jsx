@@ -34,6 +34,18 @@ export const isRoot = (path: NodePath<any>): boolean =>  {
 }
 
 export const isDynamic = (value) => {
+  if(t.isObjectExpression(value)) {
+    return value.properties.some(i=>{
+      if(t.isObjectProperty(i)) {
+        return isDynamic(i.value)
+      }
+    })
+  }
+  if(t.isArrayExpression(value)) {
+    return value.elements.some(i=>{
+      return isDynamic(i)
+    })
+  }
   return !t.isLiteral(value)
 }
 

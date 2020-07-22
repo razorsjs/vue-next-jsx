@@ -31,7 +31,8 @@ export const transformClick = (key: string | t.Expression, event: string) => {
   if(isStaticClick) {
     return event
   } else {
-    const compoundName = t.binaryExpression('+', t.stringLiteral('on'), t.callExpression(t.identifier(addVueImport(CAPITALIZE)),[t.identifier('event')]));
+    const capitalizeName = t.callExpression(t.identifier(addVueImport(CAPITALIZE)),[t.identifier('event')])
+    const compoundName = t.parenthesizedExpression(t.binaryExpression('+', t.stringLiteral('on'), capitalizeName));
     return t.conditionalExpression(
       t.binaryExpression('===', compoundName, t.stringLiteral('onClick')),
       t.stringLiteral(event),

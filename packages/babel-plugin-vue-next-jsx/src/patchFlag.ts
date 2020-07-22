@@ -58,6 +58,9 @@ export const extractPatchFlag = () => {
   attributes.forEach((attr: AttributeNode) => {
     const {name, value} = attr
     if(isStaticExp(name)) {
+      if (name === 'ref') {
+        hasRef = true
+      }
       if(isDynamic(value) && !attr.static) {
         if (
           !isComponent &&
@@ -70,9 +73,7 @@ export const extractPatchFlag = () => {
         ) {
           hasHydrationEventBinding = true
         }
-        if (name === 'ref') {
-          hasRef = true
-        } else if (name === 'class' && !isComponent) {
+        if (name === 'class' && !isComponent) {
           hasClassBinding = true
         } else if (name === 'style' && !isComponent) {
           hasStyleBinding = true

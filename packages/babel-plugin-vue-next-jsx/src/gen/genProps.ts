@@ -6,13 +6,13 @@ import { NodePath, types as t } from '@babel/core';
 import { extractPatchFlag } from '../patchFlag';
 import jsxNode, { DirectiveNode, AttributeNode, DirectiveTransform } from '../jsxNode';
 import { NodeTypes } from '../util/constant';
-import {defaultAttrTransform} from '../attributes';
+import {defaultAttrParse} from '../attributes';
 
 const parsePropsFromJSXAttribute = (path: NodePath<t.JSXAttribute>) => {
   // tsx does't support JSXNamespacedName, so only JSXIdentifier
   const nameNode: t.JSXIdentifier = path.node.name as t.JSXIdentifier;
   const name = nameNode.name;
-  const { options: {attributeTransforms} } = jsxNode;
+  const { options: {attributeParse} } = jsxNode;
 
   let value: any = path.node.value;
   if (value) {
@@ -23,20 +23,20 @@ const parsePropsFromJSXAttribute = (path: NodePath<t.JSXAttribute>) => {
     value = t.booleanLiteral(true);
   }
 
-  let attrTrans;
-  attributeTransforms.forEach(function(value, key) {
+  let attrParse;
+  attributeParse.forEach(function(value, key) {
     if(key === name) {
-      attrTrans = value
+      attrParse = value
     }
     if(key instanceof RegExp && key.test(name)) {
       key.lastIndex = 0
-      attrTrans = value
+      attrParse = value
     }
   });
-  if(attrTrans) {
-    attrTrans(name, value, jsxNode)
+  if(attrParse) {
+    attrParse(name, value, jsxNode)
   } else {
-    defaultAttrTransform(name, value, jsxNode)
+    defaultAttrParse(name, value, jsxNode)
   }
 };
 

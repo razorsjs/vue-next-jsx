@@ -1,21 +1,26 @@
 import { AttributeNode, DirectiveNode, JsxNode } from '../jsxNode';
-import { hyphenate, NodeTypes, V_ON_WITH_MODIFIERS } from '../util/constant';
+import { capitalize, hyphenate, NodeTypes, V_ON_WITH_MODIFIERS } from '../util/constant';
 import {types as t} from '@babel/core'
 import { addVueImport } from '../addVueImport';
 import { resolveModifierValue } from '../util/resolveModifiers';
 
 // onXxx
-export default (name: string | t.Expression, value: any, jsxNode: JsxNode) => {
+export default (name: string, value: any, jsxNode: JsxNode) => {
   // value can be array [value, modifiers]
+  const arg = capitalize(name.substring(2))
+  let exp, modifiers;
   if(t.isArrayExpression(value)) {
-    const {key, value: _value} = resolveModifierValue(name, value.elements[0], (value as any).elements[1])
-    name = key
-    value = _value
+    exp = value.elements[0]
+    modifiers = value.elements[1]
+  } else {
+    exp = value
   }
-  const attributeNode: AttributeNode = {
-    type: NodeTypes.ATTRIBUTE,
-    name,
-    value,
+  const directiveNode: DirectiveNode = {
+    type: NodeTypes.DIRECTIVE,
+    name: 'on',
+    exp,
+    arg,
+    modifiers
   };
-  jsxNode.attributes.push(attributeNode);
+  jsxNode.directives.push(directiveNode);
 }

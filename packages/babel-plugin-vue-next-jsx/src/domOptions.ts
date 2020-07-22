@@ -4,7 +4,7 @@ import {
 } from './util/constant'
 import {build} from './build';
 import directiveTransforms, {directiveParse} from './directives'
-import attributeTransforms from './attributes'
+import attributeParse from './attributes'
 
 const isNativeTag = parserOptions.isNativeTag
 const isBuiltInComponent = parserOptions.isBuiltInComponent
@@ -16,7 +16,7 @@ export default {
   build,
   runtimeModuleName,
   directiveTransforms,
-  attributeTransforms,
+  attributeParse,
   directiveParse,
   onError: NOOP
 }

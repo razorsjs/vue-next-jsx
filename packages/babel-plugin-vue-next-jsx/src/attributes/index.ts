@@ -12,7 +12,7 @@ import v from './v'
 import on from './on'
 import style from './style';
 
-export const defaultAttrTransform = (name: string, value: any, jsxNode: JsxNode) => {
+export const defaultAttrParse = (name: string, value: any, jsxNode: JsxNode) => {
   const attributeNode: AttributeNode = {
     type: NodeTypes.ATTRIBUTE,
     name,

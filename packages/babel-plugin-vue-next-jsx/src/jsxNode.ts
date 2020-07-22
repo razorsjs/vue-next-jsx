@@ -103,17 +103,17 @@ export interface ParseOptions {
   isNativeTag?: (tag: string) => boolean
   isBuiltInComponent?: (tag: string) => symbol | void
   /**
-   * generating DirectiveNode, you can change rules for parsing directive
+   * An object of { name or regexp : parser } to be applied to jsx attribute
+   */
+  attributeParse?: Map<string | RegExp, AttributeTransform | undefined>
+  /**
+   * An function will be applied to every directiveNode, used to modify dir or other thing
    * @param dir
    */
   directiveParse?: (dir: DirectiveNode) => void
 }
 
 export interface TransformOptions {
-  /**
-   * An object of { name or regexp : transform } to be applied to every jsx attribute
-   */
-  attributeTransforms?: Map<string | RegExp, AttributeTransform | undefined>
   /**
    * An object of { name: transform } to be applied to every directive attribute
    * node found on element nodes.

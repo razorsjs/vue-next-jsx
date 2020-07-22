@@ -24,7 +24,7 @@ describe('options', () => {
     const jsxCode = '<div v-on-click={click}>hello world</div>'
     const vueCode = '<div @click="click">hello world</div>'
     expect(transformWithPlugin(jsxCode, {
-      attributeTransforms: domOptions.attributeTransforms.set(/^v-/g, onTransformer)
+      attributeParse: domOptions.attributeParse.set(/^v-/g, onTransformer)
     })).toBe(vueCompiled(vueCode))
   })
 })

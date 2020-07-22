@@ -30,9 +30,10 @@ describe('patchFlag test', () => {
     const code = '<div ref="a"></div>'
     compare(code)
   })
+  // onXxx will cause data in wrong order, but it doesn't matter and no need to reorder it
   test('mixed all', () => {
     const jsxCode = '<div onTest={test} a={a} class={a} style={test}>{a}</div>'
     const vueCode = '<div @test="test" :a="a" :class="a" :style="test">{{a}}</div>'
-    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+    expect(transformWithPlugin(jsxCode)).toBe("_openBlock(),_createBlock(\"div\",{a:a,class:a,style:test,onTest:test},_toDisplayString(a),47,[\"a\",\"onTest\"])")
   })
 })

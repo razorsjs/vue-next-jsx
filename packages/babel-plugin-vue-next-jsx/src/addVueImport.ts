@@ -3,12 +3,13 @@
  */
 import {NodePath, types as t} from '@babel/core'
 import {helperNameMap} from './util/constant'
-import {importTransform} from './gen/generateCode';
+import {importTransform} from './util';
 import jsxNode from './jsxNode';
 
 const findVueImport = (arr: Array<t.Statement>, source: string): t.ImportDeclaration | void => {
   for(let s of arr) {
     if(t.isImportDeclaration(s) && s.source.value === source) {
+      if(!jsxNode.extraExpression.vueImport) jsxNode.extraExpression.vueImport = s
       return s
     }
   }
@@ -29,7 +30,7 @@ const addNamed = (name, source, isRenamed?: boolean): string => {
   const body: Array<t.Statement> = program.node.body
   const resultName = isRenamed ? importTransform(name) : name
   // find source
-  const vueImport = findVueImport(body, source)
+  const vueImport = jsxNode.extraExpression?.vueImport || findVueImport(body, source)
   const specifier = t.importSpecifier(t.identifier(isRenamed?resultName:name), t.identifier(name))
   if(vueImport) {
     const _vueImport = vueImport as t.ImportDeclaration;
@@ -44,6 +45,7 @@ const addNamed = (name, source, isRenamed?: boolean): string => {
   } else {
     const importDeclaration = t.importDeclaration([specifier],t.stringLiteral(source))
     body.unshift(importDeclaration)
+    jsxNode.extraExpression.vueImport = importDeclaration
   }
   return resultName
 }

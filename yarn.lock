@@ -223,7 +223,7 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@babel/parser@^7.1.0", "@babel/parser@^7.10.4", "@babel/parser@^7.10.5", "@babel/parser@^7.8.6":
+"@babel/parser@^7.1.0", "@babel/parser@^7.10.4", "@babel/parser@^7.10.5":
   version "7.10.5"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.10.5.tgz#e7c6bf5a7deff957cec9f04b551e2762909d826b"
 
@@ -715,7 +715,7 @@
     globals "^11.1.0"
     lodash "^4.17.19"
 
-"@babel/types@^7.0.0", "@babel/types@^7.10.4", "@babel/types@^7.10.5", "@babel/types@^7.3.0", "@babel/types@^7.3.3", "@babel/types@^7.4.4", "@babel/types@^7.8.6":
+"@babel/types@^7.0.0", "@babel/types@^7.10.4", "@babel/types@^7.10.5", "@babel/types@^7.3.0", "@babel/types@^7.3.3", "@babel/types@^7.4.4":
   version "7.10.5"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.10.5.tgz#d88ae7e2fde86bfbfe851d4d81afa70a997b5d15"
   dependencies:
@@ -1715,9 +1715,9 @@
   dependencies:
     "@types/node" ">= 8"
 
-"@razors/build-rollup@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@razors/build-rollup/-/build-rollup-0.0.9.tgz#3d120b32a9710fbd5b872c539575e3e1ae183ad6"
+"@razors/build-rollup@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@razors/build-rollup/-/build-rollup-0.0.11.tgz#a9f7a6fa4d44f2d8ab3294839c54ce3815921e81"
   dependencies:
     "@rollup/plugin-babel" "^5.0.4"
     "@rollup/plugin-commonjs" "^13.0.0"
@@ -1726,6 +1726,7 @@
     rollup "^2.18.0"
     rollup-plugin-css-only "^2.1.0"
     rollup-plugin-node-externals "^2.2.0"
+    rollup-plugin-preserve-shebang "^1.0.1"
     rollup-plugin-typescript2 "^0.27.1"
     rollup-plugin-vue "5.1.9"
     vue-template-compiler "^2.6.11"
@@ -1965,16 +1966,6 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@vue/compiler-core@3.0.0-beta.18":
-  version "3.0.0-beta.18"
-  resolved "https://registry.yarnpkg.com/@vue/compiler-core/-/compiler-core-3.0.0-beta.18.tgz#52cf3e4f1f627230e9affb9da22a408a624e7e50"
-  dependencies:
-    "@babel/parser" "^7.8.6"
-    "@babel/types" "^7.8.6"
-    "@vue/shared" "3.0.0-beta.18"
-    estree-walker "^0.8.1"
-    source-map "^0.6.1"
-
 "@vue/compiler-core@3.0.0-beta.21":
   version "3.0.0-beta.21"
   resolved "https://registry.yarnpkg.com/@vue/compiler-core/-/compiler-core-3.0.0-beta.21.tgz#818b1a27d640663de01fef3a12ba53cd90cbd946"
@@ -1985,12 +1976,15 @@
     estree-walker "^2.0.1"
     source-map "^0.6.1"
 
-"@vue/compiler-dom@3.0.0-beta.18":
-  version "3.0.0-beta.18"
-  resolved "https://registry.yarnpkg.com/@vue/compiler-dom/-/compiler-dom-3.0.0-beta.18.tgz#089b37c71850df28d2304e2d5034461af6065ddf"
+"@vue/compiler-core@3.0.0-rc.4":
+  version "3.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@vue/compiler-core/-/compiler-core-3.0.0-rc.4.tgz#2fe7c9e010d6c66f1f191c8a6fbd4e9c4d87d126"
   dependencies:
-    "@vue/compiler-core" "3.0.0-beta.18"
-    "@vue/shared" "3.0.0-beta.18"
+    "@babel/parser" "^7.10.4"
+    "@babel/types" "^7.10.4"
+    "@vue/shared" "3.0.0-rc.4"
+    estree-walker "^2.0.1"
+    source-map "^0.6.1"
 
 "@vue/compiler-dom@3.0.0-beta.21":
   version "3.0.0-beta.21"
@@ -1998,6 +1992,13 @@
   dependencies:
     "@vue/compiler-core" "3.0.0-beta.21"
     "@vue/shared" "3.0.0-beta.21"
+
+"@vue/compiler-dom@3.0.0-rc.4":
+  version "3.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@vue/compiler-dom/-/compiler-dom-3.0.0-rc.4.tgz#3c6b56f8c99797b46cf7935ffb1e538a1a1174c7"
+  dependencies:
+    "@vue/compiler-core" "3.0.0-rc.4"
+    "@vue/shared" "3.0.0-rc.4"
 
 "@vue/compiler-sfc@^3.0.0-beta.21":
   version "3.0.0-beta.21"
@@ -2027,34 +2028,34 @@
     "@vue/compiler-dom" "3.0.0-beta.21"
     "@vue/shared" "3.0.0-beta.21"
 
-"@vue/reactivity@3.0.0-beta.18":
-  version "3.0.0-beta.18"
-  resolved "https://registry.yarnpkg.com/@vue/reactivity/-/reactivity-3.0.0-beta.18.tgz#b6562661eca6b7bd4d633db5df867b41c8e3c648"
+"@vue/reactivity@3.0.0-rc.4":
+  version "3.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@vue/reactivity/-/reactivity-3.0.0-rc.4.tgz#0a917d9809967c78c32436fb0113dac6d157b87a"
   dependencies:
-    "@vue/shared" "3.0.0-beta.18"
+    "@vue/shared" "3.0.0-rc.4"
 
-"@vue/runtime-core@3.0.0-beta.18":
-  version "3.0.0-beta.18"
-  resolved "https://registry.yarnpkg.com/@vue/runtime-core/-/runtime-core-3.0.0-beta.18.tgz#373ccec46e37826b9976f21039287bfa69f4ee16"
+"@vue/runtime-core@3.0.0-rc.4":
+  version "3.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@vue/runtime-core/-/runtime-core-3.0.0-rc.4.tgz#87b5a4022aa86eb717d38751b8b4be4cede0f323"
   dependencies:
-    "@vue/reactivity" "3.0.0-beta.18"
-    "@vue/shared" "3.0.0-beta.18"
+    "@vue/reactivity" "3.0.0-rc.4"
+    "@vue/shared" "3.0.0-rc.4"
 
-"@vue/runtime-dom@3.0.0-beta.18":
-  version "3.0.0-beta.18"
-  resolved "https://registry.yarnpkg.com/@vue/runtime-dom/-/runtime-dom-3.0.0-beta.18.tgz#9b9f6af723bf9896fdce58857e07401ef521cba3"
+"@vue/runtime-dom@3.0.0-rc.4":
+  version "3.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@vue/runtime-dom/-/runtime-dom-3.0.0-rc.4.tgz#66453056c2761f112d9c04ab816477140bcaa664"
   dependencies:
-    "@vue/runtime-core" "3.0.0-beta.18"
-    "@vue/shared" "3.0.0-beta.18"
+    "@vue/runtime-core" "3.0.0-rc.4"
+    "@vue/shared" "3.0.0-rc.4"
     csstype "^2.6.8"
-
-"@vue/shared@3.0.0-beta.18":
-  version "3.0.0-beta.18"
-  resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.0.0-beta.18.tgz#1326efa98fe49b9ef3effbec88189b88ed7544a7"
 
 "@vue/shared@3.0.0-beta.21":
   version "3.0.0-beta.21"
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.0.0-beta.21.tgz#f4fd53501f40aaaead1448de20beb831283a6e08"
+
+"@vue/shared@3.0.0-rc.4":
+  version "3.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.0.0-rc.4.tgz#fac45cd6fec76a1e284b41f1b49c2cb13c914598"
 
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
@@ -3981,10 +3982,6 @@ estraverse@^4.1.0, estraverse@^4.1.1, estraverse@^4.2.0:
 estree-walker@^0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/estree-walker/-/estree-walker-0.6.1.tgz#53049143f40c6eb918b23671d1fe3219f3a1b362"
-
-estree-walker@^0.8.1:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/estree-walker/-/estree-walker-0.8.1.tgz#6230ce2ec9a5cb03888afcaf295f97d90aa52b79"
 
 estree-walker@^1.0.1:
   version "1.0.1"
@@ -7789,6 +7786,12 @@ rollup-plugin-node-externals@^2.2.0:
   dependencies:
     find-up "^4.1.0"
 
+rollup-plugin-preserve-shebang@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-preserve-shebang/-/rollup-plugin-preserve-shebang-1.0.1.tgz#17109cdb4ed12c3cac9379b802182427cdbee5a1"
+  dependencies:
+    magic-string "^0.25.7"
+
 rollup-plugin-typescript2@^0.27.1:
   version "0.27.1"
   resolved "https://registry.yarnpkg.com/rollup-plugin-typescript2/-/rollup-plugin-typescript2-0.27.1.tgz#4f27193408a8f040139eed3e3db7b0c7f3668200"
@@ -8999,13 +9002,13 @@ vue-template-compiler@^2.6.11:
     de-indent "^1.0.2"
     he "^1.1.0"
 
-vue@3.0.0-beta.18:
-  version "3.0.0-beta.18"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-3.0.0-beta.18.tgz#775b499602ed7ff5e14bef00cd320e77bdfe0dca"
+vue@3.0.0-rc.4:
+  version "3.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-3.0.0-rc.4.tgz#f17b32914c8add7f4792d618eb4f1358ff4222e8"
   dependencies:
-    "@vue/compiler-dom" "3.0.0-beta.18"
-    "@vue/runtime-dom" "3.0.0-beta.18"
-    "@vue/shared" "3.0.0-beta.18"
+    "@vue/compiler-dom" "3.0.0-rc.4"
+    "@vue/runtime-dom" "3.0.0-rc.4"
+    "@vue/shared" "3.0.0-rc.4"
 
 w3c-hr-time@^1.0.2:
   version "1.0.2"

@@ -1,8 +1,19 @@
 import { NodePath, types as t } from '@babel/core';
-import { BASE_TRANSITION, CREATE_TEXT, CREATE_VNODE, helperNameMap, hyphenate, KEEP_ALIVE, SUSPENSE, TELEPORT, TO_DISPLAY_STRING } from './constant';
-import { importTransform } from '../gen/generateCode';
-import { JsxNode } from '../jsxNode';
+import {
+  BASE_TRANSITION,
+  CREATE_TEXT,
+  CREATE_VNODE,
+  extend,
+  helperNameMap,
+  hyphenate,
+  KEEP_ALIVE,
+  SUSPENSE,
+  TELEPORT,
+  TO_DISPLAY_STRING,
+} from './constant';
+import jsxNode, { JsxNode, PluginOptions } from '../jsxNode';
 import { ElementTypes } from '@vue/compiler-core';
+import domOptions from '../domOptions';
 
 /**
  * jsxText will be transformed to stringLiteral in slot
@@ -79,3 +90,5 @@ export function shouldUseBlock(node: JsxNode) {
   // leads to too much unnecessary complexity.
   return vnodeTag === KEEP_ALIVE || (!isComponent && (vnodeTag === 'svg' || vnodeTag === 'foreignObject'))
 }
+
+export const importTransform = (s) => `_${s}`

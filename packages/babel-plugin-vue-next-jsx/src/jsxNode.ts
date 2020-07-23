@@ -13,6 +13,7 @@ export interface AttributeNode {
   value: any,
   // static means value is transformed, and the origin is static for patchFlags, such as style
   static?: boolean
+  // If key stringLiteral, like 'a-d': value
   stringLiteral?: boolean
 }
 
@@ -33,8 +34,11 @@ export interface JsxNode  {
   path?: NodePath
   // current program
   program?: NodePath
-  // skip building when some special tag
-  skip?: boolean
+  // record special expression like vue import
+  extraExpression?: {
+    vueImport?: t.ImportDeclaration
+    optimizeVariables?: any
+  }
 
   // nodeType: equal with @vue/compiler-core NodeTypes
   nodeType?: NodeTypes
@@ -158,6 +162,7 @@ export function jsxNodeInit(path: NodePath, options: PluginOptions, program: Nod
   jsxNode.directives = []
   jsxNode.spreadProps = []
   jsxNode.dynamicProps = []
+  jsxNode.extraExpression = {}
 }
 
 export default jsxNode

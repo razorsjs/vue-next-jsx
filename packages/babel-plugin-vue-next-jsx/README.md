@@ -11,7 +11,6 @@ transformElement.spec
 ### directives:
 
 - [x] v-once
-- [x] v-bind
 - [x] v-pre
 
 ### patchFlags

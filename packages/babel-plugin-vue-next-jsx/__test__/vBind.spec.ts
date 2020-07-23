@@ -11,4 +11,9 @@ describe('v-bind', () => {
     // const vueCode = '<div :foo="23" :bar="32"></div>'
     expect(transformWithPlugin(jsxCode)).toBe('_openBlock(),_createBlock("div",_mergeProps({a:123},{b:test},{c:"123"},{...d}),null,8,["b"])')
   })
+  test('dynamic key ', () => {
+    const jsxCode = `<div v-bind={[dynamic, a]}></div>`
+    const vueCode = '<div :[dynamic]="a"></div>'
+    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  })
 })

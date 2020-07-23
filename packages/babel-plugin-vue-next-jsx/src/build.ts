@@ -47,11 +47,6 @@ export const buildDataName = (strOrExp, stringLiteral?: boolean): {
       exp: stringLiteral ? t.stringLiteral(strOrExp) :t.identifier(strOrExp),
       needComputed: false
     }
-  } else if(t.isIdentifier(strOrExp)){
-    return {
-      exp:  t.binaryExpression('+', t.stringLiteral('on'), t.callExpression(t.identifier(addVueImport(CAPITALIZE)), [strOrExp])),
-      needComputed: true
-    }
   } else {
     return {
       exp: strOrExp,

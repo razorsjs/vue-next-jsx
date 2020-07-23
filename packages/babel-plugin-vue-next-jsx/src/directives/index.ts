@@ -6,6 +6,7 @@ import vHtml from './vHtml';
 import vIs from './vIs';
 import vOn from './vOn'
 import vModel from './vModel';
+import vBind from './vBind'
 import {NOOP} from '../util/constant'
 
 export const defaultDirectiveTransform = (dir: DirectiveNode, node: JsxNode): DirectiveTransformResult => {
@@ -44,5 +45,6 @@ export default {
   is: vIs,
   on: vOn,
   cloak: NOOP,
-  model: vModel
+  model: vModel,
+  bind: vBind
 }

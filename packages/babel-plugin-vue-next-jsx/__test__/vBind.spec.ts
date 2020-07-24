@@ -16,4 +16,19 @@ describe('v-bind', () => {
     const vueCode = '<div :[dynamic]="a"></div>'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
+  test('v-bind="obj" after static prop ', () => {
+    const jsxCode = `<div id="foo" v-bind={obj} />`
+    const vueCode = '<div id="foo" v-bind="obj" />'
+    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  })
+  test('v-bind="obj" before static prop ', () => {
+    const jsxCode = `<div v-bind={obj} id="foo" />`
+    const vueCode = '<div v-bind="obj" id="foo" />'
+    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  })
+  test('v-bind="obj" between static props ', () => {
+    const jsxCode = `<div id="foo" v-bind={obj} class="bar" />`
+    const vueCode = '<div id="foo" v-bind="obj" class="bar" />'
+    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  })
 })

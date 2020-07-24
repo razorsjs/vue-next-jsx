@@ -12,11 +12,12 @@ import v from './v'
 import on from './on'
 import style from './style';
 
-export const defaultAttrParse = (name: string, value: any, jsxNode: JsxNode) => {
+export const defaultAttrParse = (name: string, value: any, index: number, jsxNode: JsxNode) => {
   const attributeNode: AttributeNode = {
     type: NodeTypes.ATTRIBUTE,
     name,
     value,
+    index
   };
   jsxNode.attributes.push(attributeNode);
 }

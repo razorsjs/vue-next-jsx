@@ -11,9 +11,11 @@ export interface AttributeNode {
   type: NodeTypes.ATTRIBUTE
   name: string | t.Expression
   value: any,
+  // the origin index in jsx, used to sort and merge
+  index: number
   // static means value is transformed, and the origin is static for patchFlags, such as style
   static?: boolean
-  // If key stringLiteral, like 'a-d': value
+  // Force key to stringLiteral, like 'a-d': value
   stringLiteral?: boolean
 }
 
@@ -22,6 +24,8 @@ export interface AttributeNode {
 export interface DirectiveNode {
   type: NodeTypes.DIRECTIVE
   name: string
+  // the origin index in jsx, used to sort and merge
+  index: number
   exp?: any
   arg?: any
   modifiers?: t.ArrayExpression
@@ -40,8 +44,6 @@ export interface JsxNode  {
     optimizeVariables?: any
   }
 
-  // nodeType: equal with @vue/compiler-core NodeTypes
-  nodeType?: NodeTypes
   // tagType: equal with @vue/compiler-core ElementTypes
   // ElementTypes.Slot and ElementTypes.Template will not be supported(we don't need v-slot)
   tagType?: ElementTypes
@@ -90,7 +92,13 @@ export interface DirectiveTransformResult {
   needRuntime?: boolean | symbol
 }
 
-export type AttributeTransform = (name: string, value: t.Expression | t.BooleanLiteral,node: JsxNode) => void
+/**
+ * name: jsx name
+ * value: jsx exp
+ * index: jsx attribute index in all attributes
+ * node: current node
+ */
+export type AttributeTransform = (name: string, value: t.Expression | t.BooleanLiteral, index: number, node: JsxNode) => void
 
 export interface BuildOptions {
   /**

@@ -7,7 +7,7 @@ import { isStaticExp, resolveModifierValue } from '../util/resolveModifiers';
 import { addVueImport } from '../addVueImport';
 
 export default (dir: DirectiveNode, node: JsxNode): void => {
-  let {exp, modifiers, arg} = dir
+  let {exp, modifiers, arg, index} = dir
   if(isStaticExp(arg)) {
     arg = `on${capitalize(arg)}`
   } else {
@@ -18,6 +18,7 @@ export default (dir: DirectiveNode, node: JsxNode): void => {
   node.attributes.push({
     type: NodeTypes.ATTRIBUTE,
     name: key,
-    value
+    value,
+    index
   })
 }

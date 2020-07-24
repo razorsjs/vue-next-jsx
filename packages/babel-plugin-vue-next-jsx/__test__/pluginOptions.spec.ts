@@ -8,13 +8,14 @@ import { DirectiveNode, JsxNode } from '../src/jsxNode';
 import { NodeTypes } from '../src/util/constant';
 
 // a simple v-on-click transformer
-const onTransformer = (name: string, value: any, jsxNode: JsxNode) => {
+const onTransformer = (name: string, value: any, index:number, jsxNode: JsxNode) => {
   let _name = name.split('-')
   const directiveNode: DirectiveNode = {
     type: NodeTypes.DIRECTIVE,
     name: _name[1],
     exp: value,
-    arg: _name[2]
+    arg: _name[2],
+    index
   };
   jsxNode.directives.push(directiveNode);
 }

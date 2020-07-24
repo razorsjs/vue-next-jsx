@@ -8,7 +8,7 @@ import jsxNode, { DirectiveNode, AttributeNode, DirectiveTransform } from '../js
 import { NodeTypes } from '../util/constant';
 import {defaultAttrParse} from '../attributes';
 
-const parsePropsFromJSXAttribute = (path: NodePath<t.JSXAttribute>) => {
+const parsePropsFromJSXAttribute = (path: NodePath<t.JSXAttribute>, index: number) => {
   // tsx does't support JSXNamespacedName, so only JSXIdentifier
   const nameNode: t.JSXIdentifier = path.node.name as t.JSXIdentifier;
   const name = nameNode.name;
@@ -34,9 +34,9 @@ const parsePropsFromJSXAttribute = (path: NodePath<t.JSXAttribute>) => {
     }
   });
   if(attrParse) {
-    attrParse(name, value, jsxNode)
+    attrParse(name, value, index, jsxNode)
   } else {
-    defaultAttrParse(name, value, jsxNode)
+    defaultAttrParse(name, value, index, jsxNode)
   }
 };
 
@@ -49,9 +49,9 @@ export default function(): void {
   const openingElementPath: NodePath<t.JSXOpeningElement> = (path as NodePath<t.JSXElement>).get('openingElement');
   const paths = openingElementPath.get('attributes');
 
-  paths.forEach(path => {
+  paths.forEach((path, index) => {
     if (path.isJSXAttribute()) {
-      parsePropsFromJSXAttribute(path);
+      parsePropsFromJSXAttribute(path, index);
     }
     if (path.isJSXSpreadAttribute()) {
       let node = t.spreadElement(path.node.argument)

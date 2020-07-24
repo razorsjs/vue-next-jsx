@@ -5,7 +5,7 @@ import { addVueImport } from '../addVueImport';
 import { resolveModifierValue } from '../util/resolveModifiers';
 
 // onXxx
-export default (name: string, value: any, jsxNode: JsxNode) => {
+export default (name: string, value: any, index: number, jsxNode: JsxNode) => {
   // value can be array [value, modifiers]
   const arg = capitalize(name.substring(2))
   let exp, modifiers;
@@ -20,7 +20,8 @@ export default (name: string, value: any, jsxNode: JsxNode) => {
     name: 'on',
     exp,
     arg,
-    modifiers
+    modifiers,
+    index
   };
   jsxNode.directives.push(directiveNode);
 }

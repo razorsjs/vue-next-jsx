@@ -10,7 +10,7 @@ describe('innerComponent', () => {
     expect(compare(code))
   })
   test('teleport', () => {
-    const code = '<Teleport>123</Teleport>'
+    const code = '<teleport target="#foo">123</teleport>'
     expect(compare(code))
   })
   test('teleport with childrens', () => {

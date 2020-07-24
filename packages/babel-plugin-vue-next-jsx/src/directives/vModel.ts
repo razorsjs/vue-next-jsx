@@ -82,7 +82,7 @@ export default (dir: DirectiveNode, node: JsxNode): DirectiveTransformResult => 
     ))
   }
 
-  let {arg, exp, modifiers} = dir
+  let {arg, exp, modifiers, index} = dir
 
   // parse modifiers and name
   let name: any = 'onUpdate:modelValue'
@@ -117,13 +117,15 @@ export default (dir: DirectiveNode, node: JsxNode): DirectiveTransformResult => 
     node.attributes.push({
       type: NodeTypes.ATTRIBUTE,
       name: hasArg ? getContent(arg) : 'modelValue',
-      value: exp
+      value: exp,
+      index
     })
     // main
     node.attributes.push({
       type: NodeTypes.ATTRIBUTE,
       name,
       value,
+      index,
       stringLiteral: true
     })
     if(modifiers) {
@@ -131,6 +133,7 @@ export default (dir: DirectiveNode, node: JsxNode): DirectiveTransformResult => 
         type: NodeTypes.ATTRIBUTE,
         name: `${hasArg ? getContent(arg) : 'model'}Modifiers`,
         value: modifiers,
+        index,
         static: true
       })
     }
@@ -139,6 +142,7 @@ export default (dir: DirectiveNode, node: JsxNode): DirectiveTransformResult => 
       type: NodeTypes.ATTRIBUTE,
       name,
       value,
+      index,
       stringLiteral: true
     })
     // return directive

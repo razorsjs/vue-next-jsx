@@ -60,26 +60,32 @@ export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t
   if(attributes.length === 0 && spreadProps.length === 0 ) {
     return t.nullLiteral()
   }
-  // if has spread child, we use mergeProps
-  if(spreadProps?.length) {
-    const props = [...attributes,...spreadProps]
-    const name = addVueImport(MERGE_PROPS)
-    const _props = props.map(i => {
-      if(!t.isSpreadElement(i)) {
-        const {exp, needComputed} = buildDataName(i.name, i.stringLiteral)
-        return t.objectExpression([t.objectProperty(exp, i.value, needComputed)])
+  // if has spread child, or no name attr, we use mergeProps
+  let identifiers: Array<t.SpreadElement | t.ObjectExpression | t.Identifier> = [];
+  let needMergeProps = false;
+  if(attributes?.length) {
+    attributes.forEach(attr => {
+      if(attr.name) {
+        const {exp, needComputed} = buildDataName(attr.name, attr.stringLiteral)
+        identifiers.push(t.objectExpression([t.objectProperty(exp, attr.value, needComputed)]))
       } else {
-        return t.objectExpression([i])
+        needMergeProps = true
+        identifiers.push(attr.value)
       }
     })
-    return t.callExpression(t.identifier(name), _props)
+  }
+  if(spreadProps?.length) {
+    identifiers = identifiers.concat(spreadProps.map(i=>t.objectExpression([i])));
+    needMergeProps = true
+  }
+  if(needMergeProps) {
+    return t.callExpression(t.identifier(addVueImport(MERGE_PROPS)), identifiers)
   } else {
-    // plain {}
-    const objectProperty: Array<t.ObjectProperty> = attributes.map(attr => {
-      const {exp, needComputed} = buildDataName(attr.name, attr.stringLiteral)
-      return t.objectProperty(exp, attr.value, needComputed)
-    })
-    return t.objectExpression(objectProperty);
+    // identifiers all ObjectExpression
+    let properties = (identifiers as Array<t.ObjectExpression>).reduce((pre, item) => {
+      return pre.concat(item.properties)
+    }, [])
+    return t.objectExpression(properties)
   }
 }
 

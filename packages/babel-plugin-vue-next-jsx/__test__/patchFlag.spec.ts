@@ -34,6 +34,6 @@ describe('patchFlag test', () => {
   test('mixed all', () => {
     const jsxCode = '<div onTest={test} a={a} class={a} style={test}>{a}</div>'
     const vueCode = '<div @test="test" :a="a" :class="a" :style="test">{{a}}</div>'
-    expect(transformWithPlugin(jsxCode)).toBe("_openBlock(),_createBlock(\"div\",{a:a,class:a,style:test,onTest:test},_toDisplayString(a),47,[\"a\",\"onTest\"])")
+    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
 })

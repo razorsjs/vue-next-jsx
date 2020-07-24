@@ -5,6 +5,7 @@ export default (dir: DirectiveNode, node: JsxNode): void => {
   node.attributes.push({
     type: NodeTypes.ATTRIBUTE,
     name: 'textContent',
-    value: dir.exp
+    value: dir.exp,
+    index: dir.index
   })
 }

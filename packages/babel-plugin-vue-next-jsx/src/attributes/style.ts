@@ -5,7 +5,7 @@ import {buildPlainObjectToExpression} from '../util/build';
 import { isDynamic } from '../util';
 
 // transform style string to object
-export default (name: string, value: any, jsxNode: JsxNode) => {
+export default (name: string, value: any, index:number, jsxNode: JsxNode) => {
   let isStatic = false
   if(!isDynamic(value)) {
     isStatic = true
@@ -19,6 +19,7 @@ export default (name: string, value: any, jsxNode: JsxNode) => {
     type: NodeTypes.ATTRIBUTE,
     name,
     value,
+    index,
     static: isStatic
   };
   jsxNode.attributes.push(attributeNode);

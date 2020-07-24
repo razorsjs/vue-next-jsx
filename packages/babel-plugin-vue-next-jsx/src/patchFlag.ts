@@ -52,10 +52,12 @@ export const extractPatchFlag = () => {
     }
   })
 
+  // directive is transformed, so all props are certain
+  jsxNode.attributes = attributes.sort((a, b)=>a.index -b.index)
   /**
    * onXXX all be treated as listener like v-on, e.g. onClick <==> v-on:click <==> @click
    */
-  attributes.forEach((attr: AttributeNode) => {
+  jsxNode.attributes.forEach((attr: AttributeNode) => {
     const {name, value} = attr
     if(isStaticExp(name)) {
       if (name === 'ref') {

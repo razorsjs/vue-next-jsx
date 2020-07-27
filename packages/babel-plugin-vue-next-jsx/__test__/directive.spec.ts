@@ -12,4 +12,10 @@ describe('Use jsx with custom directive', () => {
     const vueCode = '<div v-a="onTest">hello world</div>'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
+
+  test('runtime directives', () => {
+    const jsxCode = `<div v-foo v-bar={x} v-baz={[arg,y,['mod','mad']]}/>`
+    const vueCode = '<div v-foo v-bar="x" v-baz:[arg].mod.mad="y" />'
+    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
+  })
 })

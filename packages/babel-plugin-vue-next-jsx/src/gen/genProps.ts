@@ -19,8 +19,6 @@ const parsePropsFromJSXAttribute = (path: NodePath<t.JSXAttribute>, index: numbe
     if (t.isJSXExpressionContainer(value)) {
       value = value.expression;
     }
-  } else {
-    value = t.booleanLiteral(true);
   }
 
   let attrParse;

@@ -13,6 +13,7 @@ import {
 } from '../util/constant';
 import { getName } from '../addVueImport';
 import { getContent, isDynamic } from '../util';
+import {transformModifiers} from './index';
 
 const findProp = (node: JsxNode, prop: string) =>{
   return node.attributes.find(s => {
@@ -103,11 +104,7 @@ export default (dir: DirectiveNode, node: JsxNode): DirectiveTransformResult => 
   }
   if(modifiers) {
     // transforms to {}
-    if(t.isArrayExpression(modifiers)) {
-      (modifiers as any) = t.objectExpression(modifiers.elements.map(i=>{
-        return t.objectProperty(t.identifier(getContent(i)), t.booleanLiteral(true))
-      }))
-    }
+    modifiers = transformModifiers(modifiers)
   }
   let value = t.arrowFunctionExpression(
     [t.identifier('$event')],

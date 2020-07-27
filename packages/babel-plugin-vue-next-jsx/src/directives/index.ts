@@ -8,14 +8,41 @@ import vOn from './vOn'
 import vModel from './vModel';
 import vBind from './vBind'
 import {NOOP} from '../util/constant'
+import { getContent } from '../util';
+
+export const transformModifiers = (modifiers) => {
+  if(modifiers) {
+    // transforms to {}
+    if(t.isArrayExpression(modifiers)) {
+      (modifiers as any) = t.objectExpression(modifiers.elements.map(i=>{
+        return t.objectProperty(t.identifier(getContent(i)), t.booleanLiteral(true))
+      }))
+    }
+  }
+  return modifiers
+}
 
 export const defaultDirectiveTransform = (dir: DirectiveNode, node: JsxNode): DirectiveTransformResult => {
-  return {
+  let {exp,arg,modifiers} = dir
+  const result = {
     props: [
-      t.identifier(dir.name),
-      dir.exp
+      t.identifier(dir.name)
     ]
   }
+
+  if(exp || arg || modifiers) {
+    result.props.push(exp)
+  }
+
+  if(arg || modifiers) {
+    result.props.push(arg)
+  }
+
+  if(modifiers) {
+    result.props.push(transformModifiers(modifiers))
+  }
+
+  return result
 }
 
 export const directiveParse = (dir: DirectiveNode) => {

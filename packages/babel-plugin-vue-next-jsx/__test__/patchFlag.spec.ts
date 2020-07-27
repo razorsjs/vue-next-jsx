@@ -30,7 +30,6 @@ describe('patchFlag test', () => {
     const code = '<div ref="a"></div>'
     compare(code)
   })
-  // onXxx will cause data in wrong order, but it doesn't matter and no need to reorder it
   test('mixed all', () => {
     const jsxCode = '<div onTest={test} a={a} class={a} style={test}>{a}</div>'
     const vueCode = '<div @test="test" :a="a" :class="a" :style="test">{{a}}</div>'

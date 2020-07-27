@@ -91,6 +91,12 @@ export const resolveModifiers = (key: string | t.Expression, modifiers: string[]
  * @param modifiers
  */
 export const resolveModifierValue = (key: string | t.Expression, value, modifiers: t.ArrayExpression) => {
+  // resolve value
+  if(!t.isLiteral(value) && !t.isIdentifier(value) && !t.isFunction(value) && !t.isMemberExpression(value)) {
+    // parenthesizedExpression only for format
+    value = t.arrowFunctionExpression([t.identifier('$event')], t.parenthesizedExpression(value))
+  }
+  // resolve modifiers
   if(modifiers) {
     const {
       keyModifiers,

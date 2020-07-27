@@ -1,8 +1,9 @@
 import { NodePath, types as t } from '@babel/core';
 import jsxNode from '../jsxNode';
-import { PatchFlags } from '../util/constant';
+import { CREATE_TEXT, PatchFlags, TO_DISPLAY_STRING } from '../util/constant';
 import { NodeTypes } from '@vue/compiler-core';
 import genText from '../gen/genText'
+import { generateCall } from './generateCode';
 
 const transformJSXText = (path: NodePath<t.JSXText>): t.StringLiteral => {
   const node = path.node
@@ -54,7 +55,9 @@ const transformJSXSpreadChild = (path: NodePath<t.JSXSpreadChild>): t.SpreadElem
 
 const transformJSXExpressionContainer = (path: NodePath<t.JSXExpressionContainer>, paths) => {
   const {node: {expression}} = path
-  if(t.isIdentifier(expression) || t.isLiteral(expression)) {
+  // object for slot special
+  // array for v-for special
+  if(!t.isObjectExpression(expression) && !t.isArrayExpression(expression)) {
     const isTextVNode = paths.length > 1
     if(t.isIdentifier(expression) && !isTextVNode) {
       jsxNode.patchFlag|=PatchFlags.TEXT
@@ -69,24 +72,45 @@ export default function() {
   const paths: Array<any> = path.get('children') as any
   const isFragment = t.isJSXFragment(path.node)
 
-  const nodes: Array<ChildNode> = paths.map(path => {
-      if (path.isJSXText()) {
-        return transformJSXText(path)
+  let nodes: Array<any> = []
+  let text: any = [];
+  // sibling text will be merged as textVNode
+  const mergeText = (text) => {
+    if(text.length === 1) {
+      const path = text[0]
+      return path.isJSXText() ? transformJSXText(path) : transformJSXExpressionContainer(path,paths)
+    } else {
+      const transform = (path) => path.isJSXText() ? transformJSXText(path) : generateCall([path.node.expression], TO_DISPLAY_STRING)
+      let binary = t.binaryExpression('+',transform(text[0]), transform(text[1]))
+      for(let i=2;i<text.length;i++) {
+        binary = t.binaryExpression('+', binary, transform(text[i]))
       }
-      // treated as vue: {{XX}}
-      if (path.isJSXExpressionContainer()) {
-        return transformJSXExpressionContainer(path, paths)
+      return generateCall([binary, t.numericLiteral(1)], CREATE_TEXT)
+    }
+  }
+  paths.forEach(path => {
+    if (path.isJSXText() || path.isJSXExpressionContainer()) {
+      text.push(path)
+    } else {
+      // not text
+      if(text.length) {
+        nodes.push(mergeText(text));
+        text = [];
       }
       if (path.isJSXSpreadChild()) {
-        return transformJSXSpreadChild(path)
+        nodes.push(transformJSXSpreadChild(path))
+      } else if (path.isCallExpression() || path.isSequenceExpression()) {
+        nodes.push(path.node)
+      } else {
+        /* istanbul ignore next */
+        throw new Error(`getChildren: ${path.type} is not supported`)
       }
-      if (path.isCallExpression() || path.isSequenceExpression()) {
-        return path.node
-      }
-      /* istanbul ignore next */
-      throw new Error(`getChildren: ${path.type} is not supported`)
-    })
-    .filter(el => el !== null && !t.isJSXEmptyExpression(el));
+    }
+  });
+  if(text.length) {
+    nodes.push(mergeText(text));
+  }
+  nodes = nodes.filter(el => el !== null && !t.isJSXEmptyExpression(el));
 
   if(isFragment) {
     jsxNode.patchFlag|=PatchFlags.STABLE_FRAGMENT

@@ -5,6 +5,10 @@
 import { NodePath, types as t } from '@babel/core';
 import { NodeTypes, ElementTypes, extend, CompilerError } from './util/constant';
 import domOptions from './domOptions'
+import { mergeProps } from './util/merge';
+import {proxyMethod} from './util';
+
+const attrMap = new Map<string, AttributeNode>();
 
 // AttributeNode: @vue/compiler-core AttributeNode
 export interface AttributeNode {
@@ -158,6 +162,7 @@ let jsxNode: JsxNode = {}
 
 export function clear() {
   Object.keys(jsxNode).forEach(key => delete jsxNode[key])
+  attrMap.clear()
 }
 
 export function jsxNodeInit(path: NodePath, options: PluginOptions, program: NodePath) {
@@ -166,7 +171,25 @@ export function jsxNodeInit(path: NodePath, options: PluginOptions, program: Nod
   jsxNode.program = program
   jsxNode.options = extend({}, domOptions, options)
   jsxNode.patchFlag = 0
-  jsxNode.attributes = []
+  // make attributes proxyable to auto merge props
+  jsxNode.attributes = new Proxy([], proxyMethod({
+    set(target, prop, value: AttributeNode) {
+      const name = value.name
+      // only class, style, event
+      // only onXxx props will be treated as event handler
+      if(name === 'style' || name === 'class' || (typeof name === 'string' && /^on[A-Z]/g.test(name))) {
+        if(attrMap.has(name)) {
+          attrMap.set(name, mergeProps(value, attrMap.get(name)))
+        } else {
+          target[prop] = value
+          attrMap.set(name, target[prop])
+        }
+      } else {
+        target[prop] = value
+      }
+      return true
+    }
+  }, 'push'))
   jsxNode.directives = []
   jsxNode.spreadProps = []
   jsxNode.dynamicProps = []

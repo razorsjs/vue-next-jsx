@@ -11,7 +11,7 @@ import {
   TELEPORT,
   TO_DISPLAY_STRING,
 } from './constant';
-import jsxNode, { JsxNode, PluginOptions } from '../jsxNode';
+import jsxNode, { AttributeNode, JsxNode, PluginOptions } from '../jsxNode';
 import { ElementTypes } from '@vue/compiler-core';
 import domOptions from '../domOptions';
 
@@ -92,3 +92,25 @@ export function shouldUseBlock(node: JsxNode) {
 }
 
 export const importTransform = (s) => `_${s}`
+
+// do set only in some methods
+export const proxyMethod = (handler: ProxyHandler<any>, method: string) => {
+  const {get, set} = handler
+  if(!set) throw new Error('handler must have set methods')
+  let isIn = false;
+  handler.get = (target, value, receiver) => {
+    if(value === method) {
+      isIn = true
+    }
+    return get ? get(target, value, receiver) : Reflect.get(target, value, receiver)
+  };
+  handler.set = (target, value, props, receiver) => {
+    if(isIn) {
+      isIn = false
+      return set(target, value, props, receiver)
+    } else {
+      return Reflect.set(target, value, props, receiver)
+    }
+  };
+  return handler
+}

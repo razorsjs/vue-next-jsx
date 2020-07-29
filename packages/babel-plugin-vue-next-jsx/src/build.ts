@@ -55,7 +55,7 @@ export const buildDataName = (strOrExp, stringLiteral?: boolean): {
   }
 }
 // build data for createVNode
-export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t.CallExpression => {
+export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t.CallExpression | t.Identifier => {
   const {attributes, spreadProps} = node
   if(attributes.length === 0 && spreadProps.length === 0 ) {
     return t.nullLiteral()
@@ -79,6 +79,8 @@ export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t
     needMergeProps = true
   }
   if(needMergeProps) {
+    // only one dynamic value such as only v-bind=[a], look at patchflag test full props
+    if(identifiers.length === 1) return identifiers[0] as t.Identifier
     return t.callExpression(t.identifier(addVueImport(MERGE_PROPS)), identifiers)
   } else {
     // identifiers all ObjectExpression

@@ -68,10 +68,11 @@ const isTextContainer = (path: NodePath<t.JSXExpressionContainer>, isComponent: 
 }
 
 const transformJSXExpressionContainer = (path: NodePath<t.JSXExpressionContainer>) => {
-  // function () => <div><div> to {default: () => [<div></div>]}
+  // Literal function () => <div><div> to {default: () => <div></div>}
   let {node: {expression}} = path
-  if(t.isFunctionExpression(expression) || t.isArrowFunctionExpression(expression)) {
-    expression = t.objectExpression([t.objectProperty(t.identifier('default'), expression)])
+  // note: render function such as renderSlot() must be wrapped with []
+  if(t.isCallExpression(expression)) {
+    expression = t.arrayExpression([expression])
   }
   return expression
 }

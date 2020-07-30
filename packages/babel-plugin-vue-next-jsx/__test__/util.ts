@@ -77,7 +77,7 @@ const formatTransformed = (source: string): string => {
   if(!match) {
     match = s.match(/_openBlock\([\s\S]+/)
   }
-  return match[0]
+  return (match && match[0]) || s
 }
 
 export function vueCompiled(source: string): string {

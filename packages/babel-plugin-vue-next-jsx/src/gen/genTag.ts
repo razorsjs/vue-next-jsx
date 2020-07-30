@@ -52,16 +52,19 @@ export default function() {
     // keep with vue vnodeTag
     jsxNode.vnodeTag = resolveTag(tag)
 
-    // reformat a-b to AB
-    // but a does not turn to A
-    if(tag.includes('-')) {
-      tag = capitalize(camelize(tag))
-    }
-
     if(tagType === ElementTypes.COMPONENT) {
       if(isSymbol(jsxNode.vnodeTag)) {
         jsxNode.tag = t.identifier(addVueImport(jsxNode.vnodeTag))
       } else {
+        /**
+         * Strategy：
+         * 1.Find if component is imported, aa-bb's tag will find aabb aaBb AaBb, and ab find ab
+         * 2.If is imported, do nothing
+         * 3.Not imported(global), fall back to vue's resolveAsset strategy
+         */
+        if(tag.includes('-')) {
+          tag = capitalize(camelize(tag))
+        }
         jsxNode.tag = t.identifier(tag)
       }
     } else {

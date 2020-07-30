@@ -11,13 +11,16 @@
   //     TestComponent
   //   }
   // }
-  import {ref} from 'vue'
+  // import renderSlot from './renderSlot';
+
+  const renderSlot = (str) => <div>{str}</div>
 
   export default () => {
+    console.log(renderSlot);
     return (
       <test-component>
         {
-          (str) => [<div>2133</div>, <div>123</div>]
+          () => <div>ad</div>
         }
       </test-component>
     )

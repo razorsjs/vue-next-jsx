@@ -32,6 +32,7 @@ export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression | 
   // If has directive, wrap with _withDirective
   const useBlock = shouldUseBlock(node)
   let codeBlock: t.SequenceExpression | t.CallExpression | t.ArrayExpression = (isRoot(path) || useBlock) ? generateBlock(args) : generateCall(args, CREATE_VNODE)
+  // only works in slot literal
   if(t.isArrowFunctionExpression(path.parent)) {
     codeBlock = t.arrayExpression([codeBlock])
   }
@@ -99,25 +100,31 @@ export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t
  * }
  * @param node
  */
-export const buildSlotChildren = (node: JsxNode): t.ObjectExpression => {
-  // if children is object, assume that slotScope
-  let isSlotScope = false
-  const children = node.children.map(child => {
-    if(t.isObjectExpression(child) && child.properties) {
-      isSlotScope = true
+export const buildSlotChildren = (node: JsxNode): t.ObjectExpression | t.Identifier => {
+  const {children} = node
+  // two ways to slotScope: identifier or object literal
+  // only one identifier: as raw slot
+  // only one identifier: as raw slot
+  if(children.length === 1) {
+    const child = children[0]
+    if(t.isIdentifier(children)) {
+      return child
+    } else if(t.isObjectExpression(child)) {
+      const _ = t.objectProperty(t.identifier('_'), t.numericLiteral(1))
+      return t.objectExpression([...children[0].properties, _])
+    } else if(t.isFunctionExpression(child) || t.isArrowFunctionExpression(child)) {
+      const _ = t.objectProperty(t.identifier('_'), t.numericLiteral(1))
+      return t.objectExpression([t.objectProperty(t.identifier('default'), child), _])
     }
+  }
+  const _children = children.map(child => {
     return isText(child) ? generateCall([child], CREATE_TEXT) : child
   })
-  if(isSlotScope) {
-    const _ = t.objectProperty(t.identifier('_'), t.numericLiteral(1))
-    return t.objectExpression([...children[0].properties, _])
-  } else {
-    const slot = {
-      default: buildArrayToArrow(children),
-      _: t.numericLiteral(1),
-    }
-    return buildObjectToExpression(slot)
+  const slot = {
+    default: buildArrayToArrow(_children),
+    _: t.numericLiteral(1),
   }
+  return buildObjectToExpression(slot)
 }
 
 /**
@@ -125,7 +132,7 @@ export const buildSlotChildren = (node: JsxNode): t.ObjectExpression => {
  * contains slotChildren for component and normal children for dom
  * @param node
  */
-export const buildChildren = (node: JsxNode): t.NullLiteral | t.CallExpression | t.StringLiteral | t.ArrayExpression | t.ObjectExpression => {
+export const buildChildren = (node: JsxNode): t.Identifier | t.NullLiteral | t.CallExpression | t.StringLiteral | t.ArrayExpression | t.ObjectExpression => {
   // no children
   if(!node.children?.length) return t.nullLiteral()
   let {children: nodes, vnodeTag} = node;

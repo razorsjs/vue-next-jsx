@@ -82,13 +82,15 @@ export function isCoreComponent(tag: string): symbol | void {
 }
 
 export function shouldUseBlock(node: JsxNode) {
-  const {tagType, vnodeTag} = node
+  const {tagType, vnodeTag, renderAsBlock} = node
   const isComponent = tagType === ElementTypes.COMPONENT
   // <svg> and <foreignObject> must be forced into blocks so that block
   // updates inside get proper isSVG flag at runtime. (#639, #643)
   // This is technically web-specific, but splitting the logic out of core
   // leads to too much unnecessary complexity.
-  return vnodeTag === KEEP_ALIVE || (!isComponent && (vnodeTag === 'svg' || vnodeTag === 'foreignObject'))
+
+  // dynamic key will use renderAsBlock (:key="a")
+  return renderAsBlock || vnodeTag === KEEP_ALIVE || (!isComponent && (vnodeTag === 'svg' || vnodeTag === 'foreignObject'))
 }
 
 export const importTransform = (s) => `_${s}`

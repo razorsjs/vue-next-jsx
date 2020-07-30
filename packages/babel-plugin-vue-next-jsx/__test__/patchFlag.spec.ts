@@ -55,14 +55,26 @@ describe('patchFlag analysis', () => {
     const vueCode = '<div id="foo" v-bind="bar" :class="cls" />'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
-  test('PatchFlags.HYDRATE_EVENTS', () => {
-    const jsxCode = '<div onTest={test}></div>'
-    const vueCode = '<div @test="test"></div>'
+  test('NEED_PATCH (static ref)', () => {
+    const code = '<div ref="foo" />'
+    compare(code)
+  })
+  test('NEED_PATCH (dynamic ref)', () => {
+    const jsxCode = '<div ref={foo} />'
+    const vueCode = '<div :ref="foo" />'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
-  test('PatchFlags.NEED_PATCH', () => {
-    const code = '<div ref="a"></div>'
+  test('NEED_PATCH (custom directives)', () => {
+    const code = '<div v-foo />'
     compare(code)
+  })
+  test('HYDRATE_EVENTS', () => {
+    const jsxCode1 = '<div onClick={foo} />'
+    const vueCode1 = '<div @click="foo" />'
+    const jsxCode2 = '<div onKeyup={foo} />'
+    const vueCode2 = '<div @keyup="foo" />'
+    expect(transformWithPlugin(jsxCode1)).toBe(vueCompiled(vueCode1))
+    expect(transformWithPlugin(jsxCode2)).toBe(vueCompiled(vueCode2))
   })
   test('mixed all', () => {
     const jsxCode = '<div onTest={test} a={a} class={a} style={test}>{a}</div>'

@@ -14,7 +14,9 @@ export const transformVIs = (node: JsxNode, exp) => {
   node.tagType = ElementTypes.COMPONENT
   // change node.tag
   const _name = t.identifier(addVueImport(RESOLVE_DYNAMIC_COMPONENT))
-  if(!t.isIdentifier(exp)) exp = t.identifier(getContent(exp))
+  if(!t.isLiteral(exp)) {
+    exp = t.identifier(getContent(exp))
+  }
   node.tag = t.callExpression(_name, [exp])
 }
 

@@ -1,21 +1,36 @@
-# vue-next-jsx
-A babel plugin that provides jsx syntax for vue
+# Vue-next-jsx
+A babel plugin that provides jsx syntax for vue-next
 
-## tests
+# Feature
 
-### compiler-core
-transformElement.spec
+*Consistent with @vue/compiler-core, @vue/compiler-dom，@vue/shared, including compiled results, test cases and library.
 
-## not supported:
+*Fully vue directives and components supported.
 
-### directives:
+*Same plugin options with @vue/compiler-core, look at.
 
-- [x] v-once
-- [x] v-pre
+*The ability to customize your own directives and props, both parse(syntax) and transform.
 
-### patchFlags
+# Use
 
-- [x] STABLE_FRAGMENT (only in fragment)
-- [x] KEYED_FRAGMENT
-- [x] UNKEYED_FRAGMENT
-- [x] BAIL
+## Install
+
+## base syntax
+
+## directive
+
+*All v-xx and vXx attributes will be parsed as directives. For example, v-on and vOn is same.
+
+*All directives value will be parsed in this format: [arg, exp, modifiers]
+
+### event handler(v-on)
+
+### props(v-bind)
+
+### other
+
+support v-html, v-is, v-model, v-show, v-text like vue
+
+## slot
+
+## fragment

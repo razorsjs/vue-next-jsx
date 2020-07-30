@@ -70,6 +70,9 @@ export interface JsxNode  {
   dynamicProps?: Array<string | undefined>
   // an array used to build directives, generated in patchFlag
   directiveTransformResult?: Array<t.ArrayExpression>
+
+  // force render as block
+  renderAsBlock?: boolean
 }
 
 export type DirectiveTransform = (

@@ -28,8 +28,13 @@ describe('Base jsx use', () => {
     const vueCode = '<div><span>test</span>{{a}}</div>'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
-  test('svg render as block', () => {
+  test('<svg> should be forced into blocks', () => {
     const code = '<div><svg></svg></div>'
     compare(code)
+  })
+  test('element with dynamic keys should be forced into blocks', () => {
+    const jsxCode = '<div><div key={foo} /></div>'
+    const vueCode = '<div><div :key="foo" /></div>'
+    expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
 })

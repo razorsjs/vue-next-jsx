@@ -1,14 +1,18 @@
 import { transformWithPlugin, vueCompiled, compare } from './util';
 
-describe('v-is', () => {
-  test('base event with dom', () => {
-    const jsxCode = '<div v-is={a}>hello world</div>'
-    const vueCode = '<div v-is="a">hello world</div>'
+describe('v-is (dynamic component)', () => {
+  test('static binding', () => {
+    const code = '<component is="foo" />'
+    compare(code)
+  })
+  test('dynamic binding', () => {
+    const jsxCode = '<component is={foo} />'
+    const vueCode = '<component :is="foo" />'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
-  test('base event with dom', () => {
-    const jsxCode = '<component is={a}>hello world</component>'
-    const vueCode = '<component :is="a">hello world</component>'
+  test('v-is', () => {
+    const jsxCode = `<div v-is={'foo'} />`
+    const vueCode = `<div v-is="'foo'" />`
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
 })

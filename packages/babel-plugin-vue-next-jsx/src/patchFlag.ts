@@ -62,8 +62,7 @@ export const extractPatchFlag = () => {
     if(isStaticExp(name)) {
       if (name === 'ref') {
         hasRef = true
-      }
-      if(isDynamic(value) && !attr.static) {
+      } else if(isDynamic(value) && !attr.static) {
         if (
           !isComponent &&
           isOn(name) &&
@@ -82,6 +81,7 @@ export const extractPatchFlag = () => {
         } else if (name !== 'key' && !dynamicPropNames.includes(name)) {
           dynamicPropNames.push(name)
         }
+        if(name === 'key') jsxNode.renderAsBlock = true
       }
     } else {
       hasDynamicKeys = true

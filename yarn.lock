@@ -1976,13 +1976,13 @@
     estree-walker "^2.0.1"
     source-map "^0.6.1"
 
-"@vue/compiler-core@3.0.0-rc.4":
-  version "3.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/@vue/compiler-core/-/compiler-core-3.0.0-rc.4.tgz#2fe7c9e010d6c66f1f191c8a6fbd4e9c4d87d126"
+"@vue/compiler-core@3.0.0-rc.5":
+  version "3.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@vue/compiler-core/-/compiler-core-3.0.0-rc.5.tgz#dd4f1816fcae34a81bc60e584f97993cad284d54"
   dependencies:
     "@babel/parser" "^7.10.4"
     "@babel/types" "^7.10.4"
-    "@vue/shared" "3.0.0-rc.4"
+    "@vue/shared" "3.0.0-rc.5"
     estree-walker "^2.0.1"
     source-map "^0.6.1"
 
@@ -1993,12 +1993,12 @@
     "@vue/compiler-core" "3.0.0-beta.21"
     "@vue/shared" "3.0.0-beta.21"
 
-"@vue/compiler-dom@3.0.0-rc.4":
-  version "3.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/@vue/compiler-dom/-/compiler-dom-3.0.0-rc.4.tgz#3c6b56f8c99797b46cf7935ffb1e538a1a1174c7"
+"@vue/compiler-dom@3.0.0-rc.5":
+  version "3.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@vue/compiler-dom/-/compiler-dom-3.0.0-rc.5.tgz#83905e8601123a3654b90fbd80708a16530ce21a"
   dependencies:
-    "@vue/compiler-core" "3.0.0-rc.4"
-    "@vue/shared" "3.0.0-rc.4"
+    "@vue/compiler-core" "3.0.0-rc.5"
+    "@vue/shared" "3.0.0-rc.5"
 
 "@vue/compiler-sfc@^3.0.0-beta.21":
   version "3.0.0-beta.21"
@@ -2028,34 +2028,34 @@
     "@vue/compiler-dom" "3.0.0-beta.21"
     "@vue/shared" "3.0.0-beta.21"
 
-"@vue/reactivity@3.0.0-rc.4":
-  version "3.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/@vue/reactivity/-/reactivity-3.0.0-rc.4.tgz#0a917d9809967c78c32436fb0113dac6d157b87a"
+"@vue/reactivity@3.0.0-rc.5":
+  version "3.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@vue/reactivity/-/reactivity-3.0.0-rc.5.tgz#45cff8d839d7ad130b1e499239090050fdecff13"
   dependencies:
-    "@vue/shared" "3.0.0-rc.4"
+    "@vue/shared" "3.0.0-rc.5"
 
-"@vue/runtime-core@3.0.0-rc.4":
-  version "3.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/@vue/runtime-core/-/runtime-core-3.0.0-rc.4.tgz#87b5a4022aa86eb717d38751b8b4be4cede0f323"
+"@vue/runtime-core@3.0.0-rc.5":
+  version "3.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@vue/runtime-core/-/runtime-core-3.0.0-rc.5.tgz#dd59af3a5fc089d1cdc05a657320c0dc17e5c362"
   dependencies:
-    "@vue/reactivity" "3.0.0-rc.4"
-    "@vue/shared" "3.0.0-rc.4"
+    "@vue/reactivity" "3.0.0-rc.5"
+    "@vue/shared" "3.0.0-rc.5"
 
-"@vue/runtime-dom@3.0.0-rc.4":
-  version "3.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/@vue/runtime-dom/-/runtime-dom-3.0.0-rc.4.tgz#66453056c2761f112d9c04ab816477140bcaa664"
+"@vue/runtime-dom@3.0.0-rc.5":
+  version "3.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@vue/runtime-dom/-/runtime-dom-3.0.0-rc.5.tgz#2fd75a1f29b23abf0ffe5ccdedabda11721c5b5b"
   dependencies:
-    "@vue/runtime-core" "3.0.0-rc.4"
-    "@vue/shared" "3.0.0-rc.4"
+    "@vue/runtime-core" "3.0.0-rc.5"
+    "@vue/shared" "3.0.0-rc.5"
     csstype "^2.6.8"
 
 "@vue/shared@3.0.0-beta.21":
   version "3.0.0-beta.21"
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.0.0-beta.21.tgz#f4fd53501f40aaaead1448de20beb831283a6e08"
 
-"@vue/shared@3.0.0-rc.4":
-  version "3.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.0.0-rc.4.tgz#fac45cd6fec76a1e284b41f1b49c2cb13c914598"
+"@vue/shared@3.0.0-rc.5":
+  version "3.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.0.0-rc.5.tgz#cea2378e3e37363ddc1f5dd158edc9c9b5b3fff0"
 
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
@@ -9002,13 +9002,13 @@ vue-template-compiler@^2.6.11:
     de-indent "^1.0.2"
     he "^1.1.0"
 
-vue@3.0.0-rc.4:
-  version "3.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-3.0.0-rc.4.tgz#f17b32914c8add7f4792d618eb4f1358ff4222e8"
+vue@3.0.0-rc.5:
+  version "3.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-3.0.0-rc.5.tgz#973175d45a892b3bd23ef5de7faa4add9c66275f"
   dependencies:
-    "@vue/compiler-dom" "3.0.0-rc.4"
-    "@vue/runtime-dom" "3.0.0-rc.4"
-    "@vue/shared" "3.0.0-rc.4"
+    "@vue/compiler-dom" "3.0.0-rc.5"
+    "@vue/runtime-dom" "3.0.0-rc.5"
+    "@vue/shared" "3.0.0-rc.5"
 
 w3c-hr-time@^1.0.2:
   version "1.0.2"

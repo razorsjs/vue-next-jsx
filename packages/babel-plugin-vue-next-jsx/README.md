@@ -26,7 +26,7 @@ or in yarn
 yarn add @razors/babel-plugin-vue-next-jsx
 ```
 
-change your babel config
+Then change your babel config
 ```javascript
 {
     "presets": [
@@ -68,11 +68,23 @@ export default {
 
 ## component
 
+Functional component:
+
 ```typescript jsx
 export default () => <material-button/>
 ```
 
-Note: you don't need to writing component in component options, plugin will handle it, only import and use it.
+Normal component:
+
+```typescript jsx
+export default {
+  render() {
+    return <material-button/>
+  }
+}
+```
+
+Tips: If you already imported component or declare function component, no need to write component options.
 
 ## directive
 
@@ -89,6 +101,8 @@ Note: you don't need to writing component in component options, plugin will hand
 support v-html, v-is, v-model, v-show, v-text like vue
 
 ## slot
+
+
 
 ## fragment
 

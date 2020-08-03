@@ -7,6 +7,7 @@ import jsxNode from '../jsxNode';
 import { ElementTypes, FRAGMENT, isSymbol, PatchFlags, camelize, capitalize } from '../util/constant';
 import { addVueImport } from '../addVueImport';
 import {isCoreComponent} from '../util'
+import { resolveComponent } from '../util/resolveComponent';
 
 export const resolveTag = (tag): string | symbol => {
   const { options } = jsxNode
@@ -56,16 +57,7 @@ export default function() {
       if(isSymbol(jsxNode.vnodeTag)) {
         jsxNode.tag = t.identifier(addVueImport(jsxNode.vnodeTag))
       } else {
-        /**
-         * Strategy：
-         * 1.Find if component is imported, aa-bb's tag will find aabb aaBb AaBb, and ab find ab
-         * 2.If is imported, do nothing
-         * 3.Not imported(global), fall back to vue's resolveAsset strategy
-         */
-        if(tag.includes('-')) {
-          tag = capitalize(camelize(tag))
-        }
-        jsxNode.tag = t.identifier(tag)
+        jsxNode.tag = resolveComponent(tag)
       }
     } else {
       jsxNode.tag = t.stringLiteral(tag)

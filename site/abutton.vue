@@ -1,3 +1,3 @@
 <script lang="jsx">
-export default () => <button/>
+export default () => <button>test</button>
 </script>

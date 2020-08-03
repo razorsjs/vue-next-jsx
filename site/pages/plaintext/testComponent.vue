@@ -4,19 +4,8 @@
 <!--  </div>-->
 <!--</template>-->
 <script lang="jsx">
-  // export default {
-  //   setup(props, context) {
-  //     console.log(context);
-  //     return {
-  //
-  //     }
-  //   }
-  // }
-  export default (props, context) => {
-    console.log(context);
-    return (
-      <div>{context.slots.default('asdd')}</div>
-    )
+  export default (props, {slots}) => {
+    return <div>{slots.test(123)}</div>
   }
 </script>
 

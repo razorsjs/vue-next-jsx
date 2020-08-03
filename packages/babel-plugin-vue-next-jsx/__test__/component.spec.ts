@@ -7,7 +7,7 @@ describe('Base components use', () => {
   })
   test('Base components not camel', () => {
     const code = '<base-layout></base-layout>'
-    expect(transformWithPlugin(code)).toBe('_openBlock(),_createBlock(BaseLayout)')
+    compare(code)
   })
   test('Base components with default slot', () => {
     const code = '<test>hello world</test>'

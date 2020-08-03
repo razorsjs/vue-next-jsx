@@ -10,6 +10,12 @@ import {proxyMethod} from './util';
 
 const attrMap = new Map<string, AttributeNode>();
 
+let jsxNode: JsxNode = {}
+
+// Some file scope helper that need to be removed in exit of file
+export let importCollection = []
+export let variableCollection = new Map()
+
 // AttributeNode: @vue/compiler-core AttributeNode
 export interface AttributeNode {
   type: NodeTypes.ATTRIBUTE
@@ -41,10 +47,11 @@ export interface JsxNode  {
   // current JSXElement Path
   path?: NodePath
   // current program
-  program?: NodePath
+  program?: NodePath<t.Program>
   // record special expression like vue import
   extraExpression?: {
     vueImport?: t.ImportDeclaration
+    componentVariables?: t.VariableDeclaration
     optimizeVariables?: any
   }
 
@@ -53,7 +60,6 @@ export interface JsxNode  {
   tagType?: ElementTypes
   // vnodeTag
   vnodeTag?: symbol | string
-
   attributes?: Array<AttributeNode>
   directives?: Array<DirectiveNode>
   // spread props like {...obj}
@@ -73,6 +79,8 @@ export interface JsxNode  {
 
   // force render as block
   renderAsBlock?: boolean
+  // mark this jsxNode as a child
+  __children?: boolean
 }
 
 export type DirectiveTransform = (
@@ -161,14 +169,12 @@ export interface TransformOptions {
 
 export type PluginOptions = BuildOptions & ParseOptions & TransformOptions & CodegenOptions
 
-let jsxNode: JsxNode = {}
-
 export function clear() {
   Object.keys(jsxNode).forEach(key => delete jsxNode[key])
   attrMap.clear()
 }
 
-export function jsxNodeInit(path: NodePath, options: PluginOptions, program: NodePath) {
+export function jsxNodeInit(path: NodePath, options: PluginOptions, program: NodePath<t.Program>) {
   clear()
   jsxNode.path = path
   jsxNode.program = program
@@ -197,6 +203,11 @@ export function jsxNodeInit(path: NodePath, options: PluginOptions, program: Nod
   jsxNode.spreadProps = []
   jsxNode.dynamicProps = []
   jsxNode.extraExpression = {}
+}
+
+export const removeCollection = () => {
+  importCollection.length = 0;
+  variableCollection.clear()
 }
 
 export default jsxNode

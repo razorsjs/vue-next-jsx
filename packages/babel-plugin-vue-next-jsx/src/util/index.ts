@@ -40,8 +40,9 @@ export const isVNode = (value: t.Expression): boolean => {
   return isCreateVnode || isOpenBlock || isCreateTextVNode
 }
 
-export const isRoot = (path: NodePath<any>): boolean =>  {
-  return t.isExpressionStatement(path.parent)
+export const isRoot = (path: NodePath<any>, node: JsxNode): boolean =>  {
+  const {parent} = path
+  return !(t.isJSXElement(parent) || t.isJSXFragment(parent) || t.isArrayExpression(parent) || node.__children)
 }
 
 export const isDynamic = (value) => {

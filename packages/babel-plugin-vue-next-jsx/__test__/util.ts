@@ -29,7 +29,6 @@ const removeFunc = (str: string, funcName): string => {
 // remove some in functional com
 const removeInFuncCom = (str) => {
   return str
-    .replace(/_component_/g, '')
     .replace(/_directive_/g, '')
 }
 

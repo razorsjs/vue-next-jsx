@@ -5,24 +5,23 @@
 <!--</template>-->
 
 <script lang="jsx">
-  import TestComponent from './testComponent'
-  // export default {
-  //   components: {
-  //     TestComponent
-  //   }
-  // }
-  // import renderSlot from './renderSlot';
-
-  const renderSlot = (str) => <div>{str}</div>
-
+  import testComponent from './testComponent';
   export default () => {
-    console.log(renderSlot);
+    const slot = {
+      test: (str) => {
+        return <span>{str}</span>
+      }
+    }
     return (
-      <test-component>
+      <testComponent>
         {
-          () => <div>ad</div>
+          {
+            test: (str) => {
+              return <span>{str}</span>
+            }
+          }
         }
-      </test-component>
+      </testComponent>
     )
   }
 </script>

@@ -31,7 +31,7 @@ export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression | 
   // A jsxElement with no jsxElement parent will be treated as root
   // If has directive, wrap with _withDirective
   const useBlock = shouldUseBlock(node)
-  let codeBlock: t.SequenceExpression | t.CallExpression | t.ArrayExpression = (isRoot(path) || useBlock) ? generateBlock(args) : generateCall(args, CREATE_VNODE)
+  let codeBlock: t.SequenceExpression | t.CallExpression | t.ArrayExpression = (isRoot(path, node) || useBlock) ? generateBlock(args) : generateCall(args, CREATE_VNODE)
   // only works in slot literal
   if(t.isArrowFunctionExpression(path.parent)) {
     codeBlock = t.arrayExpression([codeBlock])
@@ -107,7 +107,7 @@ export const buildSlotChildren = (node: JsxNode): t.ObjectExpression | t.Identif
   // only one identifier: as raw slot
   if(children.length === 1) {
     const child = children[0]
-    if(t.isIdentifier(children)) {
+    if(t.isIdentifier(child)) {
       return child
     } else if(t.isObjectExpression(child)) {
       const _ = t.objectProperty(t.identifier('_'), t.numericLiteral(1))

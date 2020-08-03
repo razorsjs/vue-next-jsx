@@ -1,5 +1,5 @@
 {
-  "name": "@razors/babel-plugin",
+  "name": "@razors/vue-next-jsx",
   "private": true,
   "devDependencies": {
     "@babel/preset-env": "^7.10.4",
@@ -34,7 +34,7 @@
   "dependencies": {
     "@vue/compiler-sfc": "^3.0.0-beta.21",
     "rollup-plugin-vue": "^6.0.0-beta.6",
-    "vue": "3.0.0-rc.4",
+    "vue": "3.0.0-rc.5",
     "vue-loader": "16.0.0-beta.3",
     "vue-router": "4.0.0-alpha.12"
   },

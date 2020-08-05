@@ -2,7 +2,7 @@
   <Icon icon="search" v-show="isShow">123<div :contentEditable="contentEditable">{{isShow}}</div></Icon>
 </template>
 
-<script lang="jsx">
+<script lang="tsx">
   import Icon from '../components/icon'
   import {ref} from 'vue'
 

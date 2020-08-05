@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-export const routes = [
+export const routes: any = [
   {
     path: '/plaintext',
     name: 'Plain Text',

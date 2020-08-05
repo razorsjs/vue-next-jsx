@@ -1,14 +1,10 @@
-<!--<template>-->
-<!--  <div>-->
-<!--    <slot></slot>-->
-<!--  </div>-->
-<!--</template>-->
-<script lang="jsx">
-  export default (props, {slots}) => {
-    return <div>{slots.test(123)}</div>
-  }
+<script lang="tsx">
+export const CounterExample = (props) => {
+  return (
+    <div>
+      {props.text}
+    </div>
+  );
+}
+export default {}
 </script>
-
-<style scoped>
-
-</style>

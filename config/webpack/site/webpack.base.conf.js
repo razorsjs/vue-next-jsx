@@ -7,18 +7,20 @@ module.exports = {
   entry: path.join(site, 'main.ts'),
   module: {
     rules: [
+      {
+        test: /\.vue$/,
+        use: 'vue-loader',
+      },
       { test: /\.js$/, use: 'babel-loader', exclude: /node_modules/},
       { test: /\.jsx$/, use: 'babel-loader'},
-      { test: /\.vue$/, use: 'vue-loader' },
-      { test: /\.tsx$/, use: ['babel-loader','ts-loader']},
       {
-        test: /\.ts$/,
+        test: /\.ts|\.tsx$/,
         use: [
           'babel-loader',
           {
             loader: 'ts-loader',
             options: {
-              appendTsSuffixTo: [/\.vue$/],
+              appendTsxSuffixTo: [/\.vue$/]
             }
           },
         ]
@@ -28,7 +30,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.ts', '.tsx', '.vue'],
+    extensions: ['.js', '.ts', '.tsx', '.vue', '.jsx'],
     alias: {
       // this isn't technically needed, since the default `vue` entry for bundlers
       // is a simple `export * from '@vue/runtime-dom`. However having this

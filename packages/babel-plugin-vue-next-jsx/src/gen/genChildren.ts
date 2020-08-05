@@ -5,7 +5,7 @@ import { NodeTypes } from '@vue/compiler-core';
 import genText from '../gen/genText'
 import { generateCall } from './generateCode';
 
-const transformJSXText = (path: NodePath<t.JSXText>): t.StringLiteral => {
+const transformJSXText = (path: NodePath<t.JSXText>): t.StringLiteral | null => {
   const node = path.node
   const lines = node.value.split(/\r\n|\n|\r/)
 
@@ -80,7 +80,7 @@ const transformJSXExpressionContainer = (path: NodePath<t.JSXExpressionContainer
 const transformJSXExpressionTextContainer = (path: NodePath<t.JSXExpressionContainer>, paths) => {
   const {node: {expression}} = path
   const isTextVNode = paths.length > 1
-  if(t.isIdentifier(expression) && !isTextVNode) {
+  if((t.isIdentifier(expression) || t.isMemberExpression(expression)) && !isTextVNode) {
     jsxNode.patchFlag|=PatchFlags.TEXT
   }
   return genText(path.node, isTextVNode)
@@ -118,9 +118,17 @@ export default function() {
       text = [];
     }
   }
-  paths.forEach(path => {
+  for(let i=0;i<paths.length;i++) {
+    const path = paths[i]
     if (path.isJSXText()) {
-      text.push(path)
+      const transformed = transformJSXText(path)
+      // TODO: remove duplicate transform
+      if(transformed!==null) {
+        text.push(path)
+      } else {
+        // remove blank in paths
+        paths.splice(i--, 1)
+      }
     } else if(path.isJSXExpressionContainer()) {
       if(isTextContainer(path, isComponent)) {
         text.push(path)
@@ -139,7 +147,7 @@ export default function() {
         throw new Error(`getChildren: ${path.type} is not supported`)
       }
     }
-  });
+  }
   pushText()
   nodes = nodes.filter(el => el !== null && !t.isJSXEmptyExpression(el));
 

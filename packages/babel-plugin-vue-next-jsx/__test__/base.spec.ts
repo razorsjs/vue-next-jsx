@@ -10,8 +10,10 @@ describe('Base jsx use', () => {
     compare(code)
   })
   test('Base jsx with variable text', () => {
-    const jsxCode = '<div>{a}</div>'
-    const vueCode = '<div>{{a}}</div>'
+    const jsxCode = `<div>
+                        {props.text}
+                    </div>`
+    const vueCode = '<div>{{props.text}}</div>'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
   test('Base jsx with variable number', () => {

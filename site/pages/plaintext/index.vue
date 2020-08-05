@@ -1,31 +1,10 @@
-<!--<template>-->
-<!--  <test-component>-->
-<!--    <div>123</div>-->
-<!--  </test-component>-->
-<!--</template>-->
+<script lang="tsx">
+import {CounterExample} from './testComponent'
 
-<script lang="jsx">
-  import testComponent from './testComponent';
-  export default () => {
-    const slot = {
-      test: (str) => {
-        return <span>{str}</span>
-      }
-    }
-    return (
-      <testComponent>
-        {
-          {
-            test: (str) => {
-              return <span>{str}</span>
-            }
-          }
-        }
-      </testComponent>
-    )
-  }
+export default () => {
+  return (
+    <CounterExample text={1}>
+    </CounterExample>
+  );
+}
 </script>
-
-<style scoped>
-
-</style>

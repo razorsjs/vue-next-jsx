@@ -7,6 +7,11 @@ export const routes: any = [
     component: () => import('../pages/plaintext/index.vue')
   },
   {
+    path: '/new',
+    name: 'Plain Text',
+    component: () => import('../pages/plaintext/index.new.vue')
+  },
+  {
     path: '/',
     redirect: 'plaintext'
   },

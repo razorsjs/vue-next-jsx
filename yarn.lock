@@ -8981,8 +8981,8 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
 
 vue-loader@16.0.0-beta.3:
-  version "16.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-16.0.0-beta.3.tgz#2374094399fed98a8a5750912f3caaaefa814553"
+  version "16.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-16.0.0-beta.3.tgz#1d9d7894f430992096727c4414bcf3b1ae8c1be9"
   dependencies:
     "@types/mini-css-extract-plugin" "^0.9.1"
     chalk "^3.0.0"
@@ -9001,6 +9001,10 @@ vue-template-compiler@^2.6.11:
   dependencies:
     de-indent "^1.0.2"
     he "^1.1.0"
+
+vue-tsx-support@^3.0.0-preview.1:
+  version "3.0.0-preview.1"
+  resolved "https://registry.yarnpkg.com/vue-tsx-support/-/vue-tsx-support-3.0.0-preview.1.tgz#11a446c6b8c84835681917450fa0455c8b3733f4"
 
 vue@3.0.0-rc.5:
   version "3.0.0-rc.5"

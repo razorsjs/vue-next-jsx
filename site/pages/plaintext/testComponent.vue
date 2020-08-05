@@ -1,10 +1,13 @@
 <script lang="tsx">
-export const CounterExample = (props) => {
+import {FunctionalComponent} from 'vue'
+const CounterExample: FunctionalComponent<{
+  sss?: string
+}> = (props) => {
   return (
     <div>
-      {props.text}
+      {props.sss}
     </div>
-  );
+);
 }
-export default {}
+export default CounterExample
 </script>

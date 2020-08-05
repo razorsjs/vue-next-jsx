@@ -1,10 +1,11 @@
 <script lang="tsx">
-import {CounterExample} from './testComponent'
+import CounterExample from "./testComponent.vue"
 
 export default () => {
   return (
-    <CounterExample text={1}>
+    <CounterExample sss={'123'}>
     </CounterExample>
   );
 }
+
 </script>

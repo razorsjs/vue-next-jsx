@@ -1,5 +1,8 @@
+///<reference path="../node_modules/vue-tsx-support/enable-check.d.ts"/>
+///<reference path="../node_modules/vue-tsx-support/options/enable-html-attrs.d.ts"/>
+
 import './index.css'
-import { createApp, FunctionalComponent } from 'vue'
+import { createApp } from 'vue'
 // @ts-ignore
 import abutton from './abutton.vue'
 import App from './app.vue'

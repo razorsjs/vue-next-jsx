@@ -102,9 +102,8 @@ export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t
  */
 export const buildSlotChildren = (node: JsxNode): t.ObjectExpression | t.Identifier => {
   const {children} = node
-  // two ways to slotScope: identifier or object literal
-  // only one identifier: as raw slot
-  // only one identifier: as raw slot
+  // two ways to slotScope: function or object literal
+  // only one function: as default slot
   if(children.length === 1) {
     const child = children[0]
     if(t.isIdentifier(child)) {
@@ -121,7 +120,7 @@ export const buildSlotChildren = (node: JsxNode): t.ObjectExpression | t.Identif
     return isText(child) ? generateCall([child], CREATE_TEXT) : child
   })
   const slot = {
-    default: buildArrayToArrow(_children),
+    default: _children.length === 1 ? t.arrowFunctionExpression([], _children[0]) : buildArrayToArrow(_children),
     _: t.numericLiteral(1),
   }
   return buildObjectToExpression(slot)

@@ -1,19 +1,19 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 
-export const routes: any = [
+export const routes: RouteRecordRaw[] = [
   {
-    path: '/plaintext',
-    name: 'Plain Text',
-    component: () => import('../pages/plaintext/index.vue')
+    path: '/example',
+    name: 'example',
+    component: () => import('../pages/example/index.vue')
   },
   {
-    path: '/new',
-    name: 'Plain Text',
-    component: () => import('../pages/plaintext/index.new.vue')
+    path: '/example/component',
+    name: 'componentExample',
+    component: () => import('../pages/example/componentExample/index.vue')
   },
   {
     path: '/',
-    redirect: 'plaintext'
+    redirect: 'example'
   },
 ]
 

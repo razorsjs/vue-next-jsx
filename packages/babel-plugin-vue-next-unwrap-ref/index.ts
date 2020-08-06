@@ -1,3 +1,6 @@
+/**
+ * replace ref.value by ref in jsx
+ */
 const vueRefsKey = Symbol('vueRefs')
 
 const transform = (t, name) => {

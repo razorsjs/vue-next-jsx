@@ -73,3 +73,7 @@ input:focus {
 [data-slate-editor] > * + * {
   margin-top: 1em;
 }
+
+#app {
+  padding: 20px;
+}

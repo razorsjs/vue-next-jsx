@@ -1,0 +1,3 @@
+/**
+ * Same strategy with component
+ */

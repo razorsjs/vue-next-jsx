@@ -40,7 +40,7 @@ Then change your babel config
 
 ## base syntax
 
-In functional component(recommend)
+Functional component
 
 ```typescript jsx
 export default () => <div/>
@@ -61,7 +61,11 @@ In setup function
 ```typescript jsx
 export default {
   setup() {
-    return () => <div/>
+    return () => {
+      return (
+        <div>hello world</div>
+      )
+    }
   }
 }
 ```
@@ -84,7 +88,11 @@ export default {
 }
 ```
 
-Tips: If you already imported component or declare function component, no need to write component options.
+Tips: If you already imported component or declare function component, no need to write component in options.
+
+### props(v-bind)
+
+### event handler(v-on)
 
 ## directive
 
@@ -92,19 +100,98 @@ Tips: If you already imported component or declare function component, no need t
 
 * All directives value will be parsed in this format: [arg, exp, modifiers]
 
-### props(v-bind)
-
-### event handler(v-on)
-
 ### other
 
 support v-html, v-is, v-model, v-show, v-text like vue
 
+## fragment
+
+```typescript jsx
+<>
+  <div>1<div>
+  <div>2<div>
+</>
+```
+
 ## slot
 
+### default slot
 
+```typescript jsx
+<test>test</test>
+```
 
-## fragment
+### Named and scoped slot:
+
+```typescript jsx
+<test>
+{
+  (str) => <div>{str}</div>
+}
+</test>
+```
+
+or use literal object
+
+```typescript jsx
+<test>
+{
+  {
+    default: (str) => <div>{str}</div>
+  }
+}
+</test>
+```
+
+### use
+
+```typescript jsx
+  setup(props, {slots}) {
+    return () => {
+      return (
+        <div>{slots.default()}</div>
+      )
+    }
+  }
+```
+
+tips: use vue's renderSlot when your default slot have multiple root, or use <></> literal
+
+example:
+
+when you write:
+
+```typescript jsx
+<test>
+  <div>1</div>
+  <div>2</div>
+</test>
+```
+
+usage:
+
+```typescript jsx
+<div>{renderSlot(slots, 'default')}</div>
+```
+
+or
+
+write:
+
+```typescript jsx
+<test>
+  <>
+    <div>1</div>
+    <div>2</div>
+  </>
+</test>
+```
+
+usage:
+
+```typescript jsx
+<div>{slots.default()}</div>
+```
 
 ## under developing
 

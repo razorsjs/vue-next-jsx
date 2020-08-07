@@ -1,6 +1,6 @@
 {
   "name": "@razors/babel-plugin-vue-next-jsx",
-  "version": "0.0.0",
+  "version": "0.0.2-alpha.0",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.es.js",
   "dependencies": {

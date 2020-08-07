@@ -11,7 +11,7 @@ A babel plugin that provides jsx syntax for vue-next
 
 * The ability to customize your own directives and props, both parse(syntax) and transform.
 
-# Use
+# Usage
 
 ## Install
 
@@ -98,11 +98,11 @@ export default {
 
 * All directives value will be parsed in this format: [arg, exp, modifiers]
 
-### other
-
-support v-html, v-is, v-model, v-show, v-text like vue
+support directive: v-html, v-is, v-model, v-show, v-text, v-bind, v-on
 
 ## fragment
+
+Use <></>
 
 ```typescript jsx
 <>
@@ -153,7 +153,7 @@ or use literal object
   }
 ```
 
-tips: use vue's renderSlot when your default slot have multiple root, or use <></> literal
+Tips: use vue's renderSlot when your default slot have multiple root, or use <></> literal
 
 example:
 
@@ -196,7 +196,7 @@ usage:
 By default, we don't change setup or render function.So you must wrap your render or setup function by withId provided by runtime.
 
 ```typescript jsx
-import { withId } from 'runtime'
+import { withId } from '@razors/babel-plugin-vue-next-jsx/dist/runtime'
 export default {
   setup() {
     return withId(()=><div/>)

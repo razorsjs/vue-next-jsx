@@ -1715,9 +1715,9 @@
   dependencies:
     "@types/node" ">= 8"
 
-"@razors/build-rollup@^0.0.11":
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/@razors/build-rollup/-/build-rollup-0.0.11.tgz#a9f7a6fa4d44f2d8ab3294839c54ce3815921e81"
+"@razors/build-rollup@^0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@razors/build-rollup/-/build-rollup-0.0.12.tgz#a12972bbfad34b7f59d5a36b90a60447f7ccd48f"
   dependencies:
     "@rollup/plugin-babel" "^5.0.4"
     "@rollup/plugin-commonjs" "^13.0.0"
@@ -8771,9 +8771,9 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typescript@^3.9.5:
-  version "3.9.6"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.6.tgz#8f3e0198a34c3ae17091b35571d3afd31999365a"
+typescript@^3.9.7:
+  version "3.9.7"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.7.tgz#98d600a5ebdc38f40cb277522f12dc800e9e25fa"
 
 uglify-js@^3.1.4:
   version "3.10.0"
@@ -8981,8 +8981,8 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
 
 vue-loader@16.0.0-beta.3:
-  version "16.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-16.0.0-beta.3.tgz#1d9d7894f430992096727c4414bcf3b1ae8c1be9"
+  version "16.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-16.0.0-beta.3.tgz#2374094399fed98a8a5750912f3caaaefa814553"
   dependencies:
     "@types/mini-css-extract-plugin" "^0.9.1"
     chalk "^3.0.0"

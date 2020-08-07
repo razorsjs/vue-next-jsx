@@ -8,9 +8,14 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/example/component',
-    name: 'componentExample',
+    name: 'component',
     component: () => import('../pages/example/componentExample/index.vue')
   },
+  // {
+  //   path: '/example/functionalComponent',
+  //   name: 'functionalComponent',
+  //   component: () => import('../pages/example/functionalComponent/index.vue')
+  // },
   {
     path: '/',
     redirect: 'example'

@@ -11,6 +11,10 @@ export {
   jsxNode
 }
 
+/**
+ * transformer
+ * @param options
+ */
 export default ({}, options: PluginOptions) => {
   return {
     name: 'babel-plugin-vue-next-jsx',

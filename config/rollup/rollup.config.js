@@ -9,6 +9,12 @@ export default [
     target: 'cjs',
     external
   }),
+  rollupConfigure(VueNextJsx, {
+    input: 'runtime/index.ts',
+    output: 'runtime.js',
+    target: 'es',
+    external: ['@vue/runtime-core']
+  }),
   rollupConfigure(VueNextUnwrapRef, {
     target: 'cjs',
     external

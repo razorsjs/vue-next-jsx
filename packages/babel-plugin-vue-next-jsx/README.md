@@ -88,8 +88,6 @@ export default {
 }
 ```
 
-Tips: If you already imported component or declare function component, no need to write component in options.
-
 ### props(v-bind)
 
 ### event handler(v-on)
@@ -193,8 +191,22 @@ usage:
 <div>{slots.default()}</div>
 ```
 
+## scoped css
+
+By default, we don't change setup or render function.So you must wrap your render or setup function by withId provided by runtime.
+
+```typescript jsx
+import { withId } from 'runtime'
+export default {
+  setup() {
+    return withId(()=><div/>)
+  }
+}
+```
+
 ## under developing
 
+- [x] inline component
 - [x] v-once
 - [x] cacheHandlers
 - [x] optimizeImports

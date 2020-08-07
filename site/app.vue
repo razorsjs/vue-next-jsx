@@ -1,17 +1,20 @@
 <script lang="tsx">
 import {defineComponent} from 'vue'
+import { withId } from '@razors/babel-plugin-vue-next-jsx/dist/runtime'
 
 export default defineComponent({
   render() {
-    return (
+    return withId((() => (
       <div>
         <router-view/>
       </div>
-    )
+    )))()
   }
 })
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+div {
+  font-size: 20px
+}
 </style>

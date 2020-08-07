@@ -5,26 +5,30 @@
  */
 
 import {defineComponent,ref} from 'vue'
+import { withId } from '@razors/babel-plugin-vue-next-jsx/dist/runtime'
 
 export default defineComponent({
   setup() {
     const count = ref(0)
     const add = () => count.value++
 
-    return () => (
-      [
+    return withId(() => {
+      return [
         <div>
           {count.value}
         </div>,
         <button onClick={add}>
           add
-        </button>,
+        </button>
       ]
-    )
+    })
   }
 })
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+button {
+  color: red
+}
 </style>
+

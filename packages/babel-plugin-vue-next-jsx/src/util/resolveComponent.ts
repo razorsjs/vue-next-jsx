@@ -11,7 +11,7 @@ import {
   capitalize
 } from './constant'
 
-import jsxNode, {importCollection} from '../jsxNode';
+import jsxNode, {compCollection} from '../jsxNode';
 import { addVueImport } from '../addVueImport';
 import { addVariable } from '../addVariable';
 
@@ -29,7 +29,7 @@ export function resolveComponent(tag: string): t.Identifier {
   } else {
     matches[tag] = true
   }
-  const name = importCollection.find((i) => matches[i])
+  const name = compCollection.find((i) => matches[i])
   if(name) {
     return t.identifier(name)
   } else {

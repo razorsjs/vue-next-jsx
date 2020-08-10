@@ -2,15 +2,15 @@
  * Helper for adding variable to program
  */
 import {types as t, NodePath} from '@babel/core';
-import jsxNode, {variableCollection} from './jsxNode';
+import jsxNode, {compVariableCollection} from './jsxNode';
 
 export const addVariable = (declarator: t.VariableDeclarator, id: string) => {
   // We must place resolveComponent in a function because global components is registered in appContext and only in component instance which we can find ti
   // TODO: If use component not mentioned and not in a function, throw error
   const { extraExpression: {componentVariables} } = jsxNode
-  if(!variableCollection.has(id)) {
+  if(!compVariableCollection.has(id)) {
     if(componentVariables) {
-      variableCollection.set(id, true)
+      compVariableCollection.set(id, true)
       componentVariables.declarations.push(declarator)
     } else {
       jsxNode.extraExpression.componentVariables = t.variableDeclaration('const', [declarator])
@@ -18,7 +18,7 @@ export const addVariable = (declarator: t.VariableDeclarator, id: string) => {
       const {path} = jsxNode
       const functionParent: NodePath<t.Function> = path.getFunctionParent();
       if(functionParent) {
-        variableCollection.set(id, true)
+        compVariableCollection.set(id, true)
         const body = functionParent.node.body
         if(t.isArrowFunctionExpression(functionParent.node) && t.isExpression(body)) {
           functionParent.node.body = t.blockStatement([

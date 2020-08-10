@@ -1,7 +1,7 @@
 import jsx from "@babel/plugin-syntax-jsx";
 import { transformJSXElement } from './src/transformJSXElement';
 import { NodePath, types as t, Node, PluginPass } from '@babel/core';
-import { jsxNodeInit, PluginOptions, importCollection } from './src/jsxNode';
+import { jsxNodeInit, PluginOptions, compCollection } from './src/jsxNode';
 
 import domOptions from './src/domOptions'
 import jsxNode, {removeCollection} from './src/jsxNode';
@@ -22,12 +22,12 @@ export default ({}, options: PluginOptions) => {
     visitor: {
       ImportSpecifier: {
         enter(path: NodePath<t.ImportSpecifier>, state:PluginPass) {
-          importCollection.push(path.node.local.name)
+          compCollection.push(path.node.local.name)
         }
       },
       ImportDefaultSpecifier: {
         enter(path: NodePath<t.ImportDefaultSpecifier>, state:PluginPass) {
-          importCollection.push(path.node.local.name)
+          compCollection.push(path.node.local.name)
         }
       },
       JSXFragment: {

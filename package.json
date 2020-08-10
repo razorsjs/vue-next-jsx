@@ -24,17 +24,19 @@
   },
   "scripts": {
     "test": "jest",
-    "publish": "npm run build && npm run test && ./node_modules/.bin/lerna publish",
     "build": "rollup --config config/rollup/rollup.config.js",
     "serve": "webpack-dev-server --config ./config/webpack/site/webpack.dev.conf.js",
     "release:site": "webpack --config ./config/webpack/site/webpack.publish.conf.js",
-    "release": "NODE_ENV=production yarn build && lerna publish"
+    "release": "NODE_ENV=production yarn build && lerna publish",
+    "commit": "git add . && git-cz"
   },
   "workspaces": [
     "packages/*"
   ],
   "dependencies": {
     "@vue/compiler-sfc": "^3.0.0-beta.21",
+    "commitizen": "^4.1.2",
+    "cz-conventional-changelog": "^3.2.0",
     "rollup-plugin-vue": "^6.0.0-beta.6",
     "vue": "3.0.0-rc.5",
     "vue-loader": "16.0.0-beta.3",
@@ -42,5 +44,10 @@
   },
   "resolutions": {
     "rollup-plugin-vue": "^6.0.0-beta.6"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }

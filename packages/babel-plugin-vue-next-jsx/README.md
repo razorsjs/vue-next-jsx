@@ -206,6 +206,7 @@ export default {
 
 ## under developing
 
+- [x] namespace component
 - [x] inline component
 - [x] v-once
 - [x] cacheHandlers

@@ -13,8 +13,8 @@ const attrMap = new Map<string, AttributeNode>();
 let jsxNode: JsxNode = {}
 
 // Some file scope helper that need to be removed in exit of file
-export let importCollection = []
-export let variableCollection = new Map()
+export let compCollection = []
+export let compVariableCollection = new Map()
 
 // AttributeNode: @vue/compiler-core AttributeNode
 export interface AttributeNode {
@@ -206,8 +206,8 @@ export function jsxNodeInit(path: NodePath, options: PluginOptions, program: Nod
 }
 
 export const removeCollection = () => {
-  importCollection.length = 0;
-  variableCollection.clear()
+  compCollection.length = 0;
+  compVariableCollection.clear()
 }
 
 export default jsxNode

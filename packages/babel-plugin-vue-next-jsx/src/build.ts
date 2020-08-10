@@ -4,7 +4,18 @@
 import { types as t } from '@babel/core';
 import { generateBlock, generateCall } from './gen/generateCode';
 import jsxNode, { JsxNode } from './jsxNode';
-import { ElementTypes, CREATE_VNODE, CREATE_TEXT, MERGE_PROPS, PatchFlags, KEEP_ALIVE, TELEPORT, FRAGMENT, CAPITALIZE } from './util/constant';
+import {
+  ElementTypes,
+  CREATE_VNODE,
+  CREATE_TEXT,
+  MERGE_PROPS,
+  PatchFlags,
+  KEEP_ALIVE,
+  TELEPORT,
+  FRAGMENT,
+  TRANSITION,
+  SUSPENSE, BASE_TRANSITION,
+} from './util/constant';
 import { buildArrayToArrow, buildObjectToExpression } from './util/build';
 import { isText, isTextVNode, isVNode, isRoot, shouldUseBlock } from './util';
 import genDirective from './gen/genDirective';
@@ -101,7 +112,7 @@ export const buildData = (node: JsxNode): t.NullLiteral | t.ObjectExpression | t
  * @param node
  */
 export const buildSlotChildren = (node: JsxNode): t.ObjectExpression | t.Identifier => {
-  const {children} = node
+  const {children, vnodeTag} = node
   // two ways to slotScope: function or object literal
   // only one function: as default slot
   if(children.length === 1) {
@@ -120,7 +131,7 @@ export const buildSlotChildren = (node: JsxNode): t.ObjectExpression | t.Identif
     return isText(child) ? generateCall([child], CREATE_TEXT) : child
   })
   const slot = {
-    default: _children.length === 1 ? t.arrowFunctionExpression([], _children[0]) : buildArrayToArrow(_children),
+    default: (_children.length === 1 && vnodeTag!==SUSPENSE && vnodeTag!==BASE_TRANSITION && vnodeTag!==TRANSITION) ? t.arrowFunctionExpression([], _children[0]) : buildArrayToArrow(_children),
     _: t.numericLiteral(1),
   }
   return buildObjectToExpression(slot)

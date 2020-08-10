@@ -31,6 +31,8 @@ export {
   V_MODEL_RADIO,
   V_MODEL_CHECKBOX,
   V_MODEL_SELECT,
+  TRANSITION,
+  TRANSITION_GROUP,
   createDOMCompilerError,
   DOMErrorCodes,
   parserOptions

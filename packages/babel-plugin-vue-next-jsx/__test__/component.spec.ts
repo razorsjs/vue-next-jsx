@@ -30,4 +30,8 @@ describe('Base components use', () => {
     const vueCode = '<test :testProps="test" @testEvent="test"></test>'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
+  test('namespace component', () => {
+    const jsxCode = '<test.a.component></test.a.component>'
+    expect(transformWithPlugin(jsxCode)).toBe('_openBlock(),_createBlock(test.a.component)')
+  })
 })

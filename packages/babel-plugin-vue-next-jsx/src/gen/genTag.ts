@@ -24,6 +24,19 @@ export const resolveTag = (tag): string | symbol => {
   return tag
 }
 
+const transformJSXMemberExpression = (node: t.JSXMemberExpression): t.MemberExpression => {
+  const getObj = (member: t.JSXMemberExpression | t.JSXIdentifier): t.MemberExpression | t.Identifier => {
+    if(t.isJSXMemberExpression(member)) {
+      return t.memberExpression(getObj(member.object),t.identifier(member.property.name))
+    } else {
+      return t.identifier(member.name)
+    }
+  }
+  const object = getObj(node.object)
+  const property = node.property
+  return t.memberExpression(object, t.identifier(property.name))
+}
+
 export default function() {
   const { path, options } = jsxNode
   if(t.isJSXFragment(path.node)) {
@@ -69,7 +82,7 @@ export default function() {
 
   if (t.isJSXMemberExpression(nameNode)) {
     // TODO: transformJSXMemberExpression
-    // return transformJSXMemberExpression(t, namePath)
+    jsxNode.tag = transformJSXMemberExpression(nameNode)
     return
   }
 

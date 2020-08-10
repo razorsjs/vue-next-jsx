@@ -88,6 +88,17 @@ export default {
 }
 ```
 
+tips: in tsx, default import which isn't called will be removed. We can use namespace component to avoid this.
+
+```typescript jsx
+// will be cleared by ts, error
+import test from './test'
+const a = () => <test></test>
+
+import * as t from './test'
+const b = () => <t.test></t.test>
+```
+
 ### props(v-bind)
 
 ### event handler(v-on)
@@ -206,7 +217,6 @@ export default {
 
 ## under developing
 
-- [x] namespace component
 - [x] inline component
 - [x] v-once
 - [x] cacheHandlers

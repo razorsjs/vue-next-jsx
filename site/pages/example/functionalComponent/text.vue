@@ -1,7 +1,7 @@
 <script lang="tsx">
 import { defineComponent } from 'vue';
 
-export const text = defineComponent({
+export const text  = defineComponent({
   props: {
     text: String
   },
@@ -12,7 +12,9 @@ export const text = defineComponent({
       )
     }
   }
-});
+})
+
+export default {}
 
 </script>
 

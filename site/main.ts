@@ -1,4 +1,5 @@
 ///<reference path="../node_modules/vue-tsx-support/enable-check.d.ts"/>
+///<reference path="../node_modules/vue-tsx-support/options/allow-unknown-props.d.ts"/>
 ///<reference path="../node_modules/vue-tsx-support/options/enable-html-attrs.d.ts"/>
 ///<reference path="../node_modules/vue-tsx-support/options/enable-vue-router.d.ts"/>
 

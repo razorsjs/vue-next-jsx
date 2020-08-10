@@ -12,6 +12,11 @@ export const routes: RouteRecordRaw[] = [
     component: () => import('../pages/example/componentExample/index.vue')
   },
   {
+    path: '/example/functionalComponent',
+    name: 'functionalComponent',
+    component: () => import('../pages/example/functionalComponent/index.vue')
+  },
+  {
     path: '/benchmark',
     name: 'benchmark',
     component: () => import('../pages/benchmark/index.vue')
@@ -21,11 +26,6 @@ export const routes: RouteRecordRaw[] = [
     name: 'benchmarkJsx',
     component: () => import('../pages/benchmark/jsx.vue')
   },
-  // {
-  //   path: '/example/functionalComponent',
-  //   name: 'functionalComponent',
-  //   component: () => import('../pages/example/functionalComponent/index.vue')
-  // },
   {
     path: '/',
     redirect: 'example'

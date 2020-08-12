@@ -50,7 +50,7 @@ module.exports = exports;
 
 /***/ }),
 
-/***/ 38:
+/***/ 35:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -75,16 +75,16 @@ var runtime = __webpack_require__(8);
  */
 
 
-/* harmony default export */ var examplevue_type_script_lang_tsx = (Object(runtime_core_esm_bundler["y" /* defineComponent */])({
+/* harmony default export */ var examplevue_type_script_lang_tsx = (Object(runtime_core_esm_bundler["j" /* defineComponent */])({
   setup: function setup() {
-    var count = Object(reactivity_esm_bundler["m" /* ref */])(0);
+    var count = Object(reactivity_esm_bundler["i" /* ref */])(0);
 
     var add = function add() {
       return count.value++;
     };
 
     return Object(runtime["a" /* withId */])(function () {
-      return [Object(runtime_core_esm_bundler["v" /* createVNode */])("div", null, Object(shared_esm_bundler["G" /* toDisplayString */])(count.value), 1), Object(runtime_core_esm_bundler["v" /* createVNode */])("button", {
+      return [Object(runtime_core_esm_bundler["i" /* createVNode */])("div", null, Object(shared_esm_bundler["G" /* toDisplayString */])(count.value), 1), Object(runtime_core_esm_bundler["i" /* createVNode */])("button", {
         onClick: add
       }, "add", 8, ["onClick"])];
     });

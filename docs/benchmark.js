@@ -1,6 +1,6 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[4],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[0],{
 
-/***/ 37:
+/***/ 34:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16,12 +16,12 @@ var shared_esm_bundler = __webpack_require__(0);
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib!./node_modules/vue-loader/dist/templateLoader.js??ref--6!./node_modules/vue-loader/dist??ref--12-0!./site/pages/benchmark/index.vue?vue&type=template&id=42337e53
 
 function render(_ctx, _cache) {
-  return Object(runtime_core_esm_bundler["Y" /* openBlock */])(), Object(runtime_core_esm_bundler["o" /* createBlock */])(runtime_core_esm_bundler["c" /* Fragment */], null, [Object(runtime_core_esm_bundler["v" /* createVNode */])("button", {
+  return Object(runtime_core_esm_bundler["r" /* openBlock */])(), Object(runtime_core_esm_bundler["e" /* createBlock */])(runtime_core_esm_bundler["b" /* Fragment */], null, [Object(runtime_core_esm_bundler["i" /* createVNode */])("button", {
     onClick: _cache[1] || (_cache[1] = function () {
       return _ctx.shuffle.apply(_ctx, arguments);
     })
-  }, "click"), (Object(runtime_core_esm_bundler["Y" /* openBlock */])(true), Object(runtime_core_esm_bundler["o" /* createBlock */])(runtime_core_esm_bundler["c" /* Fragment */], null, Object(runtime_core_esm_bundler["ib" /* renderList */])(_ctx.data, function (item) {
-    return Object(runtime_core_esm_bundler["Y" /* openBlock */])(), Object(runtime_core_esm_bundler["o" /* createBlock */])("div", null, Object(shared_esm_bundler["G" /* toDisplayString */])(item), 1
+  }, "click"), (Object(runtime_core_esm_bundler["r" /* openBlock */])(true), Object(runtime_core_esm_bundler["e" /* createBlock */])(runtime_core_esm_bundler["b" /* Fragment */], null, Object(runtime_core_esm_bundler["t" /* renderList */])(_ctx.data, function (item) {
+    return Object(runtime_core_esm_bundler["r" /* openBlock */])(), Object(runtime_core_esm_bundler["e" /* createBlock */])("div", null, Object(shared_esm_bundler["G" /* toDisplayString */])(item), 1
     /* TEXT */
     );
   }), 256
@@ -46,7 +46,7 @@ for (var i = 0; i < 100000; i++) {
 /* harmony default export */ var benchmarkvue_type_script_lang_js = ({
   name: "index",
   setup: function setup() {
-    var data = Object(reactivity_esm_bundler["k" /* reactive */])(arr);
+    var data = Object(reactivity_esm_bundler["h" /* reactive */])(arr);
     /**
      * Shuffles array in place. ES6 version
      * @param {Array} a items An array containing the items.

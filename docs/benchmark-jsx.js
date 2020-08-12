@@ -1,6 +1,6 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[5],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[1],{
 
-/***/ 39:
+/***/ 36:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27,7 +27,7 @@ for (var i = 0; i < 100000; i++) {
 /* harmony default export */ var jsxvue_type_script_lang_jsx = ({
   name: "index",
   setup: function setup() {
-    var data = Object(reactivity_esm_bundler["k" /* reactive */])(arr);
+    var data = Object(reactivity_esm_bundler["h" /* reactive */])(arr);
     /**
      * Shuffles array in place. ES6 version
      * @param {Array} a items An array containing the items.
@@ -49,10 +49,10 @@ for (var i = 0; i < 100000; i++) {
     };
 
     return function () {
-      return [Object(runtime_core_esm_bundler["v" /* createVNode */])("button", {
+      return [Object(runtime_core_esm_bundler["i" /* createVNode */])("button", {
         onClick: shuffle
       }, "click", 8, ["onClick"]), data.map(function (item) {
-        return Object(runtime_core_esm_bundler["Y" /* openBlock */])(), Object(runtime_core_esm_bundler["o" /* createBlock */])("div", null, Object(shared_esm_bundler["G" /* toDisplayString */])(item), 1);
+        return Object(runtime_core_esm_bundler["r" /* openBlock */])(), Object(runtime_core_esm_bundler["e" /* createBlock */])("div", null, Object(shared_esm_bundler["G" /* toDisplayString */])(item), 1);
       })];
     };
   }

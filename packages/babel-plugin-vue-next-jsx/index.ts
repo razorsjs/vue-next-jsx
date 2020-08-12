@@ -5,6 +5,7 @@ import { jsxNodeInit, PluginOptions, compCollection } from './src/jsxNode';
 
 import domOptions from './src/domOptions'
 import jsxNode, {removeCollection} from './src/jsxNode';
+import { VariableDeclarator } from '@babel/types';
 
 export {
   domOptions,
@@ -28,6 +29,17 @@ export default ({}, options: PluginOptions) => {
       ImportDefaultSpecifier: {
         enter(path: NodePath<t.ImportDefaultSpecifier>, state:PluginPass) {
           compCollection.push(path.node.local.name)
+        }
+      },
+      VariableDeclaration: {
+        enter(path: NodePath<t.VariableDeclaration>, state:PluginPass) {
+          path.node.declarations.forEach(declarator => {
+            if(t.isVariableDeclarator(declarator)) {
+              if(t.isIdentifier(declarator.id)) {
+                compCollection.push(declarator.id.name)
+              }
+            }
+          })
         }
       },
       JSXFragment: {

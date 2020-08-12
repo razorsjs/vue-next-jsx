@@ -81,7 +81,6 @@ export default function() {
   }
 
   if (t.isJSXMemberExpression(nameNode)) {
-    // TODO: transformJSXMemberExpression
     jsxNode.tag = transformJSXMemberExpression(nameNode)
     return
   }

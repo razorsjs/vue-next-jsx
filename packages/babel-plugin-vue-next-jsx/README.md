@@ -217,7 +217,7 @@ export default {
 
 ## under developing
 
-- [x] inline component
+- [x] resolve directive
 - [x] v-once
 - [x] cacheHandlers
 - [x] optimizeImports

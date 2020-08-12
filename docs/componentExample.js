@@ -100,7 +100,7 @@ module.exports = exports;
 
 /***/ }),
 
-/***/ 35:
+/***/ 32:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -115,14 +115,14 @@ var shared_esm_bundler = __webpack_require__(0);
 
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--3-1!./node_modules/vue-loader/dist??ref--12-0!./site/pages/example/componentExample/localButton.vue?vue&type=script&lang=tsx
 
-/* harmony default export */ var localButtonvue_type_script_lang_tsx = (Object(runtime_core_esm_bundler["y" /* defineComponent */])({
+/* harmony default export */ var localButtonvue_type_script_lang_tsx = (Object(runtime_core_esm_bundler["j" /* defineComponent */])({
   props: {
     type: String
   },
   setup: function setup(props, _ref) {
     var slots = _ref.slots;
     return function () {
-      return Object(runtime_core_esm_bundler["Y" /* openBlock */])(), Object(runtime_core_esm_bundler["o" /* createBlock */])("button", {
+      return Object(runtime_core_esm_bundler["r" /* openBlock */])(), Object(runtime_core_esm_bundler["e" /* createBlock */])("button", {
         type: "button"
       }, [slots["default"](props.type)]);
     };
@@ -147,26 +147,26 @@ localButtonvue_type_script_lang_tsx.__scopeId = "data-v-81d83dae"
  */
 
 
-/* harmony default export */ var componentExamplevue_type_script_lang_tsx = (Object(runtime_core_esm_bundler["y" /* defineComponent */])({
+/* harmony default export */ var componentExamplevue_type_script_lang_tsx = (Object(runtime_core_esm_bundler["j" /* defineComponent */])({
   components: {
     localButton: localButton
   },
   setup: function setup() {
     return function () {
-      const _component_a_button = Object(runtime_core_esm_bundler["kb" /* resolveComponent */])("a-button");
+      const _component_a_button = Object(runtime_core_esm_bundler["u" /* resolveComponent */])("a-button");
 
-      return [Object(runtime_core_esm_bundler["v" /* createVNode */])(_component_a_button, {
+      return [Object(runtime_core_esm_bundler["i" /* createVNode */])(_component_a_button, {
         type: "primary"
       }, {
         "default": function _default(type) {
-          return Object(runtime_core_esm_bundler["Y" /* openBlock */])(), Object(runtime_core_esm_bundler["o" /* createBlock */])("div", null, Object(shared_esm_bundler["G" /* toDisplayString */])(type), 1);
+          return Object(runtime_core_esm_bundler["r" /* openBlock */])(), Object(runtime_core_esm_bundler["e" /* createBlock */])("div", null, Object(shared_esm_bundler["G" /* toDisplayString */])(type), 1);
         },
         _: 1
-      }), Object(runtime_core_esm_bundler["v" /* createVNode */])(localButton, {
+      }), Object(runtime_core_esm_bundler["i" /* createVNode */])(localButton, {
         type: "primary"
       }, {
         "default": function _default(type) {
-          return Object(runtime_core_esm_bundler["Y" /* openBlock */])(), Object(runtime_core_esm_bundler["o" /* createBlock */])("div", null, Object(shared_esm_bundler["G" /* toDisplayString */])(type), 1);
+          return Object(runtime_core_esm_bundler["r" /* openBlock */])(), Object(runtime_core_esm_bundler["e" /* createBlock */])("div", null, Object(shared_esm_bundler["G" /* toDisplayString */])(type), 1);
         },
         _: 1
       })];

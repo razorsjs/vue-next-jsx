@@ -152,7 +152,7 @@ or use literal object
 </test>
 ```
 
-### use
+### usage
 
 ```typescript jsx
   setup(props, {slots}) {

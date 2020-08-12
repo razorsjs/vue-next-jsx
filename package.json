@@ -8,11 +8,10 @@
     "serve": "webpack-dev-server --config ./config/webpack/site/webpack.dev.conf.js",
     "start": "npm-run-all --parallel --print-label watch serve",
     "release:site": "webpack --config ./config/webpack/site/webpack.publish.conf.js",
-    "commit": "git add . && git-cz"
+    "commit": "git add . && git-cz",
+    "release": "shipjs prepare"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": ["packages/*"],
   "dependencies": {
     "vue": "^3.0.0-rc.5",
     "vue-loader": "^16.0.0-beta.3",
@@ -34,6 +33,7 @@
     "less-loader": "^6.2.0",
     "npm-run-all": "^4.1.5",
     "rollup-plugin-vue": "^6.0.0-beta.6",
+    "shipjs": "0.20.1",
     "style-loader": "^1.2.1",
     "ts-jest": "^26.1.1",
     "ts-loader": "^8.0.0",

@@ -35,7 +35,7 @@ describe('Base components use', () => {
     expect(transformWithPlugin(jsxCode)).toBe('_openBlock(),_createBlock(test.a.component)')
   })
   test('inline component', () => {
-    const jsxCode = 'const test = () => <div></div>; const a = <test></test>'
-    expect(transformWithPlugin(jsxCode)).toBe('')
+    const jsxCode = 'const test = 1; const a = <test></test>'
+    expect(transformWithPlugin(jsxCode)).toBe(`_openBlock(),_createBlock(test))`)
   })
 })

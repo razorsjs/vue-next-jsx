@@ -11806,7 +11806,7 @@ var routes = [{
   redirect: 'example'
 }];
 var router_router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: routes
 });
 // CONCATENATED MODULE: ./site/main.ts

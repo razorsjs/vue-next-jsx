@@ -5,9 +5,6 @@ const site = path.join(__dirname, '../../../site');
 
 module.exports = {
   entry: path.join(site, 'main.ts'),
-  output: {
-    publicPath: '/'
-  },
   module: {
     rules: [
       {

@@ -50,3 +50,15 @@ export {
   parseStringStyle,
   NOOP
 } from '@vue/shared'
+
+export const SupportedInnerDirectives = {
+  'v-bind': true,
+  'v-html': true,
+  'v-is': true,
+  'v-model': true,
+  'v-on': true,
+  'v-once': true,
+  'v-show': true,
+  'v-text': true,
+  'v-cloak': true
+}

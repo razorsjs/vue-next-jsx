@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw} from 'vue-router'
+import {defineAsyncComponent} from 'vue'
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -14,7 +15,7 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/example/functionalComponent',
     name: 'functionalComponent',
-    component: () => import(/* webpackChunkName: "functionalComponent" */'../pages/example/functionalComponent/index.vue')
+    component: defineAsyncComponent(() => import(/* webpackChunkName: "functionalComponent" */'../pages/example/functionalComponent/index.vue'))
   },
   {
     path: '/example/cssVars',

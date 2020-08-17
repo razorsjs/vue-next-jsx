@@ -4,7 +4,7 @@ export default {
   setup() {
     return () => {
       return (
-        <div v-log-mounted>12</div>
+        <div v-log-mounted>log-mounted</div>
       )
     }
   },

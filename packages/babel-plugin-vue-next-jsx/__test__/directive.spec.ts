@@ -2,8 +2,8 @@ import { transformWithPlugin, vueCompiled } from './util';
 
 describe('Use jsx with custom directive', () => {
   test('base directives with dom', () => {
-    const jsxCode = '<div v-a={onTest}>hello world</div>'
-    const vueCode = '<div v-a="onTest">hello world</div>'
+    const jsxCode = '<div v-a-b={onTest}>hello world</div>'
+    const vueCode = '<div v-a-b="onTest">hello world</div>'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
 

@@ -1,5 +1,6 @@
 export default {
-  mounted() {
+  mounted(el, binding) {
     console.log('mounted');
+    console.log(`mounted instance uid: ${binding.instance.$.uid}`);
   },
 }

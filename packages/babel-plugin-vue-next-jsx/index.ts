@@ -5,7 +5,6 @@ import { jsxNodeInit, PluginOptions, compCollection } from './src/jsxNode';
 
 import domOptions from './src/domOptions'
 import jsxNode, {removeCollection} from './src/jsxNode';
-import { VariableDeclarator } from '@babel/types';
 
 export {
   domOptions,

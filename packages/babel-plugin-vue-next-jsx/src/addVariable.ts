@@ -28,6 +28,7 @@ export const addVariable = (declarator: t.VariableDeclarator, id: string) => {
         } else {
           (body as t.BlockStatement).body.unshift(jsxNode.extraExpression.componentVariables)
         }
+        jsxNode.extraExpression.componentVariables.parent = body as t.BlockStatement
       } else {
         // error
       }

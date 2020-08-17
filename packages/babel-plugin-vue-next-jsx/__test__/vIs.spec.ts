@@ -6,8 +6,8 @@ describe('v-is (dynamic component)', () => {
     compare(code)
   })
   test('dynamic binding', () => {
-    const jsxCode = '<component is={foo} />'
-    const vueCode = '<component :is="foo" />'
+    const jsxCode = '<component is={foo.value} />'
+    const vueCode = '<component :is="foo.value" />'
     expect(transformWithPlugin(jsxCode)).toBe(vueCompiled(vueCode))
   })
   test('v-is', () => {

@@ -3,6 +3,8 @@
  */
 
 import { NodePath, types as t } from '@babel/core';
+import {VariableDeclaration} from '@babel/types'
+
 import { NodeTypes, ElementTypes, extend, CompilerError } from './util/constant';
 import domOptions from './domOptions'
 import { mergeProps } from './util/merge';
@@ -15,6 +17,11 @@ let jsxNode: JsxNode = {}
 // Some file scope helper that need to be removed in exit of file
 export let compCollection = []
 export let compVariableCollection = new Map()
+
+// extends babel types
+export interface JSX_VariableDeclaration extends VariableDeclaration {
+  parent?: t.BlockStatement
+}
 
 // AttributeNode: @vue/compiler-core AttributeNode
 export interface AttributeNode {
@@ -51,7 +58,8 @@ export interface JsxNode  {
   // record special expression like vue import
   extraExpression?: {
     vueImport?: t.ImportDeclaration
-    componentVariables?: t.VariableDeclaration
+    // all resolve_component
+    componentVariables?: JSX_VariableDeclaration
     optimizeVariables?: any
   }
 

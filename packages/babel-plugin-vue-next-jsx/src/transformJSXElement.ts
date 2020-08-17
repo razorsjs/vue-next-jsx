@@ -7,6 +7,7 @@ import genTag from './gen/genTag'
 import genChildren from './gen/genChildren';
 import genProps from './gen/genProps';
 import jsxNode from './jsxNode';
+import {beforeBuild} from './lifecycle/beforeBuild';
 
 export const transformJSXElement = (): t.SequenceExpression | t.CallExpression => {
   const {options} = jsxNode
@@ -16,6 +17,7 @@ export const transformJSXElement = (): t.SequenceExpression | t.CallExpression =
   genProps()
   // gen children
   genChildren()
-  // build
+  // Before build: modify jsxnode the last time
+  beforeBuild(jsxNode)
   return options.build(jsxNode)
 }

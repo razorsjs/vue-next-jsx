@@ -29,4 +29,8 @@ describe('v-slot', () => {
     const jsxCode = `<layout>{slot}</layout>`
     expect(transformWithPlugin(jsxCode)).toBe('_openBlock(),_createBlock(_component_layout,null,slot)')
   })
+  test('slot with text', () => {
+    const jsxCode = `<div>inline:{slots.default()}</div>`
+    expect(transformWithPlugin(jsxCode)).toBe(`_openBlock(),_createBlock("div",null,[_createTextVNode("inline:"),slots.default()])`)
+  })
 })

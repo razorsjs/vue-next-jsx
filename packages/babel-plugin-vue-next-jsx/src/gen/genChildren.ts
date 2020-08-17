@@ -51,15 +51,14 @@ const transformJSXText = (path: NodePath<t.JSXText>): t.StringLiteral | null => 
   return str !== '' ? t.stringLiteral(str) : null
 }
 
-const transformJSXSpreadChild = (path: NodePath<t.JSXSpreadChild>): t.SpreadElement => t.spreadElement(path.node.expression)
+const transformJSXSpreadChild = (node: t.JSXSpreadChild): t.SpreadElement => t.spreadElement(node.expression)
 
 /**
  * In components, only literal will be treated as text
  * In element, expect call and function(as slot) , array(as children), will be treated as text
- * @param path
  */
-const isTextContainer = (path: NodePath<t.JSXExpressionContainer>, isComponent: boolean) => {
-  const {node: {expression}} = path
+const isTextContainer = (node: t.JSXExpressionContainer, isComponent: boolean) => {
+  const {expression} = node
   if(isComponent) {
     return t.isLiteral(expression)
   } else {
@@ -67,23 +66,15 @@ const isTextContainer = (path: NodePath<t.JSXExpressionContainer>, isComponent: 
   }
 }
 
-const transformJSXExpressionContainer = (path: NodePath<t.JSXExpressionContainer>) => {
-  // Literal function () => <div><div> to {default: () => <div></div>}
-  let {node: {expression}} = path
-  // note: render function such as renderSlot() must be wrapped with []
-  if(t.isCallExpression(expression)) {
-    expression = t.arrayExpression([expression])
-  }
-  return expression
-}
+const transformJSXExpressionContainer = (node: t.JSXExpressionContainer) => node.expression
 
-const transformJSXExpressionTextContainer = (path: NodePath<t.JSXExpressionContainer>, paths) => {
-  const {node: {expression}} = path
+const transformJSXExpressionTextContainer = (node: t.JSXExpressionContainer, paths) => {
+  const {expression} = node
   const isTextVNode = paths.length > 1
   if((t.isIdentifier(expression) || t.isMemberExpression(expression)) && !isTextVNode) {
     jsxNode.patchFlag|=PatchFlags.TEXT
   }
-  return genText(path.node, isTextVNode)
+  return genText(node, isTextVNode)
 }
 
 export default function() {
@@ -93,16 +84,22 @@ export default function() {
   const isComponent = jsxNode.tagType === ElementTypes.COMPONENT
 
   let nodes: Array<any> = []
+  const children: Array<any> =[]
   let text: any = [];
   // sibling text will be merged as textVNode
-  const transform = (path) => path.isJSXText() ? transformJSXText(path) : generateCall([path.node.expression], TO_DISPLAY_STRING)
-  const mergeText = (text) => {
-    if(text.length === 1) {
-      const path = text[0]
-      return path.isJSXText() ? transformJSXText(path) : transformJSXExpressionTextContainer(path, paths)
+  const transform = (node: t.StringLiteral | t.JSXExpressionContainer) => t.isStringLiteral(node) ? node : generateCall([node.expression], TO_DISPLAY_STRING)
+  const mergeText = (texts: Array<t.StringLiteral | t.JSXExpressionContainer>) => {
+    if(texts.length === 1) {
+      const text = texts[0]
+      // Return genText if multiple
+      if(t.isStringLiteral(text)) {
+        return nodes.length > 1 ? generateCall([text], CREATE_TEXT): text
+      } else {
+        return transformJSXExpressionTextContainer(text, nodes)
+      }
     } else {
-      const _text = text.map(item => {
-        if(item.isJSXExpressionContainer() && !isFragment) jsxNode.patchFlag|=PatchFlags.TEXT
+      const _text = texts.map(item => {
+        if(t.isJSXExpressionContainer(item) && !isFragment) jsxNode.patchFlag|=PatchFlags.TEXT
         return transform(item)
       }).filter(el => el !== null && !t.isJSXEmptyExpression(el));
       let binary = t.binaryExpression('+',_text[0], _text[1])
@@ -114,46 +111,41 @@ export default function() {
   }
   const pushText = () => {
     if(text.length) {
-      nodes.push(mergeText(text));
+      children.push(mergeText(text));
       text = [];
     }
   }
-  for(let i=0;i<paths.length;i++) {
-    const path = paths[i]
-    if (path.isJSXText()) {
-      const transformed = transformJSXText(path)
-      // TODO: remove duplicate transform
-      if(transformed!==null) {
-        text.push(path)
-      } else {
-        // remove blank in paths
-        paths.splice(i--, 1)
-      }
-    } else if(path.isJSXExpressionContainer()) {
-      if(isTextContainer(path, isComponent)) {
-        text.push(path)
+  // clear empty
+  nodes = paths.map(path => path.isJSXText() ? transformJSXText(path) : path.node).filter(el => el !== null && !t.isJSXEmptyExpression(el))
+
+  for(let i=0;i<nodes.length;i++) {
+    const node = nodes[i]
+    if (t.isStringLiteral(node)) {
+      text.push(node)
+    } else if(t.isJSXExpressionContainer(node)) {
+      if(isTextContainer(node, isComponent)) {
+        text.push(node)
       } else {
         pushText()
-        nodes.push(transformJSXExpressionContainer(path))
+        children.push(transformJSXExpressionContainer(node))
       }
     } else {
       pushText()
-      if (path.isJSXSpreadChild()) {
-        nodes.push(transformJSXSpreadChild(path))
-      } else if (path.isCallExpression() || path.isSequenceExpression()) {
-        nodes.push(path.node)
+      if (t.isJSXSpreadChild(node)) {
+        children.push(transformJSXSpreadChild(node))
+      } else if (t.isCallExpression(node) || t.isSequenceExpression(node)) {
+        children.push(node)
       } else {
         /* istanbul ignore next */
-        throw new Error(`getChildren: ${path.type} is not supported`)
+        throw new Error(`getChildren: is not supported`)
       }
     }
   }
   pushText()
-  nodes = nodes.filter(el => el !== null && !t.isJSXEmptyExpression(el));
 
   if(isFragment) {
     jsxNode.patchFlag|=PatchFlags.STABLE_FRAGMENT
   }
 
-  jsxNode.children = nodes
+  jsxNode.children = children
 }

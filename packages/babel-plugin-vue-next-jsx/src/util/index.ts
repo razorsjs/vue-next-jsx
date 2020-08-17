@@ -29,15 +29,12 @@ export const isTextVNode = (value: t.Expression): boolean => {
 }
 
 export const isVNode = (value: t.Expression): boolean => {
-  // if () => [], will add wrap [] in child, not in there
-  const isCreateTextVNode = t.isCallExpression(value)
+  // add [] wrap to VNode, expect string or toDisplayString
+  const isToDisplayString = t.isCallExpression(value)
     && t.isIdentifier(value.callee)
-    && value.callee.name === importTransform(helperNameMap[CREATE_TEXT])
-  const isCreateVnode = t.isCallExpression(value)
-    && t.isIdentifier(value.callee)
-    && value.callee.name === importTransform(helperNameMap[CREATE_VNODE])
+    && value.callee.name === importTransform(helperNameMap[TO_DISPLAY_STRING])
   const isOpenBlock = t.isSequenceExpression(value)
-  return isCreateVnode || isOpenBlock || isCreateTextVNode
+  return isOpenBlock || (t.isCallExpression(value) && !isToDisplayString)
 }
 
 export const isRoot = (path: NodePath<any>, node: JsxNode): boolean =>  {

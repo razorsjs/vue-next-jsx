@@ -6,7 +6,11 @@ export default defineComponent({
   render() {
     return withId((() => (
       <div>
-        <router-view/>
+        <router-view>
+          {
+            ({Component}) => <keep-alive><component is={Component} /></keep-alive>
+          }
+        </router-view>
       </div>
     )))()
   }

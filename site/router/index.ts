@@ -27,6 +27,11 @@ export const routes: RouteRecordRaw[] = [
     component: () => import(/* webpackChunkName: "dynamicComponent" */'../pages/example/dynamicComponent/index.vue')
   },
   {
+    path: '/example/directive',
+    name: 'directive',
+    component: () => import(/* webpackChunkName: "directive" */'../pages/example/directive/index.vue')
+  },
+  {
     path: '/benchmark',
     name: 'benchmark',
     component: () => import(/* webpackChunkName: "benchmark" */'../pages/benchmark/index.vue')

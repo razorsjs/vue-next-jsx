@@ -1,11 +1,8 @@
-<!--<template>-->
-<!--  <button>s</button>-->
-<!--</template>-->
 <script lang="tsx">
 /**
  * A component use global component and local component
  */
-import {defineComponent} from 'vue'
+import {defineComponent, ref} from 'vue'
 import localButton from './localButton.vue'
 
 export default defineComponent({
@@ -13,6 +10,10 @@ export default defineComponent({
     localButton
   },
   setup() {
+    const localButtonRef = ref(null)
+    const on = () => {
+      console.log(localButtonRef.value);
+    }
     return () => {
       return (
         [
@@ -21,7 +22,7 @@ export default defineComponent({
               (type) => <div>{type}</div>
             }
           </a-button>,
-          <localButton type="primary">
+          <localButton type="primary" ref={localButtonRef} onClick={on}>
             {
               (type) => <div>{type}</div>
             }

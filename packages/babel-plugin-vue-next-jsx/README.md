@@ -101,7 +101,43 @@ const b = () => <t.test></t.test>
 
 ### props(v-bind)
 
+Use props as jsx like:
+
+```typescript jsx
+<test testProps={test}></test>
+```
+
+Dynamic bind:
+
+```typescript jsx
+<test v-bind={[dynamic, a]}></test>
+```
+
+equal to:
+
+```vue
+<test :[dynamic]="a"></test>
+```
+
 ### event handler(v-on)
+
+Props starsWith 'on' will be treated as event
+
+```typescript jsx
+<div onClick={onClick}></div>
+```
+
+And use v-on to pass modifiers or use dynamic event name
+
+```typescript jsx
+<div v-on={[e,test,["left"]]}/>
+```
+
+Equal to:
+
+```vue
+<div @[e].left="test"/>
+```
 
 ## directive
 
@@ -217,7 +253,6 @@ export default {
 
 ## under developing
 
-- [x] resolve directive
 - [x] v-once
 - [x] cacheHandlers
 - [x] optimizeImports

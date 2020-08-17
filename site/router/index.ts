@@ -33,6 +33,16 @@ export const routes: RouteRecordRaw[] = [
     component: () => import(/* webpackChunkName: "directive" */'../pages/example/directive/index.vue')
   },
   {
+    path: '/example/transition',
+    name: 'transition',
+    component: () => import(/* webpackChunkName: "transition" */'../pages/example/transition/index.vue')
+  },
+  {
+    path: '/example/listTransition',
+    name: 'listTransition',
+    component: () => import(/* webpackChunkName: "listTransition" */'../pages/example/transition/listTransition.vue')
+  },
+  {
     path: '/benchmark',
     name: 'benchmark',
     component: () => import(/* webpackChunkName: "benchmark" */'../pages/benchmark/index.vue')

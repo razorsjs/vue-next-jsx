@@ -1,24 +1,6 @@
-<!--<template>-->
-<!--<button @click="modalOpen = true">-->
-<!--  Open full screen modal! (With teleport!)-->
-<!--</button>-->
-
-<!--<teleport to="body">-->
-<!--  <div v-if="modalOpen" class="modal">-->
-<!--    <div>-->
-<!--      I'm a teleported modal!-->
-<!--      (My parent is "body")-->
-<!--      <button @click="modalOpen = false">-->
-<!--        Close-->
-<!--      </button>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</teleport>-->
-<!--</template>-->
-
-<script lang="tsx">
+<script lang="jsx">
 import {ref} from 'vue'
-import { withId } from '@razors/babel-plugin-vue-next-jsx/dist/runtime';
+import { withId, renderEmptyBlock } from '@razors/babel-plugin-vue-next-jsx/dist/runtime';
 export default {
   name: "index",
   setup() {
@@ -33,26 +15,21 @@ export default {
             Close
           </button>
         </div>
-      </div> : null
+      </div> : renderEmptyBlock()
     })
 
-    // return {
-    //   modalOpen
-    // }
-
-    return withId(() => {
+    return () => {
       return (
         <div>
-          <button onClick={()=>modalOpen.value = true}>
+          <button onClick={()=>modalOpen.value=true}>
           Open full screen modal! (With teleport!)
           </button>
-
           <teleport to="body">
             {renderTeleport()}
           </teleport>
         </div>
       )
-    })
+    }
   }
 }
 </script>

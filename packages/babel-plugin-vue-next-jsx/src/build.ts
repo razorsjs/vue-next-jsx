@@ -23,7 +23,7 @@ import { addVueImport } from './addVueImport';
 
 // main
 export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression | t.ArrayExpression => {
-  const {path, tag, children, dynamicProps} = node
+  const {path, tag, children, dynamicProps, options} = node
   const args: any = [tag]
   const data = buildData(node)
   if(dynamicProps?.length || node.patchFlag || children?.length || !t.isNullLiteral(data)) {
@@ -41,8 +41,19 @@ export const build = (node: JsxNode): t.SequenceExpression | t.CallExpression | 
   // In root we generate block, else vnode
   // A jsxElement with no jsxElement parent will be treated as root
   // If has directive, wrap with _withDirective
-  const useBlock = shouldUseBlock(node)
-  let codeBlock: t.SequenceExpression | t.CallExpression | t.ArrayExpression = (isRoot(path, node) || useBlock) ? generateBlock(args) : generateCall(args, CREATE_VNODE)
+  // In no optimized mode, force to CREATE_VNODE, just a global fallback
+  let codeBlock: t.SequenceExpression | t.CallExpression | t.ArrayExpression
+  if(!options.optimized || node.mode === 'vnode') {
+    codeBlock = generateCall(args, CREATE_VNODE)
+  } else {
+    if(node.mode === 'block') {
+      codeBlock = generateBlock(args)
+    } else {
+      const useBlock = shouldUseBlock(node)
+      codeBlock = (isRoot(path, node) || useBlock) ? generateBlock(args) : generateCall(args, CREATE_VNODE)
+    }
+  }
+
   // only works in slot literal
   if(t.isArrowFunctionExpression(path.parent)) {
     codeBlock = t.arrayExpression([codeBlock])

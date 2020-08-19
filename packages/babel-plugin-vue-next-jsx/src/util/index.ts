@@ -34,12 +34,13 @@ export const isVNode = (value: t.Expression): boolean => {
     && t.isIdentifier(value.callee)
     && value.callee.name === importTransform(helperNameMap[TO_DISPLAY_STRING])
   const isOpenBlock = t.isSequenceExpression(value)
-  return isOpenBlock || (t.isCallExpression(value) && !isToDisplayString)
+  const isLegalExpression = t.isCallExpression(value) || t.isConditionalExpression(value)
+  return isOpenBlock || (isLegalExpression && !isToDisplayString)
 }
 
 export const isRoot = (path: NodePath<any>, node: JsxNode): boolean =>  {
   const {parent} = path
-  return !(t.isJSXElement(parent) || t.isJSXFragment(parent) || t.isArrayExpression(parent) || node.__children)
+  return !(t.isJSXElement(parent) || t.isJSXFragment(parent) || t.isArrayExpression(parent))
 }
 
 export const isDynamic = (value) => {

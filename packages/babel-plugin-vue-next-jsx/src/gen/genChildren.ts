@@ -55,14 +55,14 @@ const transformJSXSpreadChild = (node: t.JSXSpreadChild): t.SpreadElement => t.s
 
 /**
  * In components, only literal will be treated as text
- * In element, expect call and function(as slot) , array(as children), will be treated as text
+ * In element, expect call and function(as slot) , array(as children), conditionalExpression(as v-if), will be treated as text
  */
 const isTextContainer = (node: t.JSXExpressionContainer, isComponent: boolean) => {
   const {expression} = node
   if(isComponent) {
     return t.isLiteral(expression)
   } else {
-    return !t.isCallExpression(expression) && !t.isFunction(expression) && !t.isArrayExpression(expression) && !t.isObjectExpression(expression)
+    return !t.isCallExpression(expression) && !t.isFunction(expression) && !t.isArrayExpression(expression) && !t.isObjectExpression(expression) && !t.isConditionalExpression(expression)
   }
 }
 

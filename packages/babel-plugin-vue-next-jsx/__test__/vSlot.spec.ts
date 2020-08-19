@@ -8,8 +8,8 @@ describe('v-slot', () => {
     const jsxCode = `<layout>
                         {
                             {
-                                header:()=><h1 __children>Here might be a page title</h1>,
-                                default:()=><h1 __children>Here might be a page title</h1>
+                                header:()=><h1 __vnode>Here might be a page title</h1>,
+                                default:()=><h1 __vnode>Here might be a page title</h1>
                             }
                         }
                      </layout>`
@@ -19,7 +19,7 @@ describe('v-slot', () => {
   test('default slot', () => {
     const jsxCode = `<layout>
                         {
-                            () => <h1 __children>Here might be a page title</h1>
+                            () => <h1 __vnode>Here might be a page title</h1>
                         }
                      </layout>`
     const vueCode = '<layout><h1>Here might be a page title</h1></layout>'

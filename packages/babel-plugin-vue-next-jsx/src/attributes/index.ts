@@ -12,7 +12,7 @@ import v_ from './v-'
 import v from './v'
 import on from './on'
 import style from './style';
-import __children from './__children'
+import {__vnode, __block} from './internal'
 
 export const defaultAttrParse = (name: string, value: any, index: number, jsxNode: JsxNode) => {
   if(!value) {
@@ -33,6 +33,7 @@ internalMap.set(/^v-/g, v_)
 internalMap.set(/^v[A-Z]/g, v)
 internalMap.set(/^on[A-Z]/g, on)
 internalMap.set('style', style)
-internalMap.set('__children', __children)
+internalMap.set('__vnode', __vnode)
+internalMap.set('__block', __block)
 
 export default internalMap

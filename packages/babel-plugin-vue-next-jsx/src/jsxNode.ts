@@ -87,8 +87,8 @@ export interface JsxNode  {
 
   // force render as block
   renderAsBlock?: boolean
-  // mark this jsxNode as a child
-  __children?: boolean
+  // force to be block or vnode
+  mode?: 'block' | 'vnode'
 }
 
 export type DirectiveTransform = (
@@ -124,6 +124,10 @@ export interface DirectiveTransformResult {
 export type AttributeTransform = (name: string, value: t.Expression | t.BooleanLiteral, index: number, node: JsxNode) => void
 
 export interface BuildOptions {
+  /**
+   * If optimized is open, plugin will use block. Or vnode. Default is true.
+   */
+  optimized?: boolean
   /**
    * e.g. build jsxNode to babel
    * @param node

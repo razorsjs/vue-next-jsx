@@ -11,6 +11,7 @@ const isBuiltInComponent = parserOptions.isBuiltInComponent
 const runtimeModuleName = 'vue'
 
 export default {
+  optimized: true,
   isNativeTag,
   isBuiltInComponent,
   build,

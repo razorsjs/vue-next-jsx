@@ -251,10 +251,21 @@ export default {
 }
 ```
 
+## optimized mode
+
+Plugin use vue3 optimized mode by default, set option optimized: false to close it. There are some points:
+
+### judge
+
+* Every condition return statement must not be null. You can use renderEmptyBlock provided by plugin.
+
+* You must set unique key on every condition return statement root.
+
+* If you still have problem, set __vnode attr on root to avoiding open new block.
+
 ## under developing
 
 - [x] v-once
-- [x] cacheHandlers
 - [x] optimizeImports
 - [x] hoistStatic
 - [x] SSR support
